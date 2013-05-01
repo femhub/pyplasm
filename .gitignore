@@ -1,0 +1,15 @@
+*.swp
+*~
+*.pyc
+*.pyo
+*.log
+*.pid
+*.o
+*.so
+*.a
+.project
+.pydevproject
+.settings
+.spyderproject
+src/xgemain/xgemain
+distrib/linux/

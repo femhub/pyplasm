@@ -6,6 +6,8 @@
 HANDLE Log::__redirect=0;
 #endif
 
+bool Log::silent = false;
+
 ////////////////////////////////////////////////////////////////////
 bool Log::redirect(uint64 handle)
 {
@@ -22,6 +24,9 @@ bool Log::redirect(uint64 handle)
 ////////////////////////////////////////////////////////////////////
 void Log::printf(const char * format, ...)
 {
+        if (Log::silent)
+             return;
+
 	int ret;
 	va_list args;
 	va_start(args,format);
@@ -57,4 +62,8 @@ void Log::printf(const char * format, ...)
 	va_end(args);
 }
 
-
+////////////////////////////////////////////////////////////////
+void Log::silence (bool silent) 
+{
+	Log::silent = silent;
+}

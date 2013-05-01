@@ -13,10 +13,15 @@ public:
 	//write a log message
 	static void printf(const char * format, ...);
 
+	// silence a log 
+	static void silence (bool silent);
+	
 private:
 	#ifdef _WINDOWS
 	static HANDLE __redirect;
 	#endif
+
+	static bool silent;
 };
 
 #endif //_LOG_H__

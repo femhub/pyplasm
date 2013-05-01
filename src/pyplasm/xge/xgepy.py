@@ -759,6 +759,8 @@ class Log(_object):
     if _newclass:redirect = staticmethod(_xgepy.Log_redirect)
     __swig_getmethods__["printf"] = lambda x: _xgepy.Log_printf
     if _newclass:printf = staticmethod(_xgepy.Log_printf)
+    __swig_getmethods__["silence"] = lambda x: _xgepy.Log_silence
+    if _newclass:silence = staticmethod(_xgepy.Log_silence)
     def __init__(self): 
         this = _xgepy.new_Log()
         try: self.this.append(this)
@@ -775,6 +777,10 @@ Log_redirect = _xgepy.Log_redirect
 def Log_printf(*args):
   return _xgepy.Log_printf(*args)
 Log_printf = _xgepy.Log_printf
+
+def Log_silence(*args):
+  return _xgepy.Log_silence(*args)
+Log_silence = _xgepy.Log_silence
 
 class Clock(_object):
     __swig_setmethods__ = {}
