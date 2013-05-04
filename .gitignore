@@ -13,3 +13,4 @@
 .spyderproject
 src/xgemain/xgemain
 distrib/linux/
+src/xgepy/xgepy.cpp
