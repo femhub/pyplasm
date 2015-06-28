@@ -17,7 +17,6 @@ static std::map<std::string,SmartPointer<Texture> > textures_in_cache;
 //------------------------------------------------------------------------
 static bool InitializeFreeImage()
 {
-	Log::printf("Initializing FreeImage library\n");
 	FreeImage_Initialise();
 	return true;
 }

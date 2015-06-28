@@ -19,7 +19,7 @@ else:
 	Gl=OpenGL.GL
 	Glu=OpenGL.GLU
 	Glut=OpenGL.GLUT
-	from xgepy import *
+	from .xgepy import *
 	BOOL_CODE_OR   = Plasm.BOOL_CODE_OR
 	BOOL_CODE_AND = Plasm.BOOL_CODE_AND
 	BOOL_CODE_DIFF = Plasm.BOOL_CODE_DIFF

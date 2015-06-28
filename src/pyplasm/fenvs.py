@@ -7,6 +7,7 @@ import copy
 
 # This is needed to access NCLab's object "nclabinst":
 from nclab.tools.lab import Lab
+
 nclabinst = Lab.instance()
 
 import collections
@@ -17,25 +18,17 @@ from nclab.tools import ExceptionWT
 
 # def ExceptionWT(a):
 #  print a
-
 # This is needed to measure time:
-import time
-start = time.clock()
-print("Evaluating fenvs.py..")
+# import time
+# start = time.clock()
 
 # default values (see PlasmConfig)
 DEFAULT_TOLERANCE = 1e-6
 DEFAULT_MAX_NUM_SPLIT = 10
 DEFAULT_USE_OCTREE_PLANES = True
 
-import sys
-import types
-import math
-
 # set this to True if you want to do a self test
 self_test = False
-
-print(__file__)
 
 from pyplasm.xge import *
 
@@ -46,7 +39,8 @@ def ISNUMBER(x):
     else:
         return True
 
-#=====================================================
+
+# =====================================================
 # Configuration for plasm
 #
 # EXAMPLE:
@@ -54,11 +48,10 @@ def ISNUMBER(x):
 # <your code>
 # plasm_config.pop()
 #
-#=====================================================
+# =====================================================
 
 
 class PlasmConfig:
-
     def __init__(self):
         self.stack = []
         self.push(
@@ -79,6 +72,7 @@ class PlasmConfig:
     def push(self, tolerance, maxnumtry=-1, useoctreeplanes=True):
         class T:
             pass
+
         obj = T()
         obj.tolerance = tolerance
         obj.maxnumtry = maxnumtry if maxnumtry >= 0 else self.maxnumtry()
@@ -91,25 +85,27 @@ class PlasmConfig:
             raise Exception("Cannot pop the default configuration!")
         self.stack = self.stack[:-1]
 
+
 plasm_config = PlasmConfig()
 
 
-#=====================================================
+# =====================================================
 # Every
-#=====================================================
+# =====================================================
 def every(predicate, iterable):
     for x in iterable:
-        if not(predicate(x)):
+        if not (predicate(x)):
             return False
     return True
 
+
 if self_test:
-    assert(every(lambda x: x >= 0, [1, 2, 3, 4]) and not every(
+    assert (every(lambda x: x >= 0, [1, 2, 3, 4]) and not every(
         lambda x: x > 0, [1, -2, 3, 4]))
 
-#=====================================================
+# =====================================================
 # from http://www.daniweb.com/code/snippet564.html
-#=====================================================
+# =====================================================
 
 
 def curry(fn, *cargs, **ckwargs):
@@ -117,16 +113,16 @@ def curry(fn, *cargs, **ckwargs):
         d = ckwargs.copy()
         d.update(fkwargs)
         return fn(*(cargs + fargs), **d)
+
     return call_fn
 
 
 def C(fun):
     return lambda arg1: lambda arg2: fun([arg1, arg2])
 
-
-#=====================================================
+# =====================================================
 # Define CONStants
-#=====================================================
+# =====================================================
 PI = math.pi
 SIN = math.sin
 SINH = math.sinh
@@ -158,6 +154,7 @@ def ATAN2(l):
 def MOD(l):
     return float(l[0] % l[1])
 
+
 # =====================================================
 # CAT
 # =====================================================
@@ -165,8 +162,9 @@ def MOD(l):
 
 def CAT(args): return reduce(lambda x, y: x + y, args)
 
+
 if self_test:
-    assert(CAT([[1, 2], [3, 4]]) == [1, 2, 3, 4])
+    assert (CAT([[1, 2], [3, 4]]) == [1, 2, 3, 4])
 
 
 # =====================================================
@@ -180,7 +178,7 @@ def INV(mat):
 
 
 if self_test:
-    assert(
+    assert (
         (Matf([1, 2, 3, 4]) * Matf(CAT(INV([[1, 2], [3, 4]])))).almostIdentity(0.01))
 
 # =====================================================
@@ -191,17 +189,17 @@ if self_test:
 def AND(list):
     """ and of all arguments in a list """
     for i in list:
-        if not(i):
+        if not (i):
             return False
     return True
 
 
 if self_test:
-    assert(AND([True, True]) == True and AND([True, False]) == False)
+    assert (AND([True, True]) == True and AND([True, False]) == False)
 
-#=====================================================
+# =====================================================
 # hpc type
-#=====================================================
+# =====================================================
 
 pol_type = Hpc
 
@@ -213,35 +211,38 @@ def is_polyhedra_complex(obj):
 def ISPOL(obj):
     return isinstance(obj, pol_type)
 
-if self_test:
-    assert(ISPOL(Plasm.cube(2)) == True)
 
-#=====================================================
+if self_test:
+    assert (ISPOL(Plasm.cube(2)) == True)
+
+# =====================================================
 # FL IDentity Function
-#=====================================================
+# =====================================================
 
 
 def ID(anyValue):
     """IDentity function. For any argument retruns the argument"""
     return anyValue
 
+
 if self_test:
-    assert(ID(True) == True)
+    assert (ID(True) == True)
 
 
-#=====================================================
+# =====================================================
 # FL CONStant Function
-#=====================================================
+# =====================================================
 
 def K(AnyValue):
     def K0(obj): return AnyValue
+
     return K0
 
 
 TT = K(TRUE)
 
 if self_test:
-    assert(K(1)(2) == 1)
+    assert (K(1)(2) == 1)
 
 # ===================================================
 # DISTL
@@ -254,7 +255,7 @@ def DISTL(args):
 
 
 if self_test:
-    assert(DISTL([1, [2, 3, 4]]) == [[1, 2], [1, 3], [1, 4]])
+    assert (DISTL([1, [2, 3, 4]]) == [[1, 2], [1, 3], [1, 4]])
 
 # ===================================================
 # DISTR
@@ -267,7 +268,7 @@ def DISTR(args):
 
 
 if self_test:
-    assert(DISTR([[1, 2, 3], 0]) == [[1, 0], [2, 0], [3, 0]])
+    assert (DISTR([[1, 2, 3], 0]) == [[1, 0], [2, 0], [3, 0]])
 
 
 # ===================================================
@@ -277,12 +278,14 @@ if self_test:
 def COMP(Funs):
     def compose(f, g):
         def h(x): return f(g(x))
+
         return h
+
     return reduce(compose, Funs)
 
 
 if self_test:
-    assert(COMP(
+    assert (COMP(
         [lambda x: x + [3], lambda x: x + [2], lambda x: x + [1]])([0]) == [0, 1, 2, 3])
 
 
@@ -292,11 +295,12 @@ if self_test:
 
 def AA(f):
     def AA0(args): return list(map(f, args))
+
     return AA0
 
 
 if self_test:
-    assert(AA(lambda x: x * 2)([1, 2, 3]) == [2, 4, 6])
+    assert (AA(lambda x: x * 2)([1, 2, 3]) == [2, 4, 6])
 
 
 # ===================================================
@@ -318,8 +322,8 @@ def NEQ(List):
 
 
 if self_test:
-    assert(EQ([1, 1, 1]) and not EQ([1, 1, 2]))
-    assert(NEQ([1, 1, 2]) == True and NEQ([1, 1, 2 / 2]) == False)
+    assert (EQ([1, 1, 1]) and not EQ([1, 1, 2]))
+    assert (NEQ([1, 1, 2]) == True and NEQ([1, 1, 2 / 2]) == False)
 
 
 def LT(a): return lambda b: b < a
@@ -333,26 +337,27 @@ def GT(a): return lambda b: b > a
 
 def GE(a): return lambda b: b >= a
 
+
 if self_test:
-    assert(LT(2)(1) and LE(2)(2) and GT(2)(3) and GE(2)(2))
+    assert (LT(2)(1) and LE(2)(2) and GT(2)(3) and GE(2)(2))
 
 
-def ISGT(args): 
+def ISGT(args):
     A, B = args
     return GT(A)(B)
 
 
-def ISLT(args): 
+def ISLT(args):
     A, B = args
     return LT(A)(B)
 
 
-def ISGE(args): 
+def ISGE(args):
     A, B = args
     return GE(A)(B)
 
 
-def ISLE(args): 
+def ISLE(args):
     A, B = args
     return LE(A)(B)
 
@@ -378,7 +383,9 @@ def FILTER(predicate):
             if predicate(item):
                 ret += [item]
         return ret
+
     return FILTER0
+
 
 if self_test:
     assert FILTER(LE(0))([-1, 0, 1, 2, 3, 4]) == [-1, 0]
@@ -395,7 +402,7 @@ def APPLY(args):
 
 
 if self_test:
-    assert(APPLY([lambda x:x * 2, 2]) == 4)
+    assert (APPLY([lambda x: x * 2, 2]) == 4)
 
 # ===================================================
 # INSR
@@ -409,11 +416,12 @@ def PLASM_INSR(f):
         for i in range(length - 2, -1, -1):
             res = f([seq[i], res])
         return res
+
     return INSR0
 
 
 if self_test:
-    assert(PLASM_INSR(lambda x: x[0] - x[1])([1, 2, 3]) == 2)
+    assert (PLASM_INSR(lambda x: x[0] - x[1])([1, 2, 3]) == 2)
 
 # ===================================================
 # INSL
@@ -426,11 +434,12 @@ def INSL(f):
         for item in seq[1:]:
             res = f([res, item])
         return res
+
     return INSL0
 
 
 if self_test:
-    assert(INSL(lambda x: x[0] - x[1])([1, 2, 3]) == -4)
+    assert (INSL(lambda x: x[0] - x[1])([1, 2, 3]) == -4)
 
 
 # ===================================================
@@ -441,7 +450,7 @@ def CONS(Funs): return lambda x: [f(x) for f in Funs]
 
 
 if self_test:
-    assert(CONS([lambda x: x + 1, lambda x: x + 2])(0) == [1, 2])
+    assert (CONS([lambda x: x + 1, lambda x: x + 2])(0) == [1, 2])
 
 
 # ===================================================
@@ -452,12 +461,13 @@ def IF(funs):
     def IF1(arg):
         f1, f2, f3 = funs
         return f2(arg) if f1(arg) else f3(arg)
+
     return IF1
 
 
 if self_test:
-    assert(IF([lambda x: x, K(True), K(False)])(True) == True)
-    assert(IF([lambda x: x, K(True), K(False)])(False) == False)
+    assert (IF([lambda x: x, K(True), K(False)])(True) == True)
+    assert (IF([lambda x: x, K(True), K(False)])(False) == False)
 
 
 # ===================================================
@@ -471,6 +481,7 @@ def LIFT(f):
 def RAISE(f):
     def RAISE0(args):
         return IF([ISSEQOF(ISFUN), LIFT(f), f])(args)
+
     return RAISE0
 
 
@@ -479,11 +490,12 @@ def RAISE(f):
 # ===================================================
 
 def ISNUM(x):
-    return isinstance(x, int) or isinstance(x, int) or isinstance(x, float) or isinstance(x, complex) or (sys.platform == 'cli' and type(x) == System.Single)
+    return isinstance(x, int) or isinstance(x, int) or isinstance(x, float) or isinstance(x, complex) or (
+        sys.platform == 'cli' and type(x) == System.Single)
 
 
 if self_test:
-    assert(ISNUM(0.0))
+    assert (ISNUM(0.0))
 
 
 def NUMBER_FROM_ZERO_TO_ONE_P(x): return ISNUM(x) and x >= 0 and x <= 1
@@ -491,8 +503,9 @@ def NUMBER_FROM_ZERO_TO_ONE_P(x): return ISNUM(x) and x >= 0 and x <= 1
 
 def ISFUN(x): return isinstance(x, collections.Callable)
 
+
 if self_test:
-    assert(ISFUN(lambda x: x) and ISFUN(abs) and not ISFUN(3))
+    assert (ISFUN(lambda x: x) and ISFUN(abs) and not ISFUN(3))
 
 
 def ISNUMPOS(x): return ISNUM(x) and x > 0
@@ -540,11 +553,13 @@ def ISSEQOF(type_checker):
             if not type_checker(item):
                 return False
         return True
+
     return ISSEQOF0
 
+
 if self_test:
-    assert(ISSEQOF(lambda x: isinstance(x, int))([1, 2, 3]) == True)
-    assert(ISSEQOF(lambda x: isinstance(x, int))([1, 2, 3.0]) == False)
+    assert (ISSEQOF(lambda x: isinstance(x, int))([1, 2, 3]) == True)
+    assert (ISSEQOF(lambda x: isinstance(x, int))([1, 2, 3.0]) == False)
 
 
 def ISNULL(x): return isinstance(x, list) and len(x) == 0
@@ -577,8 +592,9 @@ def ISZERO(N): return N == 0
 
 def ISODD(N): return not ISEVEN(N)
 
+
 if self_test:
-    assert(ISMAT([[1, 2], [3, 4]]) == True and not ISMAT([1, 2, 3, 4]))
+    assert (ISMAT([[1, 2], [3, 4]]) == True and not ISMAT([1, 2, 3, 4]))
 
 
 def VECTSUM(vects): return list(map(sum, list(zip(*vects))))
@@ -586,9 +602,10 @@ def VECTSUM(vects): return list(map(sum, list(zip(*vects))))
 
 def VECTDIFF(vects): return [l[0] - sum(l[1:]) for l in zip(*vects)]
 
+
 if self_test:
-    assert(VECTDIFF([[10, 11, 12], [0, 1, 2], [1, 1, 1]]) == [9, 9, 9])
-    assert(VECTSUM([[10, 11, 12], [0, 1, 2], [1, 1, 1]]) == [11, 13, 15])
+    assert (VECTDIFF([[10, 11, 12], [0, 1, 2], [1, 1, 1]]) == [9, 9, 9])
+    assert (VECTSUM([[10, 11, 12], [0, 1, 2], [1, 1, 1]]) == [11, 13, 15])
 
 
 def IS_PLASM_POINT_2D(obj):
@@ -613,7 +630,6 @@ if self_test:
 
 
 def PLASM_SUM(args):
-
     if isinstance(args, list) and ISPOL(args[0]):
         return PLASM_UNION(args)
 
@@ -635,46 +651,15 @@ def PLASM_SUM(args):
 
 PLASM_ADD = PLASM_SUM
 
+'''
 if self_test:
-    assert(ADD([1, 2, 3]) == 6 and ADD([[1, 2, 3], [4, 5, 6]]) == [5, 7, 9])
-    assert PLASM_SUM([[[1, 2], [3, 4]],  [[10, 20], [30, 40]],  [
-                     [100, 200], [300, 400]]]) == [[111, 222], [333, 444]]
-    assert(LIFT(ADD)([math.cos, math.sin])(PI / 2) == 1.0)
-    assert(RAISE(ADD)([1, 2]) == 3)
-    assert(RAISE(ADD)([math.cos, math.sin])(PI / 2) == 1.0)
+    assert (ADD([1, 2, 3]) == 6 and ADD([[1, 2, 3], [4, 5, 6]]) == [5, 7, 9])
+    assert PLASM_SUM([[[1, 2], [3, 4]], [[10, 20], [30, 40]], [
+        [100, 200], [300, 400]]]) == [[111, 222], [333, 444]]
+    assert (LIFT(ADD)([math.cos, math.sin])(PI / 2) == 1.0)
+    assert (RAISE(ADD)([1, 2]) == 3)
+    assert (RAISE(ADD)([math.cos, math.sin])(PI / 2) == 1.0)'''
 
-
-# ===================================================
-# n-ary DIFFerence
-# ===================================================
-
-def PLASM_NDIFF(args):
-
-    if isinstance(args, list) and ISPOL(args[0]):
-        return PLASM_DIFFERENCE(args)
-
-    if ISNUM(args):
-        return -1 * args
-
-    if isinstance(args, list) and ISNUM(args[0]):
-        return reduce(lambda x, y: x - y, args)
-
-    if isinstance(args, list) and isinstance(args[0], list):
-
-        # matrix difference
-        if isinstance(args[0][0], list):
-            return AA(VECTDIFF)(list(zip(*args)))
-
-        # vector diff
-        else:
-            return VECTDIFF(args)
-
-    raise Exception("\'-\' function has been applied to %s!" % repr(args))
-
-
-if self_test:
-    assert(PLASM_DIFF(
-        2) == -2 and PLASM_DIFF([1, 2, 3]) == -4 and PLASM_DIFF([[1, 2, 3], [1, 2, 3]]) == [0, 0, 0])
 
 # ===================================================
 # n-ary PRODuct
@@ -692,7 +677,7 @@ def PLASM_PROD(args):
 
 
 if self_test:
-    assert(PLASM_PROD([1, 2, 3, 4]) == 24 and PLASM_PROD(
+    assert (PLASM_PROD([1, 2, 3, 4]) == 24 and PLASM_PROD(
         [[1, 2, 3], [4, 5, 6]]) == 32)
 
 SQR = RAISE(RAISE(PLASM_PROD))([ID, ID])
@@ -707,7 +692,7 @@ def DIV(args):
 
 
 if self_test:
-    assert(DIV([10, 2, 5]) == 1.0)
+    assert (DIV([10, 2, 5]) == 1.0)
 
 # ===================================================
 # REVERSE
@@ -721,7 +706,7 @@ def REVERSE(List):
 
 
 if self_test:
-    assert(REVERSE([1, 2, 3]) == [3, 2, 1] and REVERSE([1]) == [1])
+    assert (REVERSE([1, 2, 3]) == [3, 2, 1] and REVERSE([1]) == [1])
 
 LEN = len
 
@@ -735,7 +720,7 @@ def TRANS(List):
 
 
 if self_test:
-    assert(TRANS([[1, 2], [3, 4]]) == [[1, 3], [2, 4]])
+    assert (TRANS([[1, 2], [3, 4]]) == [[1, 3], [2, 4]])
 
 
 def FIRST(List): return List[0]
@@ -760,10 +745,10 @@ def LIST(x): return [x]
 
 
 if self_test:
-    assert(AR([[1, 2, 3], 0, ]) == [1, 2, 3, 0])
+    assert (AR([[1, 2, 3], 0, ]) == [1, 2, 3, 0])
 
 if self_test:
-    assert(AL([0, [1, 2, 3]]) == [0, 1, 2, 3])
+    assert (AL([0, [1, 2, 3]]) == [0, 1, 2, 3])
 
 
 # ===================================================
@@ -774,9 +759,8 @@ greater = max
 BIGGEST = max
 SMALLEST = min
 
-
 if self_test:
-    assert(greater(1, 2) == 2 and BIGGEST([1, 2, 3, 4]) == 4)
+    assert (greater(1, 2) == 2 and BIGGEST([1, 2, 3, 4]) == 4)
 
 
 # ===================================================
@@ -792,12 +776,13 @@ OR = Or
 def Not(x):
     return not x
 
+
 NOT = AA(Not)
 
 if self_test:
-    assert(AND([True, True, True]) == True and AND(
+    assert (AND([True, True, True]) == True and AND(
         [True, False, True]) == False)
-    assert(OR([True, False, True]) == True and OR(
+    assert (OR([True, False, True]) == True and OR(
         [False, False, False]) == False)
 
 
@@ -826,7 +811,7 @@ def INTSTO(n):
 
 
 if self_test:
-    assert(INTSTO(5) == [1, 2, 3, 4, 5])
+    assert (INTSTO(5) == [1, 2, 3, 4, 5])
 
 
 def FROMTO(args):
@@ -834,7 +819,7 @@ def FROMTO(args):
 
 
 if self_test:
-    assert(FROMTO([1, 4]) == [1, 2, 3, 4])
+    assert (FROMTO([1, 4]) == [1, 2, 3, 4])
 
 # ===================================================
 # PLASM  selectors
@@ -857,7 +842,7 @@ S9 = SEL(9)
 S10 = SEL(10)
 
 if self_test:
-    assert(S1([1, 2, 3]) == 1 and S2([1, 2, 3]) == 2)
+    assert (S1([1, 2, 3]) == 1 and S2([1, 2, 3]) == 2)
 
 # ===================================================
 # PLASM  repeat operators
@@ -874,7 +859,7 @@ def N(n):
 
 
 if self_test:
-    assert(N(3)(10) == [10, 10, 10])
+    assert (N(3)(10) == [10, 10, 10])
 
 
 def DIESIS(n):
@@ -887,7 +872,7 @@ def DIESIS(n):
 
 
 if self_test:
-    assert(DIESIS(3)(10) == [10, 10, 10])
+    assert (DIESIS(3)(10) == [10, 10, 10])
 
 
 def NN(n):
@@ -900,7 +885,7 @@ def NN(n):
 
 
 if self_test:
-    assert(NN(3)([10]) == [10, 10, 10])
+    assert (NN(3)([10]) == [10, 10, 10])
 
 
 def DOUBLE_DIESIS(n):
@@ -911,14 +896,16 @@ def DOUBLE_DIESIS(n):
     """
     return lambda List: List * int(n)
 
+
 # NEW DEFINITION:
 
 
 def REPEAT(n, args):
     return DOUBLE_DIESIS(n)(args)
 
+
 if self_test:
-    assert(DOUBLE_DIESIS(3)([10]) == [10, 10, 10])
+    assert (DOUBLE_DIESIS(3)([10]) == [10, 10, 10])
 
 
 # ===================================================
@@ -927,6 +914,7 @@ if self_test:
 
 def C(fun):
     return lambda arg1: lambda arg2: fun([arg1, arg2])
+
 
 # ===================================================
 # Miscellanea (1/3) of "standard" functions
@@ -938,7 +926,7 @@ def AS(fun):
 
 
 if self_test:
-    assert(AS(SEL)([1, 2, 3])([10, 11, 12]) == [10, 11, 12])
+    assert (AS(SEL)([1, 2, 3])([10, 11, 12]) == [10, 11, 12])
 
 
 def AC(fun):
@@ -946,20 +934,22 @@ def AC(fun):
 
 
 if self_test:
-    assert(AC(SEL)([1, 2, 3])([10, 11, [12, [13]]]) == 13)
+    assert (AC(SEL)([1, 2, 3])([10, 11, [12, [13]]]) == 13)
 
 
 def CHARSEQ(String):
     return [String[i] for i in range(len(String))]
 
+
 if self_test:
-    assert(CHARSEQ('hello') == ['h', 'e', 'l', 'l', 'o'])
+    assert (CHARSEQ('hello') == ['h', 'e', 'l', 'l', 'o'])
 
 
 def STRING(Charseq): return reduce(lambda x, y: x + y, Charseq)
 
+
 if self_test:
-    assert(STRING(CHARSEQ('hello')) == 'hello')
+    assert (STRING(CHARSEQ('hello')) == 'hello')
 
 
 def RANGE(Pair):
@@ -969,13 +959,14 @@ def RANGE(Pair):
 
 
 if self_test:
-    assert(RANGE([1, 3]) == [1, 2, 3] and RANGE([3, 1]) == [3, 2, 1])
+    assert (RANGE([1, 3]) == [1, 2, 3] and RANGE([3, 1]) == [3, 2, 1])
 
 
 def SIGN(Number): return +1 if Number >= 0 else -1
 
+
 if self_test:
-    assert(SIGN(10) == 1 and SIGN(-10) == -1)
+    assert (SIGN(10) == 1 and SIGN(-10) == -1)
 
 
 def PRINT(AnyValue):
@@ -1000,13 +991,14 @@ def TREE(f):
             return List[0]
         k = int(len(List) / 2)
         return f([TREE_NO_CURRIED(f, List[:k])] + [TREE_NO_CURRIED(f, List[k:])])
+
     return lambda x: TREE_NO_CURRIED(f, x)
 
 
 if self_test:
-    assert(
+    assert (
         TREE(lambda x: x[0] if x[0] >= x[-1] else x[-1])([1, 2, 3, 4, 3, 2, 1]) == 4)
-    assert(
+    assert (
         TREE(lambda x: x[0] if x[0] >= x[-1] else x[-1])([1, 2, 3, 4, 3, 2]) == 4)
 
 # ===================================================
@@ -1022,14 +1014,16 @@ def MERGE(f):
         if len(list_b) == 0:
             return list_a
         res = f(list_a[0], list_b[0])
-        if not(res):
+        if not (res):
             return [list_a[0]] + MERGE_NO_CURRIED(f, [list_a[1:], list_b])
         else:
             return [list_b[0]] + MERGE_NO_CURRIED(f, [list_a, list_b[1:]])
+
     return lambda x: MERGE_NO_CURRIED(f, x)
 
+
 if self_test:
-    assert(MERGE(lambda x, y: x > y)(
+    assert (MERGE(lambda x, y: x > y)(
         [[1, 3, 4, 5], [2, 4, 8]]) == [1, 2, 3, 4, 4, 5, 8])
 
 # ===================================================
@@ -1042,12 +1036,14 @@ def CASE(ListPredFuns):
         for p in ListPredFuns:
             if p[0](x):
                 return p[1](x)
+
     return lambda arg: CASE_NO_CURRIED(ListPredFuns, arg)
 
+
 if self_test:
-    assert(CASE([[LT(0), K(-1)], [C(EQ)(0), K(0)], [GT(0), K(+1)]])(-10) == -1)
-    assert(CASE([[LT(0), K(-1)], [C(EQ)(0), K(0)], [GT(0), K(+1)]])(0) == 0)
-    assert(CASE([[LT(0), K(-1)], [C(EQ)(0), K(0)], [GT(0), K(+1)]])(10) == +1)
+    assert (CASE([[LT(0), K(-1)], [C(EQ)(0), K(0)], [GT(0), K(+1)]])(-10) == -1)
+    assert (CASE([[LT(0), K(-1)], [C(EQ)(0), K(0)], [GT(0), K(+1)]])(0) == 0)
+    assert (CASE([[LT(0), K(-1)], [C(EQ)(0), K(0)], [GT(0), K(+1)]])(10) == +1)
 
 # ===================================================
 # GEOMETRIC FUNCTION
@@ -1071,6 +1067,7 @@ def VIEWBASE(objects):
             raise ExceptionWT("The arguments must be objects!")
         geoms.append(x.geom)
     nclabinst.visualize(nclabinst.converter(geoms))
+
 
 # English:
 
@@ -1104,19 +1101,19 @@ STEEL = [200, 200, 200]
 
 
 class BASEOBJ:
-
     def __init__(self, basegeom):
         self.color = STEEL
         self.geom = basegeom
         self.dim = PLASM_DIM(basegeom)
-        self.material = [1, 0, 0, 1,  0, 1, 0, 1,  0, 0, 1, 0, 0, 0, 0, 1, 100]
+        self.material = [1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 100]
 
     def __getattr__(self, name):
         # special attributes are probably not searched by normal user
         if name[0:2] == '__' and name[-2:]:
             raise AttributeError
         raise ExceptionWT(
-            'Did you want to write "," (comma) instead of "." (period) before "%s" or did you misspell "%s"?' % (name, name))
+            'Did you want to write "," (comma) instead of "." (period) before "%s" or did you misspell "%s"?' % (
+                name, name))
 
     def __coerce__(self, other):
         if isinstance(other, list):
@@ -1138,7 +1135,7 @@ class BASEOBJ:
             raise ExceptionWT(
                 "Material must be a list of 17 values: ambientRGBA, diffuseRGBA specularRGBA emissionRGBA shininess")
 
-    def getmaterial():
+    def getmaterial(self):
         return self.material
 
     def setcolor(self, color=STEEL):
@@ -1160,6 +1157,7 @@ class BASEOBJ:
                 "Color must be a list, either [R, G, B] or [R, G, B, A]!")
         self.color = color
         self.geom = PLASM_COLOR(color)(self.geom)
+
     # Subtract a single object or list of objects from self, changing self's
     # geometry:
 
@@ -1185,6 +1183,7 @@ class BASEOBJ:
         newgeom = PLASM_DIFF(geoms)
         self.geom = newgeom
         self.setcolor(self.color)
+
     # Subtract a single object or list of objects from self, NOT changing
     # self's geometry:
 
@@ -1237,9 +1236,9 @@ class BASEOBJ:
         if axis != 1 and axis != 2 and axis != 3:
             raise ExceptionWT(
                 "The third argument of ROTATE must be either X (x-axis), Y (y-axis), or Z (z-axis)!")
-        # if self.dim == 2 and axis != 3:
+            # if self.dim == 2 and axis != 3:
             # THIS CONDITION WAS IN THE WAY WHEN I MOVED CURVED SURFACES IN 3D:
-            #raise ExceptionWT("2D objects may be rotated in the xy-plane only, not in 3D!")
+            # raise ExceptionWT("2D objects may be rotated in the xy-plane only, not in 3D!")
         if axis == 1:
             plane_indexes = [2, 3]
         elif axis == 2:
@@ -1300,16 +1299,16 @@ class BASEOBJ:
         return self.dim
 
     def scale(self, a, b, c=1):
-        #if a < 0 or b < 0 or c < 0:
+        # if a < 0 or b < 0 or c < 0:
         # THIS WAS IN THE WAY WHEN I DEFINED FLIP()
         #    raise ExceptionWT(
         #        "When scaling an object, all axial coefficients must be greater than zero!")
         if a == 0 or b == 0 or c == 0:
             raise ExceptionWT(
                 "When scaling an object, all coefficients must be nonzero!")
-        # if self.dim == 2 and c != 1.0:
+            # if self.dim == 2 and c != 1.0:
             # THIS CONDITION WAS IN THE WAY WHEN I MOVED CURVED SURFACES IN 3D:
-            #raise ExceptionWT("2D objects may be scaled in the xy-plane only, not in 3D!")
+            # raise ExceptionWT("2D objects may be scaled in the xy-plane only, not in 3D!")
         if self.dim == 3:
             self.geom = PLASM_SCALE([1, 2, 3])([a, b, c])(self.geom)
         else:
@@ -1523,6 +1522,7 @@ def SIZEZ(obj):
     else:
         return MAXZ(obj) - MINZ(obj)
 
+
 # ===========================================================
 # ERASE(obj, axis, min, max) - ERASE PART OF OBJECT THAT LIES
 # BETWEEN MIN AND MAX in AXIAL DIRECTION "axis"
@@ -1597,6 +1597,7 @@ def ERASE(obj, axis, minval, maxval):
                     oo.erasex(minval, maxval)
                     oo.rotate(-90, 2)
     return COPY(obj)
+
 
 # ============================================================
 # SPLIT(obj, axis, coord) - SPLIT AN OBJECT IN AXIAL DIRECTION
@@ -1674,6 +1675,7 @@ def SPLIT(obj, axis, coord):
                 obj2.append(oo2)
     return obj1, obj2
 
+
 # =========================================================
 # COPYING OBJECTS AND LISTS OF OBJECTS (LISTS ARE FLATTENED
 # =========================================================
@@ -1721,8 +1723,9 @@ def CUBOID(sizes_list):
     pol = Plasm.scale(Plasm.cube(dim), Vecf([0.0] + sizes_list))
     return pol
 
+
 if self_test:
-    assert(Plasm.limits(CUBOID([1, 2, 3])) == Boxf(
+    assert (Plasm.limits(CUBOID([1, 2, 3])) == Boxf(
         Vecf(1, 0, 0, 0), Vecf(1, 1, 2, 3)))
 
 # ===================================================
@@ -1930,6 +1933,7 @@ def BOX(*args):
         return obj
     raise ExceptionWT("The BOX command accepts 1, 2, 3, 4 or 6 parameters!")
 
+
 # ===================================================
 # BRICK
 # ===================================================
@@ -1939,7 +1943,7 @@ def brick(*args):
         "Command brick() is undefined. Try BRICK() instead?")
 
 
-def BRICK(a, b, c, r = 0):
+def BRICK(a, b, c, r=0):
     if not ISNUMBER(a):
         raise ExceptionWT("Size a in BRICK(a, b, c, r=0) must be a number!")
     if not ISNUMBER(b):
@@ -1962,57 +1966,58 @@ def BRICK(a, b, c, r = 0):
     if abs(r) < 1e-10:
         return BOX(a, b, c)
     else:
-        if r < a-r: 
-            o1 = PRISM(RECTANGLE(c, b, r), a - 2*r)
+        if r < a - r:
+            o1 = PRISM(RECTANGLE(c, b, r), a - 2 * r)
             MOVE(o1, -c, 0, 0)
             ROTATE(o1, 90, Y)
             MOVE(o1, r, 0, 0)
-        else: 
+        else:
             o1 = []
-        if r < b-r: 
-            o2 = PRISM(RECTANGLE(a, c, r), b - 2*r)
+        if r < b - r:
+            o2 = PRISM(RECTANGLE(a, c, r), b - 2 * r)
             MOVE(o2, 0, -c, 0)
             ROTATE(o2, -90, X)
             MOVE(o2, 0, r, 0)
-        else: 
+        else:
             o2 = []
-        if r < c-r: 
-            o3 = PRISM(RECTANGLE(a, b, r), c - 2*r)
+        if r < c - r:
+            o3 = PRISM(RECTANGLE(a, b, r), c - 2 * r)
             MOVE(o3, 0, 0, r)
-        else: 
+        else:
             o3 = []
         c1 = SPHERE(r)
         c5 = COPY(c1)
-        ERASE(c1, Z, -2*r, 0)
-        ERASE(c1, Y, -2*r, 0)
-        ERASE(c1, X, -2*r, 0)
+        ERASE(c1, Z, -2 * r, 0)
+        ERASE(c1, Y, -2 * r, 0)
+        ERASE(c1, X, -2 * r, 0)
         c2 = COPY(c1)
-        MOVE(c1, a-r, b-r, c-r)
+        MOVE(c1, a - r, b - r, c - r)
         ROTATE(c2, 90, Z)
         c3 = COPY(c2)
-        MOVE(c2, r, b-r, c-r)
+        MOVE(c2, r, b - r, c - r)
         ROTATE(c3, 90, Z)
         c4 = COPY(c3)
-        MOVE(c3, r, r, c-r)
+        MOVE(c3, r, r, c - r)
         ROTATE(c4, 90, Z)
-        MOVE(c4, a-r, r, c-r)
+        MOVE(c4, a - r, r, c - r)
         ROTATE(c5, 90, Y)
-        ERASE(c5, Z, 0, 2*r)
-        ERASE(c5, Y, -2*r, 0)
-        ERASE(c5, X, -2*r, 0)
+        ERASE(c5, Z, 0, 2 * r)
+        ERASE(c5, Y, -2 * r, 0)
+        ERASE(c5, X, -2 * r, 0)
         c6 = COPY(c5)
-        MOVE(c5, a-r, b-r, r)
+        MOVE(c5, a - r, b - r, r)
         ROTATE(c6, 90, Z)
         c7 = COPY(c6)
-        MOVE(c6, r, b-r, r)
+        MOVE(c6, r, b - r, r)
         ROTATE(c7, 90, Z)
         c8 = COPY(c7)
         MOVE(c7, r, r, r)
         ROTATE(c8, 90, Z)
-        MOVE(c8, a-r, r, r)
-        return WELD(o1, o2, o3, c1, c2, c3, c4, c5, c6, c7, c8)    
+        MOVE(c8, a - r, r, r)
+        return WELD(o1, o2, o3, c1, c2, c3, c4, c5, c6, c7, c8)
 
-# English:
+    # English:
+
 # Czech::
 KVADR = BRICK
 CIHLA = BRICK
@@ -2047,7 +2052,7 @@ def rectangle(*args):
         "Command rectangle() is undefined. Try RECTANGLE() instead?")
 
 
-def RECTANGLE(a, b, r = 0):
+def RECTANGLE(a, b, r=0):
     if not ISNUMBER(a):
         raise ExceptionWT("Size a in RECTANGLE(a, b, r=0) must be a number!")
     if not ISNUMBER(b):
@@ -2066,13 +2071,13 @@ def RECTANGLE(a, b, r = 0):
     if abs(r) < 1e-10:
         return BOX(a, b)
     else:
-        if r < a-r: 
-            o1 = BOX(r, a-r, 0, b)
-        else: 
+        if r < a - r:
+            o1 = BOX(r, a - r, 0, b)
+        else:
             o1 = []
-        if r < b-r: 
-            o2 = BOX(0, a, r, b-r)
-        else: 
+        if r < b - r:
+            o2 = BOX(0, a, r, b - r)
+        else:
             o2 = []
         arc1 = ARC(0, r, 90, 8)
         arc2 = COPY(arc1)
@@ -2081,13 +2086,15 @@ def RECTANGLE(a, b, r = 0):
         ROTATE(arc3, 90)
         arc4 = COPY(arc3)
         ROTATE(arc4, 90)
-        MOVE(arc1, a-r, b-r)
-        MOVE(arc2, r, b-r)
+        MOVE(arc1, a - r, b - r)
+        MOVE(arc2, r, b - r)
         MOVE(arc3, r, r)
-        MOVE(arc4, a-r, r)
-        return WELD(o1, o2, arc1, arc2, arc3, arc4)    
+        MOVE(arc4, a - r, r)
+        return WELD(o1, o2, arc1, arc2, arc3, arc4)
 
-# English:
+    # English:
+
+
 RECT = RECTANGLE
 # Czech:
 OBDELNIK = RECTANGLE
@@ -2149,7 +2156,7 @@ def hexahedron(*args):
         "Command hexahedron() is undefined. Try HEXAHEDRON() instead?")
 
 
-def HEXAHEDRON(size, r = 0):
+def HEXAHEDRON(size, r=0):
     if size <= 0:
         raise ExceptionWT("HEXAHEDRON(x) requires a positive value of x!")
     c = CUBE(size, r)
@@ -2179,8 +2186,9 @@ HEXAEDRE = HEXAHEDRON
 def PLASM_SIMPLEX(dim):
     return Plasm.simplex(dim)
 
+
 if self_test:
-    assert(Plasm.limits(PLASM_SIMPLEX(3)) == Boxf(
+    assert (Plasm.limits(PLASM_SIMPLEX(3)) == Boxf(
         Vecf(1, 0, 0, 0), Vecf(1, 1, 1, 1)))
 
 # NEW DEFINITION:
@@ -2223,10 +2231,12 @@ def ISPOLDIM(dims):
         d = dims[0]
         n = dims[1]
         return (d == PLASM_DIM(pol)) and (n == RN(pol))
+
     return ISPOLDIM1
 
+
 if self_test:
-    assert(RN(Plasm.cube(2)) == 2 and PLASM_DIM(Plasm.cube(2)) == 2)
+    assert (RN(Plasm.cube(2)) == 2 and PLASM_DIM(Plasm.cube(2)) == 2)
 
 # ===================================================
 # MKPOL
@@ -2238,9 +2248,10 @@ def MKPOL(args_list):
     dim = len(points[0])
     return Plasm.mkpol(dim, CAT(points), [[i - 1 for i in x] for x in cells], plasm_config.tolerance())
 
+
 if self_test:
-    assert(Plasm.limits(MKPOL([[[0, 0], [1, 0], [1, 1], [0, 1]], [
-           [1, 2, 3, 4]], None])) == Boxf(Vecf(1, 0, 0), Vecf(1, 1, 1)))
+    assert (Plasm.limits(MKPOL([[[0, 0], [1, 0], [1, 1], [0, 1]], [
+        [1, 2, 3, 4]], None])) == Boxf(Vecf(1, 0, 0), Vecf(1, 1, 1)))
 
 
 # mkpol of a single point
@@ -2255,6 +2266,7 @@ MK = COMP([MKPOL, CONS([LIST, K([[1]]), K([[1]])])])
 
 def PLASM_CONVEXHULL(points):
     return MKPOL([points, [list(range(1, len(points) + 1))], [[1]]])
+
 
 # NEW DEFINITION (ALLOWS OMITTING BRACKETS)
 
@@ -2316,9 +2328,10 @@ def UKPOL(pol):
     pols = [[1]]
     return [points, hulls, pols]
 
+
 if self_test:
-    assert(UKPOL(Plasm.cube(2)) == [
-           [[0, 1], [0, 0], [1, 1], [1, 0]], [[4, 2, 1, 3]], [[1]]])
+    assert (UKPOL(Plasm.cube(2)) == [
+        [[0, 1], [0, 0], [1, 1], [1, 0]], [[4, 2, 1, 3]], [[1]]])
 
 # return first point of a ukpol
 UK = COMP([COMP([S1, S1]), UKPOL])
@@ -2330,6 +2343,7 @@ UK = COMP([COMP([S1, S1]), UKPOL])
 
 # not supported in new Python Plasm
 def OPTIMIZE(pol): return pol
+
 
 # ===================================================
 # UKPOLF
@@ -2346,6 +2360,7 @@ def UKPOLF(pol):
     hulls = [[i + 1 for i in x] for x in u]
     pols = [[1]]
     return [faces, hulls, pols]
+
 
 if self_test:
     temp = UKPOLF(Plasm.cube(3))
@@ -2366,14 +2381,18 @@ def PLASM_TRANSLATE(axis):
             for a, t in zip(axis, values):
                 vt.set(a, t)
             return Plasm.translate(pol, vt)
+
         return lambda pol: PLASM_TRANSLATE2(axis, values, pol)
+
     return lambda values: PLASM_TRANSLATE1(axis, values)
+
+
 PLASM_T = PLASM_TRANSLATE
 
 if self_test:
-    assert(Plasm.limits(PLASM_TRANSLATE([1, 2, 3])([0, 0, 2])(
+    assert (Plasm.limits(PLASM_TRANSLATE([1, 2, 3])([0, 0, 2])(
         Plasm.cube(2))) == Boxf(Vecf(1, 0, 0, 2), Vecf(1, 1, 1, 2)))
-    assert(Plasm.limits(PLASM_TRANSLATE([1, 2, 3])([1, 0, 2])(
+    assert (Plasm.limits(PLASM_TRANSLATE([1, 2, 3])([1, 0, 2])(
         Plasm.cube(2))) == Boxf(Vecf(1, 1, 0, 2), Vecf(1, 2, 1, 2)))
 
 # NEW DEFINITION:
@@ -2410,6 +2429,7 @@ def MOVE(obj, t1, t2, t3=0):
             oo.move(t1, t2, t3)
             newobj.append(COPY(oo))
         return newobj
+
 
 TRANSLATE = MOVE
 T = MOVE
@@ -2457,14 +2477,18 @@ def PLASM_SCALE(axis):
             for a, t in zip(axis, values):
                 vs.set(a, t)
             return Plasm.scale(pol, vs)
+
         return lambda pol: PLASM_SCALE2(axis, values, pol)
+
     return lambda values: PLASM_SCALE1(axis, values)
+
+
 PLASM_S = PLASM_SCALE
 
 if self_test:
-    assert(Plasm.limits(PLASM_S(3)(2)(Plasm.cube(3)))
-           == Boxf(Vecf(1, 0, 0, 0), Vecf(1, 1, 1, 2)))
-    assert(Plasm.limits(PLASM_S([3, 1])([4, 2])(Plasm.cube(3))) == Boxf(
+    assert (Plasm.limits(PLASM_S(3)(2)(Plasm.cube(3)))
+            == Boxf(Vecf(1, 0, 0, 0), Vecf(1, 1, 1, 2)))
+    assert (Plasm.limits(PLASM_S([3, 1])([4, 2])(Plasm.cube(3))) == Boxf(
         Vecf(1, 0, 0, 0), Vecf(1, 2, 1, 4)))
 
 # NEW DEFINITION:
@@ -2499,6 +2523,7 @@ def SCALE(obj, a, b, c=1):
             oo.scale(a, b, c)
     return COPY(obj)
 
+
 S = SCALE
 # Czech:
 SKALUJ = SCALE
@@ -2526,6 +2551,7 @@ REDIMENSIONNER = SCALE
 def flip(*args):
     raise ExceptionWT(
         "Command flip() is undefined. Try FLIP() instead?")
+
 
 def FLIP(obj, axis, coord):
     if axis != 'x' and axis != 'y' and axis != 'z' and axis != 'X' and axis != 'Y' and axis != 'Z' and axis != 1 and axis != 2 and axis != 3:
@@ -2560,6 +2586,7 @@ def FLIP(obj, axis, coord):
                 FLIP3D(oo, axis, coord)
     return COPY(obj)
 
+
 def FLIP2D(obj, axis, coord):
     if not axis in [X, Y] and not axis in [1, 2]:
         raise ExceptionWT(
@@ -2572,6 +2599,7 @@ def FLIP2D(obj, axis, coord):
         MOVE(obj, 0, -coord)
         SCALE(obj, 1, -1)
         MOVE(obj, 0, coord)
+
 
 def FLIP3D(obj, axis, coord):
     if not axis in [X, Y, Z] and not axis in [1, 2, 3]:
@@ -2590,6 +2618,7 @@ def FLIP3D(obj, axis, coord):
         SCALE(obj, 1, 1, -1)
         MOVE(obj, 0, 0, coord)
 
+
 # ===================================================
 # ROTATE
 # ===================================================
@@ -2600,12 +2629,16 @@ def PLASM_ROTATE(plane_indexes):
         def PLASM_ROTATE2(pol):
             dim = max(plane_indexes)
             return Plasm.rotate(pol, dim, plane_indexes[0], plane_indexes[1], angle)
+
         return PLASM_ROTATE2
+
     return PLASM_ROTATE1
+
+
 PLASM_R = PLASM_ROTATE
 
 if self_test:
-    assert(Plasm.limits(PLASM_ROTATE([1, 2])(
+    assert (Plasm.limits(PLASM_ROTATE([1, 2])(
         PI / 2)(Plasm.cube(2))).fuzzyEqual(Boxf(Vecf(1, -1, 0), Vecf(1, 0, +1))))
 
 # NEW DEFINITION
@@ -2654,6 +2687,7 @@ def ROTATERAD(obj, angle_rad, axis=3, point=[0, 0, 0]):
             oo.rotaterad(angle_rad, axis, centerpoint)
     return COPY(obj)
 
+
 RRAD = ROTATERAD
 # Czech:
 OTOCRAD = ROTATERAD
@@ -2700,7 +2734,7 @@ def ROTATE(obj, angle_deg, axis=3, point=[0, 0, 0]):
         centerpoint = axis
         axis = 3
     if axis != 'x' and axis != 'y' and axis != 'z' and axis != 'X' and axis != 'Y' and axis != 'Z' and axis != 1 and axis != 2 and axis != 3:
-        #print("Axis is:", axis)
+        # print("Axis is:", axis)
         raise ExceptionWT(
             "In ROTATE(obj, angle, axis), axis must be X, Y or Z!")
     if axis == 'x' or axis == 'X':
@@ -2723,6 +2757,7 @@ def ROTATE(obj, angle_deg, axis=3, point=[0, 0, 0]):
             oo.rotate(angle_deg, axis, centerpoint)
             newobj.append(COPY(oo))
         return newobj
+
 
 ROTATEDEG = ROTATE
 RDEG = ROTATEDEG
@@ -2754,8 +2789,8 @@ TOURNER = ROTATE
 TOURNE = ROTATE
 
 # ===================================================
-#; Applica uno shearing con vettore shearing-vector-list sulla variabile
-#; i-esima del complesso poliedrale pol-complex
+# ; Applica uno shearing con vettore shearing-vector-list sulla variabile
+# ; i-esima del complesso poliedrale pol-complex
 # ===================================================
 
 
@@ -2763,8 +2798,12 @@ def SHEARING(i):
     def SHEARING1(shearing_vector_list):
         def SHEARING2(pol):
             raise Exception("Shearing not implemented!")
+
         return SHEARING2
+
     return SHEARING1
+
+
 H = SHEARING
 
 # ===================================================
@@ -2776,10 +2815,12 @@ def MAT(matrix):
     def MAT0(pol):
         vmat = Matf(CAT(matrix))
         return Plasm.transform(pol, vmat, vmat.invert())
+
     return MAT0
 
+
 if self_test:
-    assert(Plasm.limits(MAT([[1, 0, 0], [1, 1, 0], [2, 0, 1]])(
+    assert (Plasm.limits(MAT([[1, 0, 0], [1, 1, 0], [2, 0, 1]])(
         Plasm.cube(2))) == Boxf(Vecf(1, 1, 2), Vecf(1, 2, 3)))
 
 # ===================================================
@@ -2791,7 +2832,9 @@ def EMBED(up_dim):
     def EMBED1(pol):
         new_dim_pol = Plasm.getSpaceDim(pol) + up_dim
         return Plasm.embed(pol, new_dim_pol)
+
     return EMBED1
+
 
 # NEW DEFINITION:
 
@@ -2799,13 +2842,13 @@ def EMBED(up_dim):
 def FOOTPRINT(obj):
     return EMBED(1)(PLASM_BOX([1, 2])(obj))
 
+
 # ===================================================
 # STRUCT
 # ===================================================
 
 
 def PLASM_STRUCT(seq, nrec=0):
-
     if not isinstance(seq, list):
         raise Exception("PLASM_STRUCT must be applied to a list!")
 
@@ -2848,11 +2891,14 @@ def PLASM_STRUCT(seq, nrec=0):
 
     return Plasm.Struct(pols)
 
+
 if self_test:
-    assert(Plasm.limits(PLASM_STRUCT([Plasm.cube(2),  PLASM_TRANSLATE([1, 2, 3])([1, 1, 0]),  PLASM_TRANSLATE(
-        [1, 2, 3])([1, 1, 0]),  Plasm.cube(2), Plasm.cube(2, 1, 2)])).fuzzyEqual(Boxf(Vecf(1, 0, 0), Vecf(1, 4, 4))))
-    assert(Plasm.limits(PLASM_STRUCT([PLASM_TRANSLATE([1, 2, 3])([1, 1, 0]), PLASM_TRANSLATE([1, 2, 3])([1, 1, 0]), Plasm.cube(2),  PLASM_TRANSLATE(
-        [1, 2, 3])([1, 1, 0]), PLASM_TRANSLATE([1, 2, 3])([1, 1, 0]),  Plasm.cube(2), Plasm.cube(2, 1, 2)])).fuzzyEqual(Boxf(Vecf(1, 2, 2), Vecf(1, 6, 6))))
+    assert (Plasm.limits(PLASM_STRUCT([Plasm.cube(2), PLASM_TRANSLATE([1, 2, 3])([1, 1, 0]), PLASM_TRANSLATE(
+        [1, 2, 3])([1, 1, 0]), Plasm.cube(2), Plasm.cube(2, 1, 2)])).fuzzyEqual(Boxf(Vecf(1, 0, 0), Vecf(1, 4, 4))))
+    assert (Plasm.limits(PLASM_STRUCT(
+        [PLASM_TRANSLATE([1, 2, 3])([1, 1, 0]), PLASM_TRANSLATE([1, 2, 3])([1, 1, 0]), Plasm.cube(2), PLASM_TRANSLATE(
+            [1, 2, 3])([1, 1, 0]), PLASM_TRANSLATE([1, 2, 3])([1, 1, 0]), Plasm.cube(2),
+         Plasm.cube(2, 1, 2)])).fuzzyEqual(Boxf(Vecf(1, 2, 2), Vecf(1, 6, 6))))
 
 # NEW DEFINITION (ALLOWS OMITTING BRACKETS)
 # English:
@@ -2870,6 +2916,7 @@ def STRUCT(*args):
     if len(list1) < 1:
         raise ExceptionWT("STRUCT() must be applied to some objects!")
     return list1
+
 # OLD DEFINITION - THERE WERE PROBLEMS WITH COLORS
 # def STRUCT(*args):
 #    list1 = list(args)
@@ -2909,6 +2956,7 @@ def PLASM_UNION(objs_list):
         return COLOR(result, color)
     else:
         return result
+
 
 # ===================================================
 # WELD = HARD UNION (ORIGINAL, COMPUTATIONALLY EXPENSIVE)
@@ -2981,6 +3029,7 @@ def PLASM_INTERSECTION(objs_list):
     result = Plasm.boolop(BOOL_CODE_AND, objs_list, plasm_config.tolerance(
     ), plasm_config.maxnumtry(), plasm_config.useOctreePlanes())
     return result
+
 
 PLASM_I = PLASM_INTERSECTION
 
@@ -3071,6 +3120,7 @@ def INTERSECTIONOLDUNUSED(*args):
             result.append(obj)
         return result
 
+
 I = INTERSECTION
 # Czech:
 PRUNIK = INTERSECTION
@@ -3097,7 +3147,42 @@ def PLASM_DIFFERENCE(objs_list):
     ), plasm_config.maxnumtry(), plasm_config.useOctreePlanes())
     return result
 
+
 PLASM_DIFF = PLASM_DIFFERENCE
+
+
+# ===================================================
+# n-ary DIFFerence
+# ===================================================
+
+def PLASM_NDIFF(args):
+    if isinstance(args, list) and ISPOL(args[0]):
+        return PLASM_DIFFERENCE(args)
+
+    if ISNUM(args):
+        return -1 * args
+
+    if isinstance(args, list) and ISNUM(args[0]):
+        return reduce(lambda x, y: x - y, args)
+
+    if isinstance(args, list) and isinstance(args[0], list):
+
+        # matrix difference
+        if isinstance(args[0][0], list):
+            return AA(VECTDIFF)(list(zip(*args)))
+
+        # vector diff
+        else:
+            return VECTDIFF(args)
+
+    raise Exception("\'-\' function has been applied to %s!" % repr(args))
+
+
+if self_test:
+    assert (PLASM_DIFF(
+        2) == -2 and PLASM_DIFF([1, 2, 3]) == -4 and PLASM_DIFF([[1, 2, 3], [1, 2, 3]]) == [0, 0, 0])
+
+
 
 # SUBTRACT IS ALWAYS BINARY BUT EITHER ITEM CAN BE A LIST.
 # SECOND OBJECT IS SUBTRACTED FROM THE FIRST, AND THE FIRST OBJECT CHANGES:
@@ -3299,6 +3384,7 @@ def PLASM_XOR(objs_list):
     ), plasm_config.maxnumtry(), plasm_config.useOctreePlanes())
     return result
 
+
 # NEW DEFINITION, JUST FOR TWO OBJECTS
 
 
@@ -3312,14 +3398,15 @@ def XOR(a, b):
     L.append(DIFF(b, a))
     return L
 
+
 if self_test:
-    assert(Plasm.limits(PLASM_UNION([Plasm.cube(2, 0, 1), Plasm.cube(
+    assert (Plasm.limits(PLASM_UNION([Plasm.cube(2, 0, 1), Plasm.cube(
         2, 0.5, 1.5)])).fuzzyEqual(Boxf(Vecf(1, 0, 0), Vecf(1, 1.5, 1.5))))
-    assert(Plasm.limits(PLASM_INTERSECTION([Plasm.cube(2, 0, 1), Plasm.cube(
+    assert (Plasm.limits(PLASM_INTERSECTION([Plasm.cube(2, 0, 1), Plasm.cube(
         2, 0.5, 1.5)])).fuzzyEqual(Boxf(Vecf(1, 0.5, 0.5), Vecf(1, 1, 1))))
-    assert(Plasm.limits(PLASM_DIFFERENCE([Plasm.cube(2, 0, 1), Plasm.cube(
+    assert (Plasm.limits(PLASM_DIFFERENCE([Plasm.cube(2, 0, 1), Plasm.cube(
         2, 0.5, 1.5)])).fuzzyEqual(Boxf(Vecf(1, 0, 0), Vecf(1, 1, 1))))
-    assert(Plasm.limits(PLASM_XOR([Plasm.cube(2, 0, 1), Plasm.cube(2, 0.5, 1.5)])).fuzzyEqual(
+    assert (Plasm.limits(PLASM_XOR([Plasm.cube(2, 0, 1), Plasm.cube(2, 0.5, 1.5)])).fuzzyEqual(
         Boxf(Vecf(1, 0, 0), Vecf(1, 1.5, 1.5))))
 
 # ===================================================
@@ -3332,8 +3419,9 @@ def PLASM_JOIN(pol_list):
         pol_list = [pol_list]
     return Plasm.join(pol_list, plasm_config.tolerance())
 
+
 if self_test:
-    assert(Plasm.limits(PLASM_JOIN([Plasm.cube(2, 0, 1)])).fuzzyEqual(
+    assert (Plasm.limits(PLASM_JOIN([Plasm.cube(2, 0, 1)])).fuzzyEqual(
         Boxf(Vecf(1, 0, 0), Vecf(1, 1, 1))))
 
 # NEW DEFINITION (ALLOWS OMITTING BRACKETS FOR TWO OBJECTS)
@@ -3356,13 +3444,13 @@ def JOIN(a, b=None):
             raise ExceptionWT("In JOIN(obj), obj must be a PLaSM surface.")
         return BASEOBJ(PLASM_JOIN(ageom))
 
+
 # ===================================================
 # also ** can be used to indicates POWER
 # ===================================================
 
 
 def PLASM_POWER(objs_list):
-
     if not isinstance(objs_list, list) or len(objs_list) != 2:
         raise ExceptionWT(
             "POWER(b, h) requires two arguments: 2D object b and a height h!")
@@ -3372,9 +3460,10 @@ def PLASM_POWER(objs_list):
 
     return Plasm.power(objs_list[0], objs_list[1])
 
+
 if self_test:
-    assert(PLASM_POWER([2, 2]) == 4)
-    assert(Plasm.limits(PLASM_POWER([Plasm.cube(2), Plasm.cube(1)])).fuzzyEqual(
+    assert (PLASM_POWER([2, 2]) == 4)
+    assert (Plasm.limits(PLASM_POWER([Plasm.cube(2), Plasm.cube(1)])).fuzzyEqual(
         Boxf(Vecf(1, 0, 0, 0), Vecf(1, 1, 1, 1))))
 
 # NEW DEFINITION (ALLOWS OMITTING BRACKETS)
@@ -3412,7 +3501,7 @@ UMOCNI = POWER
 # Polish:
 MOC = POWER
 ILOCZYN = POWER
-#PRODUKT = POWER
+# PRODUKT = POWER
 # German:
 LEISTUNG = POWER
 PRODUKT = POWER
@@ -3421,7 +3510,7 @@ POTENCIA = POWER
 PRODUCTO = POWER
 # Italian:
 POTENZA = POWER
-#PRODUCTO = POWER
+# PRODUCTO = POWER
 # French:
 PUISSANCE = POWER
 PRODUIT = POWER
@@ -3433,7 +3522,9 @@ PRODUIT = POWER
 def SKELETON(ord):
     def SKELETON_ORDER(pol):
         return Plasm.skeleton(pol, ord)
+
     return SKELETON_ORDER
+
 
 SKEL_0 = SKELETON(0)
 SKEL_1 = SKELETON(1)
@@ -3447,7 +3538,7 @@ SKEL_8 = SKELETON(8)
 SKEL_9 = SKELETON(9)
 
 if self_test:
-    assert(Plasm.limits(SKELETON(0)(Plasm.cube(2))).fuzzyEqual(
+    assert (Plasm.limits(SKELETON(0)(Plasm.cube(2))).fuzzyEqual(
         Boxf(Vecf(1, 0, 0), Vecf(1, 1, 1))))
 
 
@@ -3464,6 +3555,7 @@ def flatten(*args):
         else:
             output.append(arg)
     return output
+
 
 FLATTEN = flatten
 
@@ -3485,6 +3577,8 @@ def PLASM_GRID(*args):
             hulls += [[len(points) - 2, len(points) - 1]]
         cursor = cursor + abs(value)
     return Plasm.mkpol(1, CAT(points), hulls, plasm_config.tolerance())
+
+
 PLASM_QUOTE = PLASM_GRID
 
 # NEW DEFINITION:
@@ -3526,11 +3620,10 @@ GRIGLIA = GRID
 GRILLE = GRID
 
 if self_test:
-    assert(
+    assert (
         Plasm.limits(PLASM_QUOTE([1, -1, 1])) == Boxf(Vecf([1, 0]), Vecf([1, 3])))
-    assert(
+    assert (
         Plasm.limits(PLASM_QUOTE([-1, 1, -1, 1])) == Boxf(Vecf([1, 1]), Vecf([1, 4])))
-
 
 Q = COMP([PLASM_QUOTE, IF([ISSEQ, ID, CONS([ID])])])
 
@@ -3544,7 +3637,9 @@ def PLASM_INTERVALS(A):
         if not isinstance(N, int):
             raise ExceptionWT("Division must be an integer")
         return PLASM_QUOTE([float(A) / float(N) for i in range(N)])
+
     return PLASM_INTERVALS0
+
 
 if self_test:
     assert Plasm.limits(PLASM_INTERVALS(10)(8)) == Boxf(
@@ -3560,6 +3655,8 @@ def intervals(*args):
 
 def INTERVALS(a, n):
     return BASEOBJ(PLASM_INTERVALS(a)(n))
+
+
 DIVISION = INTERVALS
 # Czech:
 DELENI = INTERVALS
@@ -3588,11 +3685,13 @@ def PLASM_SIZE(List):
     def PLASM_SIZE1(pol):
         size = Plasm.limits(pol).size()
         return [size[i] for i in List] if isinstance(List, list) else size[List]
+
     return PLASM_SIZE1
 
+
 if self_test:
-    assert(PLASM_SIZE(1)(Plasm.cube(2)) == 1)
-    assert(PLASM_SIZE([1, 3])(
+    assert (PLASM_SIZE(1)(Plasm.cube(2)) == 1)
+    assert (PLASM_SIZE([1, 3])(
         PLASM_SCALE([1, 2, 3])([1, 2, 3])(Plasm.cube(3))) == [1, 3])
 
 # NEW_DEFINITION:
@@ -3604,6 +3703,7 @@ def size(*args):
 
 def SIZE(pol, List):
     return PLASM_SIZE(List)(pol.geom)
+
 # Czech:
 VELIKOST = SIZE
 ROZMER = SIZE
@@ -3633,6 +3733,7 @@ def MIN(List):
     def MIN1(pol):
         box = Plasm.limits(pol)
         return [box.p1[i] for i in List] if isinstance(List, list) else box.p1[List]
+
     return MIN1
 
 
@@ -3640,6 +3741,7 @@ def MAX(List):
     def MAX1(pol):
         box = Plasm.limits(pol)
         return [box.p2[i] for i in List] if isinstance(List, list) else box.p2[List]
+
     return MAX1
 
 
@@ -3647,6 +3749,7 @@ def MID(List):
     def MID1(pol):
         center = Plasm.limits(pol).center()
         return [center[i] for i in List] if isinstance(List, list) else center[List]
+
     return MID1
 
 
@@ -3787,15 +3890,16 @@ def MAXZ(obj):
         else:
             return obj.maxz()
 
+
 if self_test:
-    assert(MIN(1)(Plasm.cube(2)) == 0)
-    assert(MIN([1, 3])(
+    assert (MIN(1)(Plasm.cube(2)) == 0)
+    assert (MIN([1, 3])(
         PLASM_TRANSLATE([1, 2, 3])([10, 20, 30])(Plasm.cube(3))) == [10, 30])
-    assert(MAX(1)(Plasm.cube(2)) == 1)
-    assert(MAX([1, 3])(
+    assert (MAX(1)(Plasm.cube(2)) == 1)
+    assert (MAX([1, 3])(
         PLASM_TRANSLATE([1, 2, 3])([10, 20, 30])(Plasm.cube(3))) == [11, 31])
-    assert(MID(1)(Plasm.cube(2)) == 0.5)
-    assert(MID([1, 3])(Plasm.cube(3)) == [0.5, 0.5])
+    assert (MID(1)(Plasm.cube(2)) == 0.5)
+    assert (MID([1, 3])(Plasm.cube(3)) == [0.5, 0.5])
 
 # ======
 # GETDIM
@@ -3816,6 +3920,7 @@ def GETDIM(obj):
     else:
         return obj.dim
 
+
 # ======================================
 # identity matrix
 # ======================================
@@ -3824,8 +3929,9 @@ def GETDIM(obj):
 def IDNT(N):
     return [[1 if r == c else 0 for c in range(0, N)] for r in range(0, N)]
 
+
 if self_test:
-    assert(IDNT(0) == [] and IDNT(2) == [[1, 0], [0, 1]])
+    assert (IDNT(0) == [] and IDNT(2) == [[1, 0], [0, 1]])
 
 # =============================================
 # split 2PI in N parts
@@ -3836,8 +3942,9 @@ def SPLIT_2PI(N):
     delta = 2 * PI / N
     return [i * delta for i in range(0, N)]
 
+
 if self_test:
-    assert(SPLIT_2PI(4)[2] == PI)
+    assert (SPLIT_2PI(4)[2] == PI)
 
 # NEW DEFINITIONS:
 # MOVE THE SECOND OBJECT TO BE CENTERED ON TOP THE FIRST ONE
@@ -3897,6 +4004,7 @@ def TOP(obj1, obj2):  # obj2 goes on top of obj1
         T(obj2, 0, cy1 - cy2, 0)
         return U(obj1, obj2)
 
+
 # MOVE THE SECOND OBJECT TO BE CENTERED BELOW THE FIRST ONE
 
 
@@ -3911,6 +4019,7 @@ def BOTTOM(obj1, obj2):
     R(obj1, -180, 1)
     R(obj2, -180, 1)
     return U(obj1, obj2)
+
 
 # MOVE THE SECOND OBJECT TO BE CENTERED ON THE LEFT OF THE FIRST ONE
 
@@ -3927,6 +4036,7 @@ def LEFT(obj1, obj2):
     R(obj2, 90, 2)
     return U(obj1, obj2)
 
+
 # MOVE THE SECOND OBJECT TO BE CENTERED ON THE RIGHT OF THE FIRST ONE
 
 
@@ -3941,6 +4051,7 @@ def RIGHT(obj1, obj2):
     R(obj1, -90, 2)
     R(obj2, -90, 2)
     return U(obj1, obj2)
+
 
 # MOVE THE SECOND OBJECT TO BE CENTERED ON THE FRONT OF THE FIRST ONE
 
@@ -3957,6 +4068,7 @@ def FRONT(obj1, obj2):
     R(obj2, 90, 1)
     return U(obj1, obj2)
 
+
 # MOVE THE SECOND OBJECT TO BE CENTERED ON THE REAR OF THE FIRST ONE
 
 
@@ -3972,6 +4084,7 @@ def REAR(obj1, obj2):
     R(obj2, -90, 1)
     return U(obj1, obj2)
 
+
 # ===================================================
 # PLASM_BOX of a pol complex
 # ===================================================
@@ -3986,12 +4099,14 @@ def PLASM_BOX(List):
         vt = Vecf([0] + [box.p1[i] for i in List])
         vs = Vecf([0] + [box.size()[i] for i in List])
         return Plasm.translate(Plasm.scale(Plasm.cube(dim), vs), vt)
+
     return lambda pol: PLASM_BOX0(List, pol)
 
+
 if self_test:
-    assert(Plasm.limits(PLASM_BOX([1, 3])(Plasm.translate(
+    assert (Plasm.limits(PLASM_BOX([1, 3])(Plasm.translate(
         Plasm.cube(3), Vecf(0, 1, 2, 3)))) == Boxf(Vecf(1, 1, 3), Vecf(1, 2, 4)))
-    assert(Plasm.limits(PLASM_BOX(3)(Plasm.translate(
+    assert (Plasm.limits(PLASM_BOX(3)(Plasm.translate(
         Plasm.cube(3), Vecf(0, 1, 2, 3)))) == Boxf(Vecf([1, 3]), Vecf([1, 4])))
 
 # ===================================================
@@ -4003,6 +4118,7 @@ def VECTPROD(args):
     ret = Vec3f(args[0]).cross(Vec3f(args[1]))
     return [ret.x, ret.y, ret.z]
 
+
 if self_test:
     assert VECTPROD([[1, 0, 0], [0, 1, 0]]) == [0, 0, 1]
     assert VECTPROD([[0, 1, 0], [0, 0, 1]]) == [1, 0, 0]
@@ -4012,9 +4128,9 @@ if self_test:
 def VECTNORM(u):
     return Vecf(u).module()
 
+
 if self_test:
     assert VECTNORM([1, 0, 0]) == 1
-
 
 INNERPROD = COMP([COMP([RAISE(PLASM_SUM), AA(RAISE(PLASM_PROD))]), TRANS])
 
@@ -4027,6 +4143,7 @@ def SCALARVECTPROD(args):
     if not isinstance(l, list):
         s, l = l, s
     return [s * l[i] for i in range(len(l))]
+
 
 if self_test:
     assert SCALARVECTPROD([2, [0, 1, 2]]) == [0, 2, 4] and SCALARVECTPROD(
@@ -4047,6 +4164,7 @@ def UNITVECT(V):
     v = Vecf(V).normalize()
     return [v[i] for i in range(len(V))]
 
+
 if self_test:
     assert UNITVECT([2, 0, 0]) == [1, 0, 0]
     assert UNITVECT([1, 1, 1]) == UNITVECT([2, 2, 2])
@@ -4057,7 +4175,9 @@ def DIRPROJECT(E):
 
     def DIRPROJECT0(V):
         return SCALARVECTPROD([(INNERPROD([E, V])), E])
+
     return DIRPROJECT0
+
 
 if self_test:
     assert DIRPROJECT([1, 0, 0])([2, 0, 0]) == [2, 0, 0]
@@ -4067,7 +4187,9 @@ if self_test:
 def ORTHOPROJECT(E):
     def ORTHOPROJECT0(V):
         return VECTDIFF([V, DIRPROJECT((E))(V)])
+
     return ORTHOPROJECT0
+
 
 if self_test:
     assert ORTHOPROJECT([1, 0, 0])([1, 1, 0]) == [0, 1, 0]
@@ -4078,7 +4200,6 @@ if self_test:
 
 
 def PLASM_MAP(fun):
-
     # speed up by caching points
     cache = {}
 
@@ -4112,10 +4233,10 @@ def PLASM_MAP(fun):
 
 
 if self_test:
-    assert(Plasm.limits(PLASM_MAP([S1, S2])(Plasm.cube(2))) == Boxf(
+    assert (Plasm.limits(PLASM_MAP([S1, S2])(Plasm.cube(2))) == Boxf(
         Vecf(1, 0, 0), Vecf(1, 1, 1)))
-    assert(Plasm.limits(PLASM_MAP(ID)(Plasm.cube(2)))
-           == Boxf(Vecf(1, 0, 0), Vecf(1, 1, 1)))
+    assert (Plasm.limits(PLASM_MAP(ID)(Plasm.cube(2)))
+            == Boxf(Vecf(1, 0, 0), Vecf(1, 1, 1)))
 
 # NEW DEFINITION:
 
@@ -4147,6 +4268,7 @@ def ISMATOF(ISTYPE): return COMP([COMP([AND, AR]), CONS(
 
 def FACT(N):
     return PLASM_PROD(INTSTO(N)) if N > 0 else 1
+
 
 if self_test:
     assert FACT(4) == 24 and FACT(0) == 1
@@ -4187,7 +4309,9 @@ def PLASM_RING(radius):
             [PLASM_INTERVALS(2 * PI)(N), PLASM_INTERVALS(R2 - R1)(M)]), Vecf([0.0, 0.0, R1]))
         fun = lambda p: [p[1] * math.cos(p[0]), p[1] * math.sin(p[0])]
         return PLASM_MAP(fun)(domain)
+
     return PLASM_RING0
+
 
 if self_test:
     assert Plasm.limits(PLASM_RING([0.5, 1])([8, 8])) == Boxf(
@@ -4222,6 +4346,7 @@ def RING(r1, r2, division=[48, 1]):
             obj = BASEOBJ(PLASM_RING([r1, r2])([division, 1]))
     return obj
 
+
 # Czech
 # TODO
 
@@ -4235,7 +4360,9 @@ def PLASM_TUBE(args):
 
     def PLASM_TUBE0(N):
         return Plasm.power(PLASM_RING([r1, r2])([N, 1]), PLASM_QUOTE([height]))
+
     return PLASM_TUBE0
+
 
 # NEW DEFINITION
 # English:
@@ -4261,6 +4388,7 @@ def TUBE(r1, r2, h, division=48):
         raise ExceptionWT(
             "The number of sides n in TUBE(r1, r2, h, n) must be at least 3!")
     return BASEOBJ(PLASM_TUBE([r1, r2, h])(division))
+
 # Czech:
 TRUBICE = TUBE
 TRUBKA = TUBE
@@ -4290,6 +4418,7 @@ def RING3D(r1, r2, division=48):
     h = 0.001
     return TUBE(r1, r2, h, division)
 
+
 # =============================================
 # CIRCLE
 # =============================================
@@ -4302,7 +4431,9 @@ def PLASM_CIRCLE(R):
             [PLASM_INTERVALS(2 * PI)(N), PLASM_INTERVALS(R)(M)])
         fun = lambda p: [p[1] * math.cos(p[0]), p[1] * math.sin(p[0])]
         return PLASM_MAP(fun)(domain)
+
     return PLASM_CIRCLE0
+
 
 if self_test:
     assert Plasm.limits(PLASM_CIRCLE(1.0)([8, 8])) == Boxf(
@@ -4326,6 +4457,7 @@ def CIRCLE(r, division=[48, 1]):
             raise ExceptionWT(
                 "Number of edges n in CIRCLE(r, n) must be at least 3!")
         return BASEOBJ(PLASM_CIRCLE(r)([division, 1]))
+
 # Czech:
 KRUH = CIRCLE
 KRUZNICE = CIRCLE
@@ -4362,6 +4494,7 @@ def CIRCLE3D(r, division=[48, 1]):
             raise ExceptionWT(
                 "Number of edges n in CIRCLE3D(r, n) must be at least 3!")
         return PRISM(BASEOBJ(PLASM_CIRCLE(r)([division, 1])), h)
+
 # Czech:
 KRUH3D = CIRCLE3D
 # Polish:
@@ -4391,7 +4524,9 @@ def PLASM_ARC(params):
         fun = lambda p: [
             (p[1] + r1) * math.cos(p[0]), (p[1] + r1) * math.sin(p[0])]
         return PLASM_MAP(fun)(domain)
+
     return PLASM_ARC0
+
 
 # NEW DEFINITION
 # English:
@@ -4414,6 +4549,8 @@ def ARC(r1, r2, angle, division=[48, 1]):
         return BASEOBJ(PLASM_ARC([r1, r2, angle])(division))
     else:
         return BASEOBJ(PLASM_ARC([r1, r2, angle])([division, 1]))
+
+
 # Czech
 # TODO
 
@@ -4439,6 +4576,7 @@ def ARC3D(r1, r2, angle, division=[48, 1]):
     else:
         return PRISM(BASEOBJ(PLASM_ARC([r1, r2, angle])([division, 1])), h)
 
+
 # =============================================
 # MY_CYLINDER
 # =============================================
@@ -4451,12 +4589,14 @@ def PLASM_MY_CYLINDER(args):
         points = CIRCLE_POINTS(R, N)
         circle = Plasm.mkpol(2, CAT(points), [list(range(N))])
         return Plasm.power(circle, Plasm.mkpol(1, [0, H], [[0, 1]]))
+
     return PLASM_MY_CYLINDER0
+
 
 PLASM_CYLINDER = PLASM_MY_CYLINDER
 
 if self_test:
-    assert(Plasm.limits(PLASM_CYLINDER([1.0, 2.0])(8)).fuzzyEqual(
+    assert (Plasm.limits(PLASM_CYLINDER([1.0, 2.0])(8)).fuzzyEqual(
         Boxf(Vecf(1, -1, -1, 0), Vecf(1, +1, +1, 2))))
 
 # NEW DEFINITION
@@ -4522,6 +4662,7 @@ def PLASM_SHELL(r1, r2):
         fz = lambda p: p[2] * math.sin(p[0])
         ret = PLASM_MAP(([fx, fy, fz]))(domain)
         return ret
+
     return PLASM_SHELL0
 
 
@@ -4546,6 +4687,7 @@ def SHELL(radius1, radius2, divisions=[16, 32]):
     # Making it s solid:
     return BASEOBJ(PLASM_SHELL(radius1, radius2)(divisionslist))
 
+
 # =============================================
 # SPHERE - will be SHELL of inner radius 0
 # =============================================
@@ -4561,7 +4703,9 @@ def PLASM_SPHERE(radius):
         fz = lambda p: radius * math.sin(p[0])
         ret = PLASM_MAP([fx, fy, fz])(domain)
         return ret
+
     return PLASM_SPHERE0
+
 
 if self_test:
     assert Plasm.limits(PLASM_SPHERE(1)([8, 8])).fuzzyEqual(
@@ -4578,6 +4722,7 @@ def SPHERE_SURFACE(radius, divisions=[16, 32]):
         raise ExceptionWT("Radius r in SPHERE_SURFACE(r) must be positive!")
     # This is a surface:
     return BASEOBJ(PLASM_SPHERE(radius)(divisions))
+
 
 # English:
 
@@ -4626,11 +4771,12 @@ def PLASM_TORUS(radius):
         a = 0.5 * (r2 - r1)
         c = 0.5 * (r1 + r2)
         domain = Plasm.power(
-            PLASM_INTERVALS(2 * PI)(N),  PLASM_INTERVALS(2 * PI)(M))
+            PLASM_INTERVALS(2 * PI)(N), PLASM_INTERVALS(2 * PI)(M))
         fx = lambda p: (c + a * math.cos(p[1])) * math.cos(p[0])
         fy = lambda p: (c + a * math.cos(p[1])) * math.sin(p[0])
         fz = lambda p: a * math.sin(p[1])
         return PLASM_MAP(([fx, fy, fz]))(domain)
+
     return PLASM_TORUS0
 
 
@@ -4656,6 +4802,7 @@ def TORUS_SURFACE(r1, r2, divisions=[32, 16]):
             "Inner radius r1 must be smaller than outer radius r2 in TORUS_SURFACE(r1, r2)!")
     return BASEOBJ(PLASM_TORUS([r1, r2])(divisions))
 
+
 # =============================================
 # TORUS - SOLID
 # =============================================
@@ -4674,7 +4821,9 @@ def PLASM_SOLIDTORUS(radius):
         fy = lambda p: (c + p[2] * a * math.cos(p[1])) * math.sin(p[0])
         fz = lambda p: p[2] * a * math.sin(p[1])
         return PLASM_MAP(([fx, fy, fz]))(domain)
+
     return PLASM_TORUS0
+
 
 if self_test:
     PLASM_VIEW(SKELETON(1)(PLASM_SOLIDTORUS([1.5, 2])([18, 24, 1])))
@@ -4739,7 +4888,9 @@ def PLASM_SOLIDELBOW(radiusandangle):
         fy = lambda p: (c + p[2] * a * math.cos(p[1])) * math.sin(p[0])
         fz = lambda p: p[2] * a * math.sin(p[1])
         return PLASM_MAP(([fx, fy, fz]))(domain)
+
     return PLASM_ELBOW0
+
 
 # NEW DEFINITION WITH NON-MANDATORY DIVISIONS:
 
@@ -4795,11 +4946,12 @@ def PLASM_REVOLVE(basisandangleandelevanddiv):
     fz = lambda p: math.sin(p[2]) * p[0]
     return PLASM_MAP(([fx, fy, fz]))(geom)
 
+
 def revolve(*args):
     raise ExceptionWT("Command revolve() is undefined. Try REVOLVE() instead?")
 
 
-def REVOLVE(basis, angle, division = 48):
+def REVOLVE(basis, angle, division=48):
     if not ISNUMBER(angle):
         raise ExceptionWT(
             "Angle in REVOLVE(base, angle, division) must be a number!")
@@ -4830,7 +4982,8 @@ def REVOLVE(basis, angle, division = 48):
             obj.append(oo3d)
         return obj
 
-def SPIRAL(basis, angle, elevation, division = 48):
+
+def SPIRAL(basis, angle, elevation, division=48):
     if not ISNUMBER(angle):
         raise ExceptionWT(
             "Angle in SPIRAL(base, angle, elevation, division) must be a number!")
@@ -4860,7 +5013,6 @@ def SPIRAL(basis, angle, elevation, division = 48):
         return obj
 
 
-
 # =============================================
 # CONE
 # =============================================
@@ -4872,7 +5024,9 @@ def PLASM_CONE(args):
         basis = PLASM_CIRCLE(radius)([N, 1])
         apex = PLASM_TRANSLATE([1, 2, 3])([0, 0, height])(PLASM_SIMPLEX(0))
         return PLASM_JOIN([basis, apex])
+
     return PLASM_CONE0
+
 
 if self_test:
     assert Plasm.limits(PLASM_CONE([1.0, 3.0])(16)).fuzzyEqual(
@@ -4939,6 +5093,7 @@ def PYRAMID(r, h, n=4):
             "Number of sides n in PYRAMID(r, h, n) must be at least 3!")
     return BASEOBJ(PLASM_CONE([r, h])(n))
 
+
 # =============================================
 # TRUNCONE
 # =============================================
@@ -4957,8 +5112,11 @@ def PLASM_TRUNCONE(args):
                 (R1 + p[1] * (R2 - R1)) * math.sin(p[0]),
                 (H * p[1])
             ]
+
         return PLASM_MAP(fn)(domain)
+
     return PLASM_TRUNCONE0
+
 
 # NEW DEFINITION WITH NON-MANDATORY DIVISIONS:
 
@@ -5095,7 +5253,8 @@ ICOSAEDRE = ICOSAHEDRON
 # =============================================
 
 def build_TETRAHEDRON():
-    return PLASM_JOIN([PLASM_TRANSLATE([1, 2, 3])([0, 0, -1.0 / 3.0])(NGON(3)),  MK([0, 0, 1])])
+    return PLASM_JOIN([PLASM_TRANSLATE([1, 2, 3])([0, 0, -1.0 / 3.0])(NGON(3)), MK([0, 0, 1])])
+
 
 PLASM_TETRAHEDRON = build_TETRAHEDRON()
 
@@ -5193,12 +5352,12 @@ def TRIANGLE3D(a, b, c):
     # so that logical operations with them work:
     h = 0.001
     # Get maximum edge length:
-    #e1 = sqrt((b[0] - a[0])**2 + (b[1] - a[1])**2)
-    #e2 = sqrt((c[0] - b[0])**2 + (c[1] - b[1])**2)
-    #e3 = sqrt((c[0] - a[0])**2 + (c[1] - a[1])**2)
-    #h = e1
-    #if e2 > h: h = e2
-    #if e3 > h: h = e3
+    # e1 = sqrt((b[0] - a[0])**2 + (b[1] - a[1])**2)
+    # e2 = sqrt((c[0] - b[0])**2 + (c[1] - b[1])**2)
+    # e3 = sqrt((c[0] - a[0])**2 + (c[1] - a[1])**2)
+    # h = e1
+    # if e2 > h: h = e2
+    # if e3 > h: h = e3
     # Get six points for the prism:
     a_low = [a[0], a[1], 0]
     a_high = [a[0], a[1], h]
@@ -5208,6 +5367,7 @@ def TRIANGLE3D(a, b, c):
     c_high = [c[0], c[1], h]
     # Get the convex hull:
     return BASEOBJ(PLASM_CONVEXHULL([a_low, a_high, b_low, b_high, c_low, c_high]))
+
 # Czech:
 TROJUHELNIK3D = TRIANGLE3D
 # Polish:
@@ -5261,6 +5421,8 @@ def QUAD(a, b, c, d):
         raise ExceptionWT(
             "All points a, b, c, d in QUAD(a, b, c, d) must be 2D points, or all must be 3D points.")
     return BASEOBJ(PLASM_CONVEXHULL([a, b, c, d]))
+
+
 QUADRILATERAL = QUAD
 
 # ===================================================
@@ -5270,6 +5432,7 @@ QUADRILATERAL = QUAD
 
 def POLYPOINT(points):
     return BASEOBJ(Plasm.mkpol(len(points[0]), CAT(points), [[i] for i in range(len(points))]))
+
 
 # ===================================================
 # POLYLINE
@@ -5298,6 +5461,7 @@ def TRIANGLEFAN(points):
     cells = [[0, i - 1, i] for i in range(2, len(points))]
     return Plasm.mkpol(len(points[0]), CAT(points), cells)
 
+
 # ===================================================
 # MIRROR
 # ===================================================
@@ -5306,6 +5470,7 @@ def TRIANGLEFAN(points):
 def MIRROR(D):
     def MIRROR0(pol):
         return PLASM_STRUCT([PLASM_S(D)(-1)(pol), pol])
+
     return MIRROR0
 
 
@@ -5329,6 +5494,7 @@ def POLYMARKER(type, MARKERSIZE=0.1):
         dim = len(points[0])
         axis = list(range(1, dim + 1))
         return Plasm.Struct([PLASM_T(axis)(point)(marker) for point in points])
+
     return POLYMARKER_POINTS
 
 
@@ -5339,6 +5505,7 @@ def POLYMARKER(type, MARKERSIZE=0.1):
 def CHOOSE(args):
     N, K = args
     return FACT(N) / float(FACT(K) * FACT(N - K))
+
 
 if self_test:
     assert CHOOSE([7, 3]) == 35
@@ -5354,6 +5521,7 @@ def TRACE(MATRIX):
     for i in range(dim):
         acc += MATRIX[i][i]
     return acc
+
 
 if self_test:
     assert TRACE([[5, 0], [0, 10]]) == 15
@@ -5373,6 +5541,7 @@ def PASCALTRIANGLE(N):
     cur = [1] + [last_row[i - 1] + last_row[i]
                  for i in range(1, len(last_row))] + [1]
     return prev + [cur]
+
 
 if self_test:
     assert PASCALTRIANGLE(
@@ -5397,8 +5566,11 @@ def PLASM_BEZIER(U):
                 for K in range(len(ret)):
                     ret[K] += weight * (controldata[I][K])
             return ret
+
         return map_fn
+
     return PLASM_BEZIER0
+
 
 if self_test:
     PLASM_VIEW(PLASM_MAP(PLASM_BEZIER(S1)(
@@ -5418,6 +5590,7 @@ if self_test:
 def PLASM_BEZIERCURVE(controlpoints):
     return PLASM_BEZIER(S1)(controlpoints)
 
+
 # NEW DEFINITIONS:
 
 
@@ -5426,6 +5599,8 @@ def BEZIER1(*args):
     if len(list1) <= 1:
         raise ExceptionWT("BEZIER curve expects at least two control points!")
     return PLASM_BEZIER(S1)(list1)
+
+
 BEZIER = BEZIER1
 BEZIERX = BEZIER1
 BE1 = BEZIER1
@@ -5436,6 +5611,8 @@ def BEZIER2(*args):
     if len(list1) <= 1:
         raise ExceptionWT("BEZIER curve expects at least two control points!")
     return PLASM_BEZIER(S2)(list1)
+
+
 BEZIERY = BEZIER2
 BE2 = BEZIER2
 
@@ -5445,6 +5622,8 @@ def BEZIER3(*args):
     if len(list1) <= 1:
         raise ExceptionWT("BEZIER curve expects at least two control points!")
     return PLASM_BEZIER(S3)(list1)
+
+
 BEZIERZ = BEZIER3
 BE3 = BEZIER3
 
@@ -5482,6 +5661,7 @@ def DRAWBEZIER2D(point_list, hcurve=0.02, hpts=0.1, colcurve=[0, 0, 0], colpt=[0
         out.append(circle)
     return out
 
+
 # ======================================================
 # coons patch
 # ======================================================
@@ -5505,9 +5685,11 @@ def PLASM_COONSPATCH(args):
         ret = [0.0 for i in range(len(su0))]
         for K in range(len(ret)):
             ret[K] = (1 - u) * s0v[K] + u * s1v[K] + (1 - v) * su0[K] + v * su1[K] + (1 - u) * \
-                (1 - v) * s0v[K] + (1 - u) * v * s0v[K] + \
-                u * (1 - v) * s1v[K] + u * v * s1v[K]
+                                                                                     (1 - v) * s0v[K] + (1 - u) * v * \
+                                                                                                        s0v[K] + \
+                     u * (1 - v) * s1v[K] + u * v * s1v[K]
         return ret
+
     return map_fn
 
 
@@ -5532,6 +5714,7 @@ def COONSPATCH(u1, u2, v1, v2, nx=32, ny=32):
     out = MAP(refdomain, surf)
     return out
 
+
 # ======================================================
 # RULED SURFACE
 # ======================================================
@@ -5547,12 +5730,13 @@ def PLASM_RULEDSURFACE(args):
         for K in range(len(ret)):
             ret[K] = alpha[K] + v * beta[K]
         return ret
+
     return map_fn
 
 
 if self_test:
-    alpha = lambda point: [point[0], point[0],       0]
-    beta = lambda point: [-1,      +1, point[0]]
+    alpha = lambda point: [point[0], point[0], 0]
+    beta = lambda point: [-1, +1, point[0]]
     domain = PLASM_TRANSLATE([1, 2, 3])(
         [-1, -1, 0])(Plasm.power(PLASM_INTERVALS(2)(10), PLASM_INTERVALS(2)(10)))
     plasm_config.push(1e-4)
@@ -5564,6 +5748,8 @@ if self_test:
 
 def RULEDSURFACE(a, b):
     return BASEOBJ(PLASM_RULEDSURFACE([a, b]))
+
+
 RUSURFACE = RULEDSURFACE
 RUSURF = RULEDSURFACE
 RUSU = RULEDSURFACE
@@ -5581,7 +5767,9 @@ def PROFILEPRODSURFACE(args):
         profile, section = profile_fn(point), section_fn(point)
         ret = [profile[0] * section[0], profile[0] * section[1], profile[2]]
         return ret
+
     return map_fun
+
 
 if self_test:
     alpha = PLASM_BEZIER(S1)([[0.1, 0, 0], [2, 0, 0], [0, 0, 4], [1, 0, 5]])
@@ -5598,6 +5786,8 @@ if self_test:
 
 def PROFILEPRODSURFACE(a, b):
     return PROFILEPRODSURFACE([a, b])
+
+
 PPSURFACE = PROFILEPRODSURFACE
 PPSURF = PROFILEPRODSURFACE
 PPSU = PROFILEPRODSURFACE
@@ -5615,17 +5805,10 @@ def PLASM_ROTATIONALSURFACE(args):
         f, h, g = profile(point)
         ret = [f * math.cos(v), f * math.sin(v), g]
         return ret
+
     return map_fn
 
-if self_test:
-    profile = PLASM_BEZIER(S1)(
-        [[0, 0, 0], [2, 0, 1], [3, 0, 4]])  # defined in xz!
-    plasm_config.push(1e-4)
-    # the first interval should be in 0,1 for bezier
-    domain = Plasm.power(PLASM_INTERVALS(1)(10), PLASM_INTERVALS(2 * PI)(30))
-    out = PLASM_MAP(ROTATIONALSURFACE(profile))(domain)
-    plasm_config.pop()
-    PLASM_VIEW(out)
+
 
 # NEW COMMAND:
 
@@ -5656,9 +5839,23 @@ def ROTATIONALSURFACE(point_list, angle=360, nx=32, na=32):
     # Rotate object back:
     ROTATE(out, -90, X)
     return out
+
+
 ROSURFACE = ROTATIONALSURFACE
 ROSURF = ROTATIONALSURFACE
 ROSU = ROTATIONALSURFACE
+
+
+
+if self_test:
+    profile = PLASM_BEZIER(S1)(
+        [[0, 0, 0], [2, 0, 1], [3, 0, 4]])  # defined in xz!
+    plasm_config.push(1e-4)
+    # the first interval should be in 0,1 for bezier
+    domain = Plasm.power(PLASM_INTERVALS(1)(10), PLASM_INTERVALS(2 * PI)(30))
+    out = PLASM_MAP(ROTATIONALSURFACE(profile))(domain)
+    plasm_config.pop()
+    PLASM_VIEW(out)
 
 # ======================================================
 # ROTATIONAL SOLID
@@ -5673,12 +5870,14 @@ def PLASM_ROTSOLID(profileangleminr):
         domain = PLASM_INSR(PLASM_PROD)(
             [PLASM_INTERVALS(1.0)(n), PLASM_INTERVALS(angle)(m), PLASM_INTERVALS(1.0)(o)])
         fx = lambda p: minr * \
-            math.cos(p[1]) + ((profile(p))[0] - minr) * p[2] * math.cos(p[1])
+                       math.cos(p[1]) + ((profile(p))[0] - minr) * p[2] * math.cos(p[1])
         fy = lambda p: minr * \
-            math.sin(p[1]) + ((profile(p))[0] - minr) * p[2] * math.sin(p[1])
+                       math.sin(p[1]) + ((profile(p))[0] - minr) * p[2] * math.sin(p[1])
         fz = lambda p: (profile(p))[2]
         return PLASM_MAP(([fx, fy, fz]))(domain)
+
     return PLASM_ROTSOLID0
+
 
 # NEW COMMAND:
 
@@ -5713,6 +5912,8 @@ def ROTATIONALSOLID(point_list, angle=360, minr=0, nx=32, na=32, nr=1):
     # Rotate object back:
     ROTATE(out, -90, X)
     return out
+
+
 ROTSOLID = ROTATIONALSOLID
 ROSOLID = ROTATIONALSOLID
 ROSOL = ROTATIONALSOLID
@@ -5730,12 +5931,14 @@ def PLASM_ROTSHELL(profileanglethickness):
         domain = PLASM_INSR(PLASM_PROD)(
             [PLASM_INTERVALS(1.0)(n), PLASM_INTERVALS(angle)(m), PLASM_INTERVALS(1.0)(o)])
         fx = lambda p: (profile(p))[
-            0] * math.cos(p[1]) + thickness * p[2] * math.cos(p[1])
+                           0] * math.cos(p[1]) + thickness * p[2] * math.cos(p[1])
         fy = lambda p: (profile(p))[
-            0] * math.sin(p[1]) + thickness * p[2] * math.sin(p[1])
+                           0] * math.sin(p[1]) + thickness * p[2] * math.sin(p[1])
         fz = lambda p: (profile(p))[2]
         return PLASM_MAP(([fx, fy, fz]))(domain)
+
     return PLASM_ROTSHELL0
+
 
 # NEW COMMAND:
 
@@ -5770,6 +5973,8 @@ def ROTATIONALSHELL(point_list, thickness, angle=360, nx=32, na=32, nr=1):
     # Rotate object back:
     ROTATE(out, -90, X)
     return out
+
+
 ROTSHELL = ROTATIONALSHELL
 ROSHELL = ROTATIONALSHELL
 
@@ -5782,6 +5987,7 @@ def PLASM_CYLINDRICALSURFACE(args):
     alpha_fun = args[0]
     beta_fun = CONS(AA(K)(args[1]))
     return PLASM_RULEDSURFACE([alpha_fun, beta_fun])
+
 
 if self_test:
     alpha = PLASM_BEZIER(S1)([[1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0]])
@@ -5798,6 +6004,8 @@ def CYLINDRICALSURFACE(curve, vector, nx=32, ny=32):
     refdomain = UNITSQUARE(nx, ny)
     surf = PLASM_CYLINDRICALSURFACE([curve, vector])
     return MAP(refdomain, surf)
+
+
 CYSURFACE = CYLINDRICALSURFACE
 CYSU = CYLINDRICALSURFACE
 
@@ -5827,6 +6035,8 @@ def CONICALSURFACE(curve, point, nx=32, ny=32):
     refdomain = UNITSQUARE(nx, ny)
     surf = PLASM_CONICALSURFACE([point, curve])
     return MAP(refdomain, surf)
+
+
 COSURFACE = CONICALSURFACE
 COSURF = CONICALSURFACE
 COSU = CONICALSURFACE
@@ -5849,13 +6059,15 @@ def PLASM_CUBICHERMITE(U):
             ret = [0.0 for i in range(len(p1))]
             for i in range(len(ret)):
                 ret[i] += (2 * u3 - 3 * u2 + 1) * p1[i] + (-2 * u3 + 3 * u2) * \
-                    p2[i] + (u3 - 2 * u2 + u) * s1[i] + (u3 - u2) * s2[i]
+                                                          p2[i] + (u3 - 2 * u2 + u) * s1[i] + (u3 - u2) * s2[i]
             return ret
+
         return map_fn
+
     return PLASM_CUBICHERMITE0
 
-if self_test:
 
+if self_test:
     domain = PLASM_INTERVALS(1)(20)
     out = Plasm.Struct([
         PLASM_MAP(PLASM_CUBICHERMITE(S1)(
@@ -5885,17 +6097,20 @@ if self_test:
 def CUBICHERMITE1(*args):
     return PLASM_CUBICHERMITE(S1)(list(args))
 
+
 CH1 = CUBICHERMITE1
 
 
 def CUBICHERMITE2(*args):
     return PLASM_CUBICHERMITE(S2)(list(args))
 
+
 CH2 = CUBICHERMITE2
 
 
 def CUBICHERMITE3(*args):
     return PLASM_CUBICHERMITE(S3)(list(args))
+
 
 CH3 = CUBICHERMITE3
 
@@ -5935,6 +6150,7 @@ def PROJECT(M):
         vertices, cells, pols = UKPOL(POL)
         vertices = [vert[0:-M] for vert in vertices]
         return MKPOL([vertices, cells, pols])
+
     return PROJECT0
 
 
@@ -5971,6 +6187,7 @@ def PERMUTATIONS(SEQ):
         for r in rest:
             ret += [[element] + r]
     return ret
+
 
 if self_test:
     assert len(PERMUTATIONS([1, 2, 3])) == 6
@@ -6031,12 +6248,14 @@ def STAR(r, n):
 def SCHLEGEL2D(D):
     def map_fn(point):
         return [D * point[0] / point[2], D * point[1] / point[2]]
+
     return PLASM_MAP(map_fn)
 
 
 def SCHLEGEL3D(D):
     def map_fn(point):
         return [D * point[0] / point[3], D * point[1] / point[3], D * point[2] / point[3]]
+
     return PLASM_MAP(map_fn)
 
 
@@ -6065,7 +6284,9 @@ def FINITECONE(pol):
 def PLASM_PRISM(height):
     def PLASM_PRISM0(basis):
         return Plasm.power(basis, PLASM_QUOTE([height]))
+
     return PLASM_PRISM0
+
 
 # NEW DEFINITION - RETURNS AN INSTANCE OF CLASS "PRODUCT" OR A LIST
 # OF PRODUCTS:
@@ -6137,6 +6358,7 @@ def CROSSPOLYTOPE(D):
     pols = [[1]]
     return MKPOL([points, cells, pols])
 
+
 OCTAHEDRON = CROSSPOLYTOPE(2)
 OKTAEDR = OCTAHEDRON
 OCTAEDER = OCTAHEDRON
@@ -6149,6 +6371,7 @@ OCTAEDRO = OCTAHEDRON
 
 def MATHOM(M):
     return [[1] + [0 for i in range(len(M))]] + [[0] + l for l in M]
+
 
 if self_test:
     assert MATHOM([[1, 2], [3, 4]]) == [[1, 0, 0], [0, 1, 2], [0, 3, 4]]
@@ -6179,7 +6402,7 @@ def ROTN(args):
 # ===================================================
 # MKVECTOR
 # ===================================================
-
+'''
 def MKVECTOR(P1):
     def MKVECTOR0(P2):
         TR = PLASM_T([1, 2, 3])(P1)
@@ -6190,8 +6413,8 @@ def MKVECTOR(P1):
         N = VECTPROD([[0, 0, 1], U])
         ROT = ROTN([ALPHA, N])
         return (COMP([COMP([TR, ROT]), SC]))(MKVERSORK)
-    return MKVECTOR0
 
+    return MKVECTOR0'''
 
 # ===================================================
 # Matrix stuff
@@ -6224,7 +6447,6 @@ if self_test:
 # ======================================================
 
 def CUBICUBSPLINE(domain):
-
     def CUBICUBSPLINE0(args):
         q1_fn, q2_fn, q3_fn, q4_fn = args
 
@@ -6237,9 +6459,12 @@ def CUBICUBSPLINE(domain):
             ret = [0 for x in range(len(q1))]
             for i in range(len(ret)):
                 ret[i] = (1.0 / 6.0) * ((-u3 + 3 * u2 - 3 * u + 1) * q1[i] + (3 * u3 - 6 *
-                                                                              u2 + 4) * q2[i] + (-3 * u3 + 3 * u2 + 3 * u + 1) * q3[i] + (u3) * q4[i])
+                                                                              u2 + 4) * q2[i] + (
+                    -3 * u3 + 3 * u2 + 3 * u + 1) * q3[i] + (u3) * q4[i])
             return ret
+
         return PLASM_MAP(map_fn)(domain)
+
     return CUBICUBSPLINE0
 
 
@@ -6261,11 +6486,13 @@ def CUBICCARDINAL(domain, h=1):
             ret = [0.0 for i in range(len(q1))]
             for i in range(len(ret)):
                 ret[i] = (-h * u3 + 2 * h * u2 - h * u) * q1[i] + ((2 - h) * u3 + (h - 3) * u2 + 1) * \
-                    q2[i] + ((h - 2) * u3 + (3 - 2 * h) * u2 + h * u) * \
-                    q3[i] + (h * u3 - h * u2) * q4[i]
+                                                                  q2[i] + ((h - 2) * u3 + (3 - 2 * h) * u2 + h * u) * \
+                                                                          q3[i] + (h * u3 - h * u2) * q4[i]
 
             return ret
+
         return PLASM_MAP(map_fn)(domain)
+
     return CUBICCARDINAL0
 
 
@@ -6280,6 +6507,7 @@ def SPLINE(curve):
             P = points[i:i + 4]
             ret += [curve(P)]
         return Plasm.Struct(ret)
+
     return SPLINE0
 
 
@@ -6310,14 +6538,15 @@ def JOINTS(curve):
 def BERNSTEINBASIS(U):
     def BERNSTEIN0(N):
         def BERNSTEIN1(I):
-
             def map_fn(point):
-
                 t = U(point)
                 ret = CHOOSE([N, I]) * math.pow(1 - t, N - I) * math.pow(t, I)
                 return ret
+
             return map_fn
+
         return [BERNSTEIN1(I) for I in range(0, N + 1)]
+
     return BERNSTEIN0
 
 
@@ -6352,8 +6581,11 @@ def TENSORPRODSURFACE(args):
                             ret[M] += U[i] * V[j] * controlpoints[i][j][M]
 
             return ret
+
         return map_fn
+
     return TENSORPRODSURFACE0
+
 
 # ======================================================
 # BILINEARSURFACE
@@ -6362,6 +6594,7 @@ def TENSORPRODSURFACE(args):
 
 def BILINEARSURFACE(controlpoints):
     return TENSORPRODSURFACE([BERNSTEINBASIS(S1)(1), BERNSTEINBASIS(S1)(1)])(controlpoints)
+
 
 if self_test:
     controlpoints = [[[0, 0, 0], [2, -4, 2]], [[0, 3, 1], [4, 0, 0]]]
@@ -6373,18 +6606,22 @@ if self_test:
 # BIQUADRATICSURFACE
 # ======================================================
 
-
+'''
 def BIQUADRATICSURFACE(controlpoints):
     def u0(point): u = S1(point)
+
     return 2 * u * u - u
 
     def u1(point): u = S1(point)
+
     return 4 * u - 4 * u * u
 
     def u2(point): u = S1(point)
+
     return 2 * u * u - 3 * u + 1
     basis = [u0, u1, u2]
     return TENSORPRODSURFACE([basis, basis])(controlpoints)
+
 
 if self_test:
     controlpoints = [[[0, 0, 0], [2, 0, 1], [3, 1, 1]], [
@@ -6393,44 +6630,50 @@ if self_test:
     mapping = BIQUADRATICSURFACE(controlpoints)
     plasm_config.push(1e-4)
     PLASM_VIEW(PLASM_MAP(mapping)(domain))
-    plasm_config.pop()
+    plasm_config.pop()'''
 
 
 # ======================================================
 # HERMITESURFACE
 # ======================================================
-
+'''
 def PLASM_HERMITESURFACE(controlpoints):
     def H0(point): u = S1(point)
+
     u2 = u * u
     u3 = u2 * u
     return u3 - u2
 
     def H1(point): u = S1(point)
+
     u2 = u * u
     u3 = u2 * u
     return u3 - 2 * u2 + u
 
     def H2(point): u = S1(point)
+
     u2 = u * u
     u3 = u2 * u
     return 3 * u2 - 2 * u3
 
     def H3(point): u = S1(point)
+
     u2 = u * u
     u3 = u2 * u
     return 2 * u3 - 3 * u2 + 1
     basis = [H3, H2, H1, H0]
     return TENSORPRODSURFACE([basis, basis])(controlpoints)
 
+
 if self_test:
     controlpoints = [[[0, 0, 0], [2, 0, 1], [3, 1, 1], [4, 1, 1]], [[1, 3, -1], [3, 2, 0], [4, 2, 0],
-                                                                    [4, 2, 0]], [[0, 4, 0], [2, 4, 1], [3, 3, 2], [5, 3, 2]], [[0, 6, 0], [2, 5, 1], [3, 4, 1], [4, 4, 0]]]
+                                                                    [4, 2, 0]],
+                     [[0, 4, 0], [2, 4, 1], [3, 3, 2], [5, 3, 2]], [[0, 6, 0], [2, 5, 1], [3, 4, 1], [4, 4, 0]]]
     domain = Plasm.power(PLASM_INTERVALS(1)(10), PLASM_INTERVALS(1)(10))
     mapping = PLASM_HERMITESURFACE(controlpoints)
     plasm_config.push(1e-4)
     PLASM_VIEW(PLASM_MAP(mapping)(domain))
-    plasm_config.pop()
+    plasm_config.pop()'''
 
 # ======================================================
 # PLASM_BEZIERSURFACE
@@ -6441,6 +6684,7 @@ def PLASM_BEZIERSURFACE(controlpoints):
     M = len(controlpoints) - 1
     N = len(controlpoints[0]) - 1
     return TENSORPRODSURFACE([BERNSTEINBASIS(S1)(M), BERNSTEINBASIS(S1)(N)])(controlpoints)
+
 
 if self_test:
     controlpoints = [
@@ -6488,11 +6732,13 @@ def TENSORPRODSOLID(args):
                     for k in range(len(wbasis)):
                         for M in range(target_dim):
                             ret[M] += U[i] * V[j] * W[k] * \
-                                controlpoints[M][i][j][k]
+                                      controlpoints[M][i][j][k]
             return ret
 
         return map_fn
+
     return TENSORPRODSOLID0
+
 
 # ======================================================
 # PLASM_BEZIERMANIFOLD
@@ -6502,6 +6748,7 @@ def TENSORPRODSOLID(args):
 def PLASM_BEZIERMANIFOLD(degrees):
     basis = [BERNSTEINBASIS(S1)(d) for d in degrees]
     return TENSORPRODSOLID(basis)
+
 
 if self_test:
     grid1D = PLASM_INTERVALS(1)(5)
@@ -6537,8 +6784,8 @@ def LOCATE(args):
 def SUBSEQ(I_J):
     def SUBSEQ0(SEQ):
         return SEQ[I_J[0] - 1:I_J[1]]
-    return SUBSEQ0
 
+    return SUBSEQ0
 
 # ===================================================
 # NORTH,SOUTH,WEST,EAST
@@ -6579,7 +6826,6 @@ def RIF(size):
 
 def FRACTALSIMPLEX(D):
     def FRACTALSIMPLEX0(N):
-
         mkpols = COMP([COMP([COMP([COMP([PLASM_STRUCT, AA(MKPOL)]), AA(AL)]), DISTR]), CONS(
             [ID, K([[FROMTO([1, D + 1])], [[1]]])])])
 
@@ -6684,6 +6930,7 @@ def CURVE2PLASM_MAPVECT(CURVE):
     D = len((CURVE([0])))
     return [COMP([SEL(i), CURVE]) for i in FROMTO([1, D])]
 
+
 if self_test:
     temp = CURVE2PLASM_MAPVECT(lambda t: [t[0] + 1, t[0] + 2])
     assert temp[0]([10]) == 11
@@ -6703,7 +6950,9 @@ def SEGMENT(sx):
 
         print((P0, P1))
         return POLYLINE([P0, P1])
+
     return SEGMENT0
+
 
 # ===================================================
 # SOLIDIFY
@@ -6711,7 +6960,6 @@ def SEGMENT(sx):
 
 
 def PLASM_SOLIDIFY(pol):
-
     box = Plasm.limits(pol)
     min = box.p1[1]
     max = box.p2[1]
@@ -6730,8 +6978,8 @@ def PLASM_SOLIDIFY(pol):
     ret = [PLASM_JOIN([pol, InftyProject(pol)]) for pol in ret]
     return PLASM_XOR(FILTER(IsFull)(ret))
 
-if self_test:
 
+if self_test:
     PLASM_VIEW(PLASM_SOLIDIFY(PLASM_STRUCT(AA(POLYLINE)([
         [[0, 0], [4, 2], [2.5, 3], [4, 5], [2, 5], [0, 3], [-3, 3], [0, 0]],
         [[0, 3], [0, 1], [2, 2], [2, 4], [0, 3]],
@@ -6751,6 +6999,7 @@ def SOLIDIFY(surf):
     obj = BASEOBJ(PLASM_SOLIDIFY(surf.geom))
     return obj
 
+
 # ===================================================
 # PLASM_EXTRUSION - ONE PIECE IN THE VERTICAL DIRECTION
 # ===================================================
@@ -6766,8 +7015,11 @@ def PLASM_EXTRUSION(angle):
                 [PLASM_T(dim + 1)(1.0 / height), PLASM_R([dim - 1, dim])(angle / height)])
             layer = Plasm.Struct([PLASM_JOIN([p, tensor(p)]) for p in slice])
             return (COMP([COMP([PLASM_STRUCT, CAT]), DIESIS(height)]))([layer, tensor])
+
         return PLASM_EXTRUSION0
+
     return PLASM_EXTRUSION1
+
 
 # ===================================================
 # EXTRUSION - WITH ARBITRATRY DIVISION IN VERTICAL DIRECTION
@@ -6829,6 +7081,7 @@ def EXTRUDE(basis, height, angle_deg, n=1):
         obj = flatten(obj)
         return obj
 
+
 EXT = EXTRUDE
 E = EXTRUDE
 
@@ -6843,7 +7096,9 @@ def EX(args):
     def EX0(pol):
         dim = PLASM_DIM(pol)
         return PLASM_T(dim + 1)(x1)(PLASM_S(dim + 1)(x2 - x1)(PLASM_EXTRUSION(0.0)(1.0)(pol)))
+
     return EX0
+
 
 # ===================================================
 # LEX
@@ -6862,6 +7117,7 @@ def LEX(args):
                     [[S1, newrow], AA(SEL)((FROMTO([3, dim + 1])))])
                 matrix = update(IDNT(dim + 1))
                 return (MAT(matrix))(POL)
+
             return SHEARTENSOR0
 
         ret = PLASM_EXTRUSION(0)(1)(pol)
@@ -6869,7 +7125,9 @@ def LEX(args):
         ret = S(PLASM_DIM(pol) + 1)(x2 - x1)(ret)
         ret = PLASM_T(PLASM_DIM(pol) + 1)(x1)(ret)
         return ret
+
     return LEX0
+
 
 # ===================================================
 # SEX
@@ -6886,11 +7144,13 @@ def SEX(args):
             ret = PLASM_S(dim + 1)(x2 - x1)(ret)
             ret = PLASM_R([dim, dim - 1])(x1)(ret)
             return ret
+
         return SEX0
+
     return SEX1
 
-if self_test:
 
+if self_test:
     mypol1 = PLASM_T([1, 2, 3])([-5, -5, 0])(CUBOID([10, 10]))
     mypol2 = PLASM_S(0.9, 0.9, 0)(mypol1)
     mypol3 = PLASM_DIFF([mypol1, mypol2])
@@ -6915,6 +7175,7 @@ def POLAR(pol, precision=1e-6):
         faces[i] = [value / mod for value in faces[i][1:]]
     return MKPOL([faces, cells, pols])
 
+
 if self_test:
     PLASM_VIEW(POLAR(CUBOID([1, 1, 1])))
 
@@ -6925,7 +7186,6 @@ if self_test:
 
 def SWEEP(v):
     def SWEEP0(pol):
-
         ret = Plasm.power(pol, PLASM_QUOTE([1]))
 
         # shear operation
@@ -6938,6 +7198,7 @@ def SWEEP(v):
 
     return SWEEP0
 
+
 # ===================================================
 # MINKOWSKI
 # ===================================================
@@ -6949,7 +7210,9 @@ def MINKOWSKI(vects):
         for i in range(len(vects) - 1, -1, -1):
             ret = SWEEP(vects[i])(ret)
         return ret
+
     return MINKOWSKI0
+
 
 # ===================================================
 # OFFSET
@@ -6975,7 +7238,9 @@ def OFFSET(v):
             ret = MAT(mat)((Plasm.power(ret, PLASM_QUOTE([1]))))
 
         return PROJECT(len(v))(ret)
+
     return OFFSET0
+
 
 if self_test:
     verts = [[0, 0, 0], [3, 0, 0], [3, 2, 0], [0, 2, 0], [0, 0, 1.5],
@@ -6993,9 +7258,7 @@ if self_test:
 # THINSOLID
 # //////////////////////////////////////////////////////////////////
 def THINSOLID(surface, delta=1e-4):
-
     def map_fn(point):
-
         u, v, w = point
         # calculate normal as cross product of its gradient
         P0 = surface([u, v])
@@ -7009,6 +7272,7 @@ def THINSOLID(surface, delta=1e-4):
         return ret
 
     return map_fn
+
 
 if self_test:
     Su0 = COMP([PLASM_BEZIERCURVE([[0, 0, 0], [10, 0, 0]]), CONS([S1])])
@@ -7032,7 +7296,6 @@ if self_test:
 # //////////////////////////////////////////////////////////////////
 
 def PLANE(args):
-
     p0, p1, p2 = args
     v1 = VECTDIFF([p1, p0])
     v2 = VECTDIFF([p2, p0])
@@ -7097,7 +7360,9 @@ def ELLIPSE(args):
         quarter = PLASM_MAP(mapping)((PLASM_INTERVALS(1.0)(N)))
         half = PLASM_STRUCT([quarter, PLASM_S(2)(-1)(quarter)])
         return PLASM_STRUCT([half, PLASM_S(1)(-1)(half)])
+
     return ELLIPSE0
+
 
 if self_test:
     PLASM_VIEW(ELLIPSE([1, 2])(8))
@@ -7108,7 +7373,6 @@ if self_test:
 
 
 def CURVE_NORMAL(curve):
-
     def map_fn(point):
         xu, yu = curve(point)
 
@@ -7118,6 +7382,7 @@ def CURVE_NORMAL(curve):
         return [-yu / den, xu / den]
 
     return map_fn
+
 
 # //////////////////////////////////////////////////////////////////
 # DERPLASM_BEZIER
@@ -7133,7 +7398,9 @@ def DERPLASM_BEZIER(controlpoints_fn):
             def map_fn(point):
                 t = S1(point)
                 return CHOOSE([N, I]) * math.pow(t, I - 1) * math.pow(1 - t, N - I - 1) * (I - N * t)
+
             return map_fn
+
         return DERBERNSTEIN0
 
     basis = [DERBERNSTEIN(degree)(i) for i in range(degree + 1)]
@@ -7168,7 +7435,6 @@ def PLASM_BEZIERSTRIPE(args):
     normal = CURVE_NORMAL(DERPLASM_BEZIER(controlpoints))
 
     def map_fn(point):
-
         u, v = point
         bx, by = bezier(point)
         nx, ny = normal(point)
@@ -7179,6 +7445,7 @@ def PLASM_BEZIERSTRIPE(args):
     domain = PLASM_S(2)(width)(
         PLASM_T(1)(0.00001)(Plasm.power(PLASM_INTERVALS(1)(n), PLASM_INTERVALS(1)(1))))
     return PLASM_MAP(map_fn)(domain)
+
 
 if self_test:
     vertices = [[0, 0], [1.5, 0], [-1, 2], [2, 2], [2, 0]]
@@ -7249,6 +7516,7 @@ def BSPLINE(degree):
             return map_fn
 
         return BSPLINE1
+
     return BSPLINE0
 
 
@@ -7268,8 +7536,11 @@ def NUBSPLINE(degree, totpoints=80):
             v = [-tmin] + v
             domain = PLASM_QUOTE(v)
             return PLASM_MAP(BSPLINE(degree)(knots)(points))(domain)
+
         return NUBSPLINE2
+
     return NUBSPLINE1
+
 
 # ===================================================
 # DISPLAYNUBSPLINE
@@ -7303,11 +7574,9 @@ if self_test:
 def RATIONALBSPLINE(degree):
     def RATIONALBSPLINE0(knots):
         def RATIONALBSPLINE1(points):
-
             bspline = BSPLINE(degree)(knots)(points)
 
             def map_fn(point):
-
                 ret = bspline(point)
 
                 # rationalize (== divide for the last value)
@@ -7320,6 +7589,7 @@ def RATIONALBSPLINE(degree):
             return map_fn
 
         return RATIONALBSPLINE1
+
     return RATIONALBSPLINE0
 
 
@@ -7339,7 +7609,9 @@ def NURBSPLINE(degree, totpoints=80):
             v = [-tmin] + v
             domain = PLASM_QUOTE(v)
             return PLASM_MAP(RATIONALBSPLINE(degree)(knots)(points))(domain)
+
         return NURBSPLINE2
+
     return NURBSPLINE1
 
 
@@ -7368,10 +7640,10 @@ if self_test:
     PLASM_VIEW(DISPLAYNURBSPLINE([2, knots, controlpoints]))
 
 
-#=========================================================================
+# =========================================================================
 # Colors (wants a list [R,G,B] or [R,G,B,A]
 # Example PLASM_COLOR([1,0,0])(pol)
-#=========================================================================
+# =========================================================================
 
 # Change it to procedural style:
 # English:
@@ -7395,6 +7667,7 @@ def COLOR(obj, col=None):
                 raise ExceptionWT("Invalid object found in the COLOR command.")
             x.setcolor(col)
     return COPY(obj)
+
 
 C = COLOR
 # Czech:
@@ -7435,6 +7708,7 @@ def PLASM_COLOR(Cpl):
         return Plasm.addProperty(pol, "RGBcolor", formatColor(Cpl))
 
     return PLASM_COLOR0
+
 # English:
 GRAY = [128, 128, 128]
 GREY = [128, 128, 128]
@@ -7509,7 +7783,6 @@ VANILLA = [243, 229, 171]
 LEMON = [255, 250, 205]
 CHOCOLATE = [94, 39, 40]
 CANDY = [237, 139, 209]
-
 
 BRASS = [181, 166, 66]
 COPPER = [184, 115, 51]
@@ -7673,13 +7946,13 @@ def PLASM_GETCOLOR(obj):
         raise Exception(repr(obj) + " is not a Plasm object!")
     string = Plasm.getProperty(obj, "RGBcolor")
     col = [float(s) for s in string.split()]
-    if col == []:
+    if not col:
         return col
     else:
         if len(col) < 3:
             print(
                 "Warning: There is some problem with the color of an object.")
-            print(("Expected [R, G, B] but list length is", len(col0)))
+            print("Expected [R, G, B] but list length is", len(col))
             return
     col[0] = int(255 * float(col[0]) + 0.5)
     col[1] = int(255 * float(col[1]) + 0.5)
@@ -7692,17 +7965,16 @@ if self_test:
      == ("%s %s %s %s" % (1.0, 0.0, 0.0, 1.0)))
 
 
-#=========================================================================
+# =========================================================================
 # Materials (want a list of 17 elements(ambientRGBA, diffuseRGBA specularRGBA emissionRGBA shininess)
 # Example PLASM_MATERIAL([1,0,0,1,  0,1,0,1,  0,0,1,0, 0,0,0,1, 100])(pol)
-#=========================================================================
+# =========================================================================
 
 def PLASM_MATERIAL(M):
-
     def PLASM_MATERIAL0(pol):
 
         svalue = "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s" % (M[0], M[1], M[2], M[
-                                                                         3], M[4], M[5], M[6], M[7], M[8], M[9], M[10], M[11], M[12], M[13], M[14], M[15], M[16])
+            3], M[4], M[5], M[6], M[7], M[8], M[9], M[10], M[11], M[12], M[13], M[14], M[15], M[16])
         return Plasm.addProperty(pol, "VRMLmaterial", svalue)
 
     # convert list to Material
@@ -7723,8 +7995,9 @@ def PLASM_MATERIAL(M):
 
     return PLASM_MATERIAL0
 
+
 if self_test:
-    (Plasm.getProperty(PLASM_MATERIAL([1, 0, 0, 1,  0, 1, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  100])(
+    (Plasm.getProperty(PLASM_MATERIAL([1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 100])(
         Plasm.cube(3)), "VRMLmaterial") == [1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 100])
 
 # New definition:
@@ -7740,14 +8013,14 @@ def MATERIAL(obj, mat):
             x.setmaterial(mat)
     return COPY(obj)
 
-#=========================================================================
+
+# =========================================================================
 # Textures (wants a list [url:string,repeatS:bool,repeatT:bool,cx::float,cy::float,rot::float,sx::float,sy::float,tx::float,ty::float]
 # Example TEXTURE('filename.png')(pol)
-#=========================================================================
+# =========================================================================
 
 
 def TEXTURE(params):
-
     def TEXTURE0(params, pol):
 
         # is simply an URL
@@ -7764,8 +8037,8 @@ def TEXTURE(params):
             params = params[1:]
 
         # complete with default parameters
-        params += [True, True, 0.0, 0.0,  0.0,
-                   1.0, 1.0,    0.0, 0.0][len(params):]
+        params += [True, True, 0.0, 0.0, 0.0,
+                   1.0, 1.0, 0.0, 0.0][len(params):]
 
         # unpack
         repeatS, repeatT, cx, cy, rot, sx, sy, tx, ty = params
@@ -7812,18 +8085,19 @@ def TEXTURE(params):
         perm[ref1] = 2
         perm[refm] = 3
 
-        project_uv = Matf.translateV (Vecf(0.0, +cx, +cy, 0)) \
-            * Matf.scaleV (Vecf(0.0, sx, sy, 1)) \
-            * Matf.rotateV(3, 1, 2, -rot) \
-            * Matf.translateV (Vecf(0.0, -cx, -cy, 0)) \
-            * Matf.translateV (Vecf(0.0, tx, ty, 0))  \
-            * Matf(3).swapCols(perm) \
-            * Matf.scaleV     (vs) \
-            * Matf.translateV(vt)
+        project_uv = Matf.translateV(Vecf(0.0, +cx, +cy, 0)) \
+                     * Matf.scaleV(Vecf(0.0, sx, sy, 1)) \
+                     * Matf.rotateV(3, 1, 2, -rot) \
+                     * Matf.translateV(Vecf(0.0, -cx, -cy, 0)) \
+                     * Matf.translateV(Vecf(0.0, tx, ty, 0)) \
+                     * Matf(3).swapCols(perm) \
+                     * Matf.scaleV(vs) \
+                     * Matf.translateV(vt)
 
         return Plasm.Skin(pol, url, project_uv)
 
     return lambda pol: TEXTURE0(params, pol)
+
 
 if self_test:
     PLASM_VIEW(TEXTURE(":images/gioconda.png")(CUBOID([1, 1])))
@@ -7912,12 +8186,13 @@ def BOUNDARY(hpc, dim):
 
     return [vertex_db, faces_db]
 
-#print("...fenvs.py imported in",(time.clock() - start),"seconds")
+
+# print("...fenvs.py imported in",(time.clock() - start),"seconds")
 
 
-#=========================================================================
+# =========================================================================
 # AUTOGRADING FUNCTIONALITY
-#=========================================================================
+# =========================================================================
 
 # Is the object "tested" two-dimensional?
 def IS2D(tested):
@@ -7930,6 +8205,7 @@ def IS2D(tested):
             if obj.dim != 2:
                 result = False
         return result
+
 
 # Is the object "tested" three-dimensional?
 
@@ -7944,6 +8220,7 @@ def IS3D(tested):
             if obj.dim != 3:
                 result = False
         return result
+
 
 # Is a set an empty set?
 
@@ -7975,6 +8252,7 @@ def EMPTYSET(obj):
     else:
         return False
 
+
 # Base function. Returns True if object "small" is subset of object "big":
 
 
@@ -7984,6 +8262,7 @@ def SUBSET(small, big):
         return True
     else:
         return False
+
 
 # Base function. Returns True if object "tested" has an empty
 # intersection with object "obj":
@@ -7996,6 +8275,7 @@ def DISJOINT(obj1, obj2, tol=1e-8):
     else:
         return False
 
+
 # Returns True if the entire 2D box "box2d" lies in object "tested":
 
 
@@ -8003,6 +8283,7 @@ def HASBOX2D(tested, centerx, centery, sizex, sizey):
     box2d = BOX(sizex, sizey)
     MOVE(box2d, centerx - 0.5 * sizex, centery - 0.5 * sizey)
     return SUBSET(box2d, tested)
+
 
 # Returns True if no part of the 2D box "box2d" lies in object "tested":
 
@@ -8012,6 +8293,7 @@ def HASNTBOX2D(tested, centerx, centery, sizex, sizey):
     MOVE(box2d, centerx - 0.5 * sizex, centery - 0.5 * sizey)
     return DISJOINT(tested, box2d)
 
+
 # Returns True if object "tested" lies within a 2D box of given dimensions:
 
 
@@ -8020,6 +8302,7 @@ def ISINBOX2D(tested, minx, maxx, miny, maxy, tol=1e-8):
     yok = (MINY(tested) >= miny - tol) and (MAXY(tested) <= maxy + tol)
     return xok and yok
 
+
 # Returns True if entire 3D box "box3d" lies in object "tested":
 
 
@@ -8027,6 +8310,7 @@ def HASBOX3D(tested, centerx, centery, centerz, sizex, sizey, sizez):
     box3d = BOX(centerx - 0.5 * sizex, centerx + 0.5 * sizex, centery - 0.5 *
                 sizey, centery + 0.5 * sizey, centerz - 0.5 * sizez, centerz + 0.5 * sizez)
     return SUBSET(box3d, tested)
+
 
 # Returns True if no part of the 3D box "box3d" lies in object "tested":
 
@@ -8037,6 +8321,7 @@ def HASNTBOX3D(tested, centerx, centery, centerz, sizex, sizey, sizez):
          centery - 0.5 * sizey, centerz - 0.5 * sizez)
     return DISJOINT(brick, tested)
 
+
 # Returns True if object "tested" lies within a 3D box of given dimensions:
 
 
@@ -8046,6 +8331,7 @@ def ISINBOX3D(tested, minx, maxx, miny, maxy, minz, maxz, tol=1e-8):
     zok = (MINZ(tested) >= minz - tol) and (MAXZ(tested) <= maxz + tol)
     return xok and yok and zok
 
+
 # Checks if 2D object "tested" has dimensions sizex, sizey
 # with a given tolerance:
 
@@ -8054,6 +8340,7 @@ def SIZETEST2D(tested, sizex, sizey, eps=1e-8):
     a1 = (abs(SIZEX(tested) - sizex) <= eps)
     a2 = (abs(SIZEY(tested) - sizey) <= eps)
     return (a1 and a2)
+
 
 # Checks if 3D object "tested" has dimensions sizex, sizey, sizez
 # with a given tolerance:
@@ -8065,6 +8352,7 @@ def SIZETEST3D(tested, sizex, sizey, sizez, eps=1e-8):
     a3 = (abs(SIZEZ(tested) - sizez) <= eps)
     return (a1 and a2 and a3)
 
+
 # Checks whether the bounding box of the 2D object "tested" is
 # (minx, maxx) x (miny. maxy):
 
@@ -8075,6 +8363,7 @@ def BBTEST2D(tested, minx, maxx, miny, maxy, eps=1e-8):
     a3 = (abs(MINY(tested) - miny) <= eps)
     a4 = (abs(MAXY(tested) - maxy) <= eps)
     return a1 and a2 and a3 and a4
+
 
 # Checks whether the bounding box of the 3D object "tested" is
 # (minx, maxx) x (miny. maxy) x (minz. maxz):
@@ -8089,6 +8378,7 @@ def BBTEST3D(tested, minx, maxx, miny, maxy, minz, maxz, eps=1e-8):
     a6 = (abs(MAXZ(tested) - maxz) <= eps)
     return a1 and a2 and a3 and a4 and a5 and a6
 
+
 # Checks if 2D objects "tested" and "ref" have the same dimensions,
 # with a given tolerance:
 
@@ -8097,6 +8387,7 @@ def SIZEMATCH2D(tested, ref, eps=1e-8):
     a1 = (abs(SIZEX(tested) - SIZEX(ref)) <= eps)
     a2 = (abs(SIZEY(tested) - SIZEY(ref)) <= eps)
     return (a1 and a2)
+
 
 # Checks if 3D objects "tested" and "ref" have the same dimensions,
 # with a given tolerance:
@@ -8108,6 +8399,7 @@ def SIZEMATCH3D(tested, ref, eps=1e-8):
     a3 = (abs(SIZEZ(tested) - SIZEZ(ref)) <= eps)
     return (a1 and a2 and a3)
 
+
 # Checks if 2D object "tested" has given minx, miny
 # coordinates in the x, y directions, with a given tolerance:
 
@@ -8116,6 +8408,7 @@ def POSITIONTEST2D(tested, minx, miny, eps=1e-8):
     b1 = (abs(tested.minx() - minx) <= eps)
     b2 = (abs(tested.miny() - miny) <= eps)
     return (b1 and b2)
+
 
 # Checks if 3D object "tested" has given minx, miny, minz
 # coordinates in the x, y, z directions, with a given tolerance:
@@ -8127,6 +8420,7 @@ def POSITIONTEST3D(tested, minx, miny, minz, eps=1e-8):
     b3 = (abs(tested.minz() - minz) <= eps)
     return (b1 and b2 and b3)
 
+
 # Checks if 2D objects "tested" and "ref" have the same
 # minimum coordinates in the x, y directions,
 # with a given tolerance:
@@ -8136,6 +8430,7 @@ def POSITIONMATCH2D(tested, ref, eps=1e-8):
     b1 = (abs(tested.minx() - ref.minx()) <= eps)
     b2 = (abs(tested.miny() - ref.miny()) <= eps)
     return (b1 and b2)
+
 
 # Checks if 3D objects "tested" and "ref" have the same
 # minimum coordinates in the x, y, z directions,
@@ -8148,6 +8443,7 @@ def POSITIONMATCH3D(tested, ref, eps=1e-8):
     b3 = (abs(tested.minz() - ref.minz()) <= eps)
     return (b1 and b2 and b3)
 
+
 # Move 2D object "tested" so that it has given minx, miny:
 
 
@@ -8155,6 +8451,7 @@ def ADJUSTPOSITION3D(tested, minx, miny):
     xmintested = tested.minx()
     ymintested = tested.miny()
     return MOVE(tested, minx - xmintested, miny - ymintested)
+
 
 # Move 3D object "tested" so that it has given minx, miny, minz:
 
@@ -8164,6 +8461,7 @@ def ADJUSTPOSITION3D(tested, minx, miny, minz):
     ymintested = tested.miny()
     zmintested = tested.minz()
     return T(tested, minx - xmintested, miny - ymintested, minz - zmintested)
+
 
 # Move 2D object "tested" so that its minx coincides with minx of object ref,
 # and its miny coincides with miny of object ref:
@@ -8175,6 +8473,7 @@ def ALIGNOBJECTS2D(tested, ref):
     xminref = ref.minx()
     yminref = ref.miny()
     return MOVE(tested, xminref - xmintested, yminref - ymintested)
+
 
 # Move 3D object "tested" so that its minx coincides with minx of object ref,
 # its miny coincides with miny of object ref. and its minz coincides
@@ -8190,6 +8489,7 @@ def ALIGNOBJECTS3D(tested, ref):
     zminref = ref.minz()
     return MOVE(tested, xminref - xmintested, yminref - ymintested, zminref - zmintested)
 
+
 # Returns a rectangle which is the bounding box of a 2D object "tested":
 
 
@@ -8203,6 +8503,7 @@ def BBOXTEST2D(tested, minx, maxx, miny, maxy, tol=1e-8):
     a3 = (abs(testminy - miny) <= tol)
     a4 = (abs(testmaxy - maxy) <= tol)
     return a1 and a2 and a3 and a4
+
 
 # Returns a brick which is the bounding box of a 3D object "tested":
 
@@ -8222,6 +8523,7 @@ def BBOXTEST3D(tested, minx, maxx, miny, maxy, minz, maxz, tol=1e-8):
     a6 = (abs(testmaxz - maxz) <= tol)
     return a1 and a2 and a3 and a4 and a5 and a6
 
+
 # Returns the frame of a 2D box. Bars of
 # the frame will have thicknesses
 
@@ -8232,6 +8534,7 @@ def FRAME2D(x, y, hx, hy):
     MOVE(rect, hx, hy)
     SUBTRACT(box, rect)
     return box
+
 
 # Returns the frame of a 3D box. Bars of
 # the frame will have thicknesses hx, hy, hz
@@ -8246,6 +8549,7 @@ def FRAME3D(x, y, z, hx, hy, hz):
     brickz = BOX(x - 2 * hx, y - 2 * hy, z)
     M(brickz, hx, hy, 0)
     return DIFF(box, [brickx, bricky, brickz])
+
 
 # Alberto's changes to make Cartesian products simplicial:
 
@@ -8291,7 +8595,7 @@ def larSimplexGrid(shape):
 
         Return an (hyper-)cuboid of given shape. Vertices have integer coords
     """
-    model = V0, CV0 = [[]], [[0]]    # the empty simplicial model
+    model = V0, CV0 = [[]], [[0]]  # the empty simplicial model
     for item in shape:
         model = larExtrude(model, item * [1])
     return model
@@ -8304,6 +8608,7 @@ def SIMPLEXGRID(size):
 
         SIMPLEXGRID(size)(shape): Return an HPC value
     """
+
     def model2hpc0(shape):
         assert len(shape) == len(size)
         scaleCoeffs = list(map(DIV, list(zip(size, shape))))
@@ -8312,7 +8617,9 @@ def SIMPLEXGRID(size):
         cells = [[v + 1 for v in cell] for cell in cells]
         coords = list(range(1, len(size) + 1))
         return PLASM_S(coords)(scaleCoeffs)(MKPOL([verts, cells, None]))
+
     return model2hpc0
+
 
 # NEW COMMAND FOR REFERENCE DOMAIN:
 
@@ -8356,7 +8663,6 @@ def UNITCUBE(m, n, o):
     # return POWER(INTERVALS(1.0, n), INTERVALS(1.0, m))
     return BASEOBJ(SIMPLEXGRID([1.0, 1.0, 1.0])([m, n, o]))
 
-
 # Symbols for axes:
 X = 'X'
 Y = 'Y'
@@ -8372,6 +8678,7 @@ def PRINTSIZE(obj):
     maxz = MAXZ(obj)
     print(("SIZE:", maxx - minx, maxy - miny, maxz - minz))
     print(("BBOX:", minx, maxx, miny, maxy, minz, maxz))
+
 
 # Returns extrema, rounded to 3 digits:
 
@@ -8401,6 +8708,7 @@ def EXTREMA(obj):
     print(("Y:", miny, maxy))
     if ddd == 3:
         print(("Z:", minz, maxz))
+
 
 EXTREMS = EXTREMA
 EXTREMES = EXTREMA
@@ -8458,6 +8766,7 @@ def TANGRAM7():
     COLOR(tangram7, ORANGE)
     return tangram7
 
+
 ####    POINT    ####
 
 
@@ -8469,6 +8778,7 @@ def POINT(*args):
             "2D points are created as POINT(x, y), 3D points as POINT(x, y, z)!")
     # return the list:
     return L
+
 
 ####    TEST VALIDITY OF OBJECTS    ####
 
@@ -8504,7 +8814,6 @@ def VALIDATE(obj, name, dim):
 
     return True, None
 
-
 ######  NCLAB TURTLE - UTILITIES  ######
 
 from numpy import cos, sin, pi, sqrt, arctan2
@@ -8514,14 +8823,15 @@ from numpy import cos, sin, pi, sqrt, arctan2
 def NCLabTurtleRectangle(l, layer):
     dx = l.endx - l.startx
     dy = l.endy - l.starty
-    dist = sqrt(dx*dx + dy*dy)
+    dist = sqrt(dx * dx + dy * dy)
     angle = arctan2(dy, dx) * 180 / pi
-    rect = RECTANGLE(dist + 2*layer, l.linewidth + 2*layer)
-    MOVE(rect, -layer, -0.5*l.linewidth - layer)
+    rect = RECTANGLE(dist + 2 * layer, l.linewidth + 2 * layer)
+    MOVE(rect, -layer, -0.5 * l.linewidth - layer)
     ROTATE(rect, angle)
     COLOR(rect, l.linecolor)
     MOVE(rect, l.startx, l.starty)
     return rect
+
 
 # Dots to set area size:
 def NCLabTurtleCanvas(turtle):
@@ -8536,6 +8846,7 @@ def NCLabTurtleCanvas(turtle):
     dot4 = COPY(dot3)
     ROTATE(dot4, 90)
     return [dot1, dot2, dot3, dot4]
+
 
 # Return trace as list of PLaSM objects:
 def NCLabTurtleTrace(turtle, layer=0, dots=True):
@@ -8553,31 +8864,32 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
         # If dots == True, add circles:
         if dots == True:
             # Add circle to start point:
-            radius = 0.5*l.linewidth + layer
+            radius = 0.5 * l.linewidth + layer
             cir = CIRCLE(radius, 8)
-            MOVE(cir, l.startx, l.starty) 
+            MOVE(cir, l.startx, l.starty)
             COLOR(cir, l.linecolor)
             out.append(cir)
             # If this is the last line, add 
             # circle at end point and return:
-            if i == n-1:
-                radius = 0.5*l.linewidth + layer
+            if i == n - 1:
+                radius = 0.5 * l.linewidth + layer
                 cir = CIRCLE(radius, 8)
-                MOVE(cir, l.endx, l.endy) 
+                MOVE(cir, l.endx, l.endy)
                 COLOR(cir, l.linecolor)
                 out.append(cir)
                 return out
             # Add circle if next line is not connected 
             # (we know this is not the last line):
-            dx = turtle.lines[i+1].startx - l.endx
-            dy = turtle.lines[i+1].starty - l.endy
+            dx = turtle.lines[i + 1].startx - l.endx
+            dy = turtle.lines[i + 1].starty - l.endy
             if abs(dx) > 0.000001 or abs(dy) > 0.000001:
-                radius = 0.5*l.linewidth + layer
+                radius = 0.5 * l.linewidth + layer
                 cir = CIRCLE(radius, 8)
-                MOVE(cir, l.endx, l.endy) 
+                MOVE(cir, l.endx, l.endy)
                 COLOR(cir, l.linecolor)
                 out.append(cir)
     return out
+
 
 # Shape of the turtle:
 def NCLabTurtleImage(turtle):
@@ -8627,9 +8939,9 @@ def NCLabTurtleFindPair(turtle):
     n = len(turtle.lines)
     if n <= 1:
         return -1
-    for i in range(n-1):
+    for i in range(n - 1):
         l1 = turtle.lines[i]
-        l2 = turtle.lines[i+1]
+        l2 = turtle.lines[i + 1]
         # End point is start point of next:
         f1 = abs(l2.startx - l1.endx) < 0.000001
         f2 = abs(l2.starty - l1.endy) < 0.000001
@@ -8644,15 +8956,16 @@ def NCLabTurtleFindPair(turtle):
         # Color:
         f4 = True
         for i in range(3):
-          if l1.linecolor[i] != l2.linecolor[i]:
-            f4 = False
-            break
+            if l1.linecolor[i] != l2.linecolor[i]:
+                f4 = False
+                break
         # Width:
         f5 = (l1.linewidth - l2.linewidth) < 0.000001
         if f1 and f2 and f3 and f4 and f5:
             return i
     return -1
-  
+
+
 # Merges adjacent segments that lie
 # on the same line, and have the same 
 # width and color:
@@ -8660,11 +8973,12 @@ def NCLabTurtleCleanTrace(turtle):
     index = NCLabFindPair(turtle)
     while index != -1:
         l1 = turtle.lines[index]
-        l2 = turtle.lines[index+1]
+        l2 = turtle.lines[index + 1]
         l1.endx = l2.endx
         l1.endy = l2.endy
-        del turtle.lines[index+1]
+        del turtle.lines[index + 1]
         index = NCLabFindPair(turtle)
+
 
 def NCLabTurtleShow(turtle, layer=0, dots=True):
     h_image = 0.0008
@@ -8676,10 +8990,11 @@ def NCLabTurtleShow(turtle, layer=0, dots=True):
     image = PRISM(image, h_image)
     canvas = PRISM(canvas, h_trace)
     trace = PRISM(trace, h_trace)
-    if turtle.isvisible == True:
+    if turtle.isvisible:
         SHOW(image, canvas, trace)
     else:
         SHOW(canvas, trace)
+
 
 ######  NCLAB TURTLE - CLASSES  ######
 
@@ -8692,7 +9007,8 @@ class NCLabTurtleLine:
         self.endy = ey
         self.linewidth = w
         self.linecolor = c
-  
+
+
 # Class Turtle:
 class NCLabTurtle:
     def __init__(self, px=0, py=0):
@@ -8705,8 +9021,10 @@ class NCLabTurtle:
         self.canvassize = 100
         self.lines = []
         self.isvisible = True
+
     def angle(self, a):
         self.turtleangle = a
+
     def color(self, col):
         if not isinstance(col, list):
             raise ExceptionWT("Attempt to set invalid color. Have you forgotten square brackets?")
@@ -8716,26 +9034,35 @@ class NCLabTurtle:
             if col[i] < 0 or col[i] > 255:
                 raise ExceptionWT("Attempt to set invalid color. Have you used three integers between 0 and 255?")
         self.linecolor = col
+
     def width(self, w):
         if w < 0.1:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
         if w > 10.0:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
         self.linewidth = w
+
     def penup(self):
         self.draw = False
+
     def up(self):
         self.draw = False
+
     def pu(self):
         self.draw = False
+
     def pendown(self):
         self.draw = True
+
     def down(self):
         self.draw = True
+
     def pd(self):
         self.draw = True
+
     def isdown(self):
         return self.draw
+
     def go(self, dist):
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
@@ -8744,30 +9071,40 @@ class NCLabTurtle:
             self.lines.append(newline)
         self.posx = newx
         self.posy = newy
+
     def forward(self, dist):
         self.go(dist)
+
     def fd(self, dist):
         self.go(dist)
+
     def left(self, da):
         self.turtleangle += da
+
     def lt(self, da):
         self.left(da)
+
     def right(self, da):
         self.turtleangle -= da
+
     def rt(self, da):
         self.rt(da)
+
     def back(self, dist):
         draw = self.draw
         self.left(180)
-        self.penup()        # do not draw while backing
+        self.penup()  # do not draw while backing
         self.go(dist)
         self.right(180)
         if draw == True:
             self.pendown()
+
     def backward(self, dist):
         self.back(dist)
+
     def bk(self, dist):
         self.back(dist)
+
     def goto(self, newx, newy):
         if self.draw == True:
             newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.linecolor)
@@ -8777,42 +9114,59 @@ class NCLabTurtle:
         self.turtleangle = arctan2(dy, dx) * 180 / pi
         self.posx = newx
         self.posy = newy
+
     def setpos(self, newx, newy):
         self.goto(newx, newy)
+
     def setposition(self, newx, newy):
         self.goto(newx, newy)
+
     def setx(self, newx):
         self.goto(newx, self.posy)
+
     def sety(self, newy):
         self.goto(self.posx, newy)
+
     def home(self):
         self.goto(0, 0)
         self.angle(0)
+
     def getx(self):
         return self.posx
+
     def gety(self):
         return self.posy
+
     def getangle(self):
         return self.turtleangle
+
     def getcolor(self):
         return self.linecolor
+
     def getwidth(self):
         return self.linewidth
+
     def show(self, layer=0, dots=True):
         NCLabTurtleShow(self, layer, dots)
+
     def visible(self):
         self.isvisible = True
+
     def reveal(self):
         self.isvisible = True
+
     def invisible(self):
         self.isvisible = False
+
     def hide(self):
         self.isvisible = False
+
     def line(self, x1, y1, x2, y2):
         self.up()
         self.goto(x1, y1)
         self.down()
         self.goto(x2, y2)
+
     def extrude(self, height):
         layer = 0
         dots = True
@@ -8820,6 +9174,7 @@ class NCLabTurtle:
         p = PRISM(base, height)
         if not EMPTYSET(p):
             SHOW(p)
+
     def revolve(self, angle, div=48):
         layer = 0
         dots = True
@@ -8827,6 +9182,7 @@ class NCLabTurtle:
         p = REVOLVE(base, angle, div)
         if not EMPTYSET(p):
             SHOW(p)
+
     def spiral(self, angle, elevation, div=48):
         layer = 0
         dots = True
@@ -8834,8 +9190,10 @@ class NCLabTurtle:
         p = SPIRAL(base, angle, elevation, div)
         if not EMPTYSET(p):
             SHOW(p)
+
     def erase(self):
         del self.lines[:]
+
     def reset(self):
         del self.lines[:]
         self.posx = 0
@@ -8846,5 +9204,3 @@ class NCLabTurtle:
         self.linewidth = 1
         self.canvassize = 100
         self.isvisible = True
-        
-
