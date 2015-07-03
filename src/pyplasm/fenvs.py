@@ -9174,6 +9174,7 @@ class NCLabTurtle:
         p = PRISM(base, height)
         if not EMPTYSET(p):
             SHOW(p)
+        return p
 
     def revolve(self, angle, div=48):
         layer = 0
@@ -9182,6 +9183,7 @@ class NCLabTurtle:
         p = REVOLVE(base, angle, div)
         if not EMPTYSET(p):
             SHOW(p)
+        return p
 
     def spiral(self, angle, elevation, div=48):
         layer = 0
@@ -9190,6 +9192,7 @@ class NCLabTurtle:
         p = SPIRAL(base, angle, elevation, div)
         if not EMPTYSET(p):
             SHOW(p)
+        return p
 
     def erase(self):
         del self.lines[:]
