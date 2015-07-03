@@ -9021,6 +9021,7 @@ class NCLabTurtle:
         self.canvassize = 100
         self.lines = []
         self.isvisible = True
+        self.extrusionheight = 0
 
     def angle(self, a):
         self.turtleangle = a
@@ -9173,6 +9174,7 @@ class NCLabTurtle:
         base = NCLabTurtleTrace(self, layer, dots)
         p = PRISM(base, height)
         if not EMPTYSET(p):
+            self.extrusionheight = height
             SHOW(p)
         return p
 
@@ -9207,3 +9209,4 @@ class NCLabTurtle:
         self.linewidth = 1
         self.canvassize = 100
         self.isvisible = True
+        self.extrusionheight = 0
