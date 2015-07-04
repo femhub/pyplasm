@@ -8979,6 +8979,8 @@ def NCLabTurtleCleanTrace(turtle):
         del turtle.lines[index + 1]
         index = NCLabFindPair(turtle)
 
+# For the red line in the course, to highlight student's errors:
+NCLAB_TURTLE_RED_H = 0.0007
 
 def NCLabTurtleShow(turtle, layer=0, dots=True):
     h_image = 0.0008
