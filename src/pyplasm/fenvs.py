@@ -8979,12 +8979,15 @@ def NCLabTurtleCleanTrace(turtle):
         del turtle.lines[index + 1]
         index = NCLabFindPair(turtle)
 
-# For the red line in the course, to highlight student's errors:
+# Extrusion heights for the turtle trace, the red 
+# (correct solution) trace and the turtle itself:
+NCLAB_TURTLE_TRACE_H = 0.0005
 NCLAB_TURTLE_RED_H = 0.0007
+NCLAB_TURTLE_IMAGE_H = 0.0008
 
 def NCLabTurtleShow(turtle, layer=0, dots=True):
-    h_image = 0.0008
-    h_trace = 0.0005
+    h_image = NCLAB_TURTLE_IMAGE_H
+    h_trace = NCLAB_TURTLE_TRACE_H
     image = NCLabTurtleImage(turtle)
     canvas = NCLabTurtleCanvas(turtle)
     trace = NCLabTurtleTrace(turtle, layer, dots)
