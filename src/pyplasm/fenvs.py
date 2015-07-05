@@ -9134,8 +9134,10 @@ class NCLabTurtle:
         self.goto(self.posx, newy)
 
     def home(self):
+        self.penup()
         self.goto(0, 0)
         self.angle(0)
+        self.pendown()
 
     def getx(self):
         return self.posx
