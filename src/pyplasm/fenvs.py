@@ -8984,6 +8984,7 @@ def NCLabTurtleCleanTrace(turtle):
 NCLAB_TURTLE_TRACE_H = 0.0005
 NCLAB_TURTLE_RED_H = 0.0007
 NCLAB_TURTLE_IMAGE_H = 0.0008
+NCLAB_TURTLE_EPS = 0.0001
 
 def NCLabTurtleShow(turtle, layer=0, dots=True):
     h_image = NCLAB_TURTLE_IMAGE_H
