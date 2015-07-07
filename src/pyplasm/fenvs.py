@@ -9176,7 +9176,7 @@ class NCLabTurtle:
         self.down()
         self.goto(x2, y2)
 
-    def extrude(self, height):
+    def extrude(self, height = 1):
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
