@@ -9219,9 +9219,13 @@ class NCLabTurtle:
         self.isvisible = True
         self.extrusionheight = 0
 
-    def arc(self, angle):
+    def arc(self, angle, radius = 10):
         n = (angle / 180) * 18
         n = round(n)
-        for j in range(n):
-            T.go(3.48622970991)
-            T.right(10)
+        step = 0.174977327052 * radius
+        self.go(0.5*step)
+        self.right(10)
+        for j in range(n-1):
+            self.go(step)
+            self.right(10)
+        self.go(0.5*step)
