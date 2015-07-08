@@ -9186,11 +9186,44 @@ class NCLabTurtle:
             SHOW(p)
         return p
 
-    def revolve(self, angle, div=48):
+    # Revolves complete trace including width
+    def revolve(self, angle=360, div=32):   
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
         p = REVOLVE(base, angle, div)
+        if not EMPTYSET(p):
+            SHOW(p)
+        return p
+
+    # Rotational solid
+    def rosol(self, angle=360, div=32):     
+        p = []
+        for line in self.lines:
+            a = POINT(line.startx, line.starty)
+            b = POINT(line.endx, line.endy)
+            minr = 0
+            nx = 1
+            na = div
+            nr = 1
+            s = ROSOL([a, b], angle, minr, nx, na, nr)
+            COLOR(s, line.linecolor)
+            p.append(s)
+        if not EMPTYSET(p):
+            SHOW(p)
+        return p
+
+    # Rotational surface
+    def rosurf(self, angle=360, div=32):     
+        p = []
+        for line in self.lines:
+            a = POINT(line.startx, line.starty)
+            b = POINT(line.endx, line.endy)
+            nx = 1
+            na = div
+            s = ROSURF([a, b], angle, nx, na)
+            COLOR(s, line.linecolor)
+            p.append(s)
         if not EMPTYSET(p):
             SHOW(p)
         return p
