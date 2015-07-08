@@ -9028,6 +9028,9 @@ class NCLabTurtle:
         self.lines = []
         self.isvisible = True
         self.extrusionheight = 0
+        self.isrosol = False
+        self.isrosurf = False
+        self.isroshell = False
 
     def angle(self, a):
         self.turtleangle = a
@@ -9194,6 +9197,7 @@ class NCLabTurtle:
         p = REVOLVE(base, angle, div)
         if not EMPTYSET(p):
             SHOW(p)
+            self.isroshell = True
         return p
 
     # Rotational solid
@@ -9211,6 +9215,7 @@ class NCLabTurtle:
             p.append(s)
         if not EMPTYSET(p):
             SHOW(p)
+            self.isrosol = True
         return p
 
     # Rotational surface
@@ -9226,6 +9231,7 @@ class NCLabTurtle:
             p.append(s)
         if not EMPTYSET(p):
             SHOW(p)
+            self.isrosurf = True
         return p
 
     def spiral(self, angle, elevation, div=48):
@@ -9251,6 +9257,9 @@ class NCLabTurtle:
         self.canvassize = 100
         self.isvisible = True
         self.extrusionheight = 0
+        self.isrosol = False
+        self.isrosurf = False
+        self.isroshell = False
 
     def arc(self, angle, radius = 10):
         n = (angle / 180) * 18
