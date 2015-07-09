@@ -9027,10 +9027,12 @@ class NCLabTurtle:
         self.canvassize = 100
         self.lines = []
         self.isvisible = True
-        self.extrusionheight = 0
+        self.isextruded = False
+        self.isrevolved = False
+        self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
-        self.isroshell = False
+        self.geom = None
 
     def angle(self, a):
         self.turtleangle = a
@@ -9158,9 +9160,6 @@ class NCLabTurtle:
     def getwidth(self):
         return self.linewidth
 
-    def show(self, layer=0, dots=True):
-        NCLabTurtleShow(self, layer, dots)
-
     def visible(self):
         self.isvisible = True
 
@@ -9180,29 +9179,48 @@ class NCLabTurtle:
         self.goto(x2, y2)
 
     def extrude(self, height = 1):
+        self.isextruded = True
+        self.isrevolved = False
+        self.isspiral = False
+        self.isrosol = False
+        self.isrosurf = False
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
-        p = PRISM(base, height)
-        if not EMPTYSET(p):
-            self.extrusionheight = height
-            SHOW(p)
-        return p
+        self.geom = PRISM(base, height)
 
     # Revolves complete trace including width
     def revolve(self, angle=360, div=32):   
+        self.isextruded = False
+        self.isrevolved = True
+        self.isspiral = False
+        self.isrosol = False
+        self.isrosurf = False
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
-        p = REVOLVE(base, angle, div)
-        if not EMPTYSET(p):
-            SHOW(p)
-            self.isroshell = True
-        return p
+        self.geom = REVOLVE(base, angle, div)
+
+    # Spiral
+    def spiral(self, angle, elevation, div=48):
+        self.isextruded = False
+        self.isrevolved = False
+        self.isspiral = True
+        self.isrosol = False
+        self.isrosurf = False
+        layer = 0
+        dots = True
+        base = NCLabTurtleTrace(self, layer, dots)
+        self.geom = SPIRAL(base, angle, elevation, div)
 
     # Rotational solid
     def rosol(self, angle=360, div=32):     
-        p = []
+        self.isextruded = False
+        self.isrevolved = False
+        self.isspiral = False
+        self.isrosol = True
+        self.isrosurf = False
+        self.geom = []
         for line in self.lines:
             a = POINT(line.startx, line.starty)
             b = POINT(line.endx, line.endy)
@@ -9212,15 +9230,16 @@ class NCLabTurtle:
             nr = 1
             s = ROSOL([a, b], angle, minr, nx, na, nr)
             COLOR(s, line.linecolor)
-            p.append(s)
-        if not EMPTYSET(p):
-            SHOW(p)
-            self.isrosol = True
-        return p
+            self.geom.append(s)
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
-        p = []
+        self.isextruded = False
+        self.isrevolved = False
+        self.isspiral = False
+        self.isrosol = False
+        self.isrosurf = True
+        self.geom = []
         for line in self.lines:
             a = POINT(line.startx, line.starty)
             b = POINT(line.endx, line.endy)
@@ -9228,20 +9247,7 @@ class NCLabTurtle:
             na = div
             s = ROSURF([a, b], angle, nx, na)
             COLOR(s, line.linecolor)
-            p.append(s)
-        if not EMPTYSET(p):
-            SHOW(p)
-            self.isrosurf = True
-        return p
-
-    def spiral(self, angle, elevation, div=48):
-        layer = 0
-        dots = True
-        base = NCLabTurtleTrace(self, layer, dots)
-        p = SPIRAL(base, angle, elevation, div)
-        if not EMPTYSET(p):
-            SHOW(p)
-        return p
+            self.geom.append(s)
 
     def erase(self):
         del self.lines[:]
@@ -9256,10 +9262,12 @@ class NCLabTurtle:
         self.linewidth = 1
         self.canvassize = 100
         self.isvisible = True
-        self.extrusionheight = 0
+        self.isextruded = False
+        self.isrevolved = False
+        self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
-        self.isroshell = False
+        self.geom = None
 
     def arc(self, angle, radius = 10):
         n = (angle / 180) * 18
@@ -9271,3 +9279,16 @@ class NCLabTurtle:
             self.go(step)
             self.right(10)
         self.go(0.5*step)
+
+    def geometry(self):
+        return self.geom
+
+    def show(self, layer=0, dots=True):
+        # If geom is not None, show geometry,
+        # else show trace:
+        if self.geom != None:
+            SHOW(geom)
+        else:
+            NCLabTurtleShow(self, layer, dots)
+          
+
