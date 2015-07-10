@@ -9269,7 +9269,7 @@ class NCLabTurtle:
         self.isrosurf = False
         self.geom = None
 
-    def arc(self, angle, radius = 10):
+    def arc(self, angle, radius, direction='r'):
         n = (angle / 180) * 18
         n = round(n)
         step = 0.174977327052 * radius
@@ -9277,7 +9277,10 @@ class NCLabTurtle:
         self.right(10)
         for j in range(n-1):
             self.go(step)
-            self.right(10)
+            if direction == 'r' or direction == 'R' or direction == 'right':
+                self.right(10)
+            else:
+                self.left(10)
         self.go(0.5*step)
 
     def geometry(self):
