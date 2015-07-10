@@ -9274,7 +9274,10 @@ class NCLabTurtle:
         n = round(n)
         step = 0.174977327052 * radius
         self.go(0.5*step)
-        self.right(10)
+        if direction == 'r' or direction == 'R' or direction == 'right':
+            self.right(10)
+        else:
+            self.left(10)
         for j in range(n-1):
             self.go(step)
             if direction == 'r' or direction == 'R' or direction == 'right':
