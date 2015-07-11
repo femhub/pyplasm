@@ -9201,6 +9201,10 @@ class NCLabTurtle:
         base = NCLabTurtleTrace(self, layer, dots)
         self.geom = REVOLVE(base, angle, div)
 
+    # Another name for revolve()
+    def roshell(self, angle=360, div=32):
+        self.revolve(angle, div)
+
     # Spiral
     def spiral(self, angle, elevation, div=48):
         self.isextruded = False
