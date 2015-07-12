@@ -9076,6 +9076,8 @@ class NCLabTurtle:
         return self.draw
 
     def go(self, dist):
+        if dist <= 0:
+            raise ExceptionWT("The distance d in go(d) must be positive!")
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
@@ -9103,6 +9105,8 @@ class NCLabTurtle:
         self.rt(da)
 
     def back(self, dist):
+        if dist <= 0:
+            raise ExceptionWT("The distance d in back(d) must be positive!")
         draw = self.draw
         self.left(180)
         self.penup()  # do not draw while backing
