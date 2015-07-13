@@ -9278,7 +9278,12 @@ class NCLabTurtle:
         self.geom = None
 
     def arc(self, angle, radius, direction='r'):
-        n = 36
+        if angle < 0.001:
+            raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
+        if radius < 0.001:
+            raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
+        n = (angle / 180) * 18
+        n = round(n)
         step = 0.174977327052 * radius
         self.go(0.5*step)
         if direction == 'r' or direction == 'R' or direction == 'right':
