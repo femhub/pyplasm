@@ -9278,8 +9278,7 @@ class NCLabTurtle:
         self.geom = None
 
     def arc(self, angle, radius, direction='r'):
-        n = (angle / 180) * 18
-        n = round(n)
+        n = 36
         step = 0.174977327052 * radius
         self.go(0.5*step)
         if direction == 'r' or direction == 'R' or direction == 'right':
