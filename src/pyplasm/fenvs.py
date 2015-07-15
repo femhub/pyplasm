@@ -9028,10 +9028,10 @@ class NCLabTurtle:
         self.lines = []
         self.isvisible = True
         self.isextruded = False
-        self.isrevolved = False
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
+        self.isroshell = False
         self.geom = None
 
     def angle(self, a):
@@ -9183,11 +9183,13 @@ class NCLabTurtle:
         self.goto(x2, y2)
 
     def extrude(self, height = 1):
+        if height <= 0.000001:
+            raise ExceptionWT("Height 'h' in extrude(h) must be positive!")
         self.isextruded = True
-        self.isrevolved = False
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
+        self.isroshell = False
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
@@ -9195,11 +9197,13 @@ class NCLabTurtle:
 
     # Revolves complete trace including width
     def revolve(self, angle=360, div=32):   
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in revolve(a) must be positive!")
         self.isextruded = False
-        self.isrevolved = True
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
+        self.isroshell = True
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
@@ -9207,15 +9211,19 @@ class NCLabTurtle:
 
     # Another name for revolve()
     def roshell(self, angle=360, div=32):
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in roshell(a) must be positive!")
         self.revolve(angle, div)
 
     # Spiral
     def spiral(self, angle, elevation, div=48):
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in spiral(a, elevation) must be positive!")
         self.isextruded = False
-        self.isrevolved = False
         self.isspiral = True
         self.isrosol = False
         self.isrosurf = False
+        self.isroshell = False
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
@@ -9223,11 +9231,13 @@ class NCLabTurtle:
 
     # Rotational solid
     def rosol(self, angle=360, div=32):     
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in rosol(a) must be positive!")
         self.isextruded = False
-        self.isrevolved = False
         self.isspiral = False
         self.isrosol = True
         self.isrosurf = False
+        self.isroshell = False
         self.geom = []
         for line in self.lines:
             a = POINT(line.startx, line.starty)
@@ -9242,11 +9252,13 @@ class NCLabTurtle:
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in rosurf(a) must be positive!")
         self.isextruded = False
-        self.isrevolved = False
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = True
+        self.isroshell = False
         self.geom = []
         for line in self.lines:
             a = POINT(line.startx, line.starty)
@@ -9271,10 +9283,10 @@ class NCLabTurtle:
         self.canvassize = 100
         self.isvisible = True
         self.isextruded = False
-        self.isrevolved = False
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
+        self.isroshell = False
         self.geom = None
 
     def arc(self, angle, radius, direction='r'):
