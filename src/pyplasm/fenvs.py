@@ -8803,6 +8803,12 @@ def VALIDATE(obj, name, dim):
     if not isinstance(obj, BASEOBJ) and not isinstance(obj, list):
         return False, "Object '" + name + "' is invalid."
 
+    if isinstance(obj, BASEOBJ):
+        if dim == 2 and obj.dim == 3:
+            return False, "Your object '" + name + "' should be a 2D object (it is a 3D object)."
+        if dim == 3 and obj.dim == 2:
+            return False, "Your object '" + name + "' should be a 3D object (it is a 2D object)."
+
     if isinstance(obj, list):
         m = len(obj)
         if m == 0:
@@ -8811,6 +8817,10 @@ def VALIDATE(obj, name, dim):
         for ooo in newobj:
             if not isinstance(ooo, BASEOBJ):
                 return False, "'" + name + "' is not a valid " + str(dim) + "D object."
+            if dim == 2 and ooo.dim == 3:
+                return False, "Your object '" + name + "' should be a 2D object (it is a 3D object)."
+            if dim == 3 and ooo.dim == 2:
+                return False, "Your object '" + name + "' should be a 3D object (it is a 2D object)."
 
     return True, None
 
