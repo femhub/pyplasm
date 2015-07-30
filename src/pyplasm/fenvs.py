@@ -4448,7 +4448,7 @@ def circle(*args):
 
 
 def CIRCLE(r, division=[48, 1]):
-    if r <= 0:
+    if r <= 0.0000001:
         raise ExceptionWT("Radius r in CIRCLE(r) must be positive!")
     if type(division) == list:
         return BASEOBJ(PLASM_CIRCLE(r)(division))
