@@ -4448,7 +4448,7 @@ def circle(*args):
 
 
 def CIRCLE(r, division=[48, 1]):
-    if r <= 0:
+    if r <= 0.0000001:
         raise ExceptionWT("Radius r in CIRCLE(r) must be positive!")
     if type(division) == list:
         return BASEOBJ(PLASM_CIRCLE(r)(division))
@@ -8803,6 +8803,12 @@ def VALIDATE(obj, name, dim):
     if not isinstance(obj, BASEOBJ) and not isinstance(obj, list):
         return False, "Object '" + name + "' is invalid."
 
+    if isinstance(obj, BASEOBJ):
+        if dim == 2 and obj.dim == 3:
+            return False, "Your object '" + name + "' should be a 2D object (it is a 3D object)."
+        if dim == 3 and obj.dim == 2:
+            return False, "Your object '" + name + "' should be a 3D object (it is a 2D object)."
+
     if isinstance(obj, list):
         m = len(obj)
         if m == 0:
@@ -8811,6 +8817,10 @@ def VALIDATE(obj, name, dim):
         for ooo in newobj:
             if not isinstance(ooo, BASEOBJ):
                 return False, "'" + name + "' is not a valid " + str(dim) + "D object."
+            if dim == 2 and ooo.dim == 3:
+                return False, "Your object '" + name + "' should be a 2D object (it is a 3D object)."
+            if dim == 3 and ooo.dim == 2:
+                return False, "Your object '" + name + "' should be a 3D object (it is a 2D object)."
 
     return True, None
 
@@ -8979,10 +8989,16 @@ def NCLabTurtleCleanTrace(turtle):
         del turtle.lines[index + 1]
         index = NCLabFindPair(turtle)
 
+# Extrusion heights for the turtle trace, the red 
+# (correct solution) trace and the turtle itself:
+NCLAB_TURTLE_TRACE_H = 0.0005
+NCLAB_TURTLE_RED_H = 0.0007
+NCLAB_TURTLE_IMAGE_H = 0.0008
+NCLAB_TURTLE_EPS = 0.0001
 
 def NCLabTurtleShow(turtle, layer=0, dots=True):
-    h_image = 0.0008
-    h_trace = 0.0005
+    h_image = NCLAB_TURTLE_IMAGE_H
+    h_trace = NCLAB_TURTLE_TRACE_H
     image = NCLabTurtleImage(turtle)
     canvas = NCLabTurtleCanvas(turtle)
     trace = NCLabTurtleTrace(turtle, layer, dots)
@@ -9021,6 +9037,12 @@ class NCLabTurtle:
         self.canvassize = 100
         self.lines = []
         self.isvisible = True
+        self.isextruded = False
+        self.isspiral = False
+        self.isrosol = False
+        self.isrosurf = False
+        self.isroshell = False
+        self.geom = None
 
     def angle(self, a):
         self.turtleangle = a
@@ -9064,6 +9086,8 @@ class NCLabTurtle:
         return self.draw
 
     def go(self, dist):
+        if dist <= 0:
+            raise ExceptionWT("The distance d in go(d) must be positive!")
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
@@ -9091,6 +9115,8 @@ class NCLabTurtle:
         self.rt(da)
 
     def back(self, dist):
+        if dist <= 0:
+            raise ExceptionWT("The distance d in back(d) must be positive!")
         draw = self.draw
         self.left(180)
         self.penup()  # do not draw while backing
@@ -9128,8 +9154,10 @@ class NCLabTurtle:
         self.goto(self.posx, newy)
 
     def home(self):
+        self.penup()
         self.goto(0, 0)
         self.angle(0)
+        self.pendown()
 
     def getx(self):
         return self.posx
@@ -9145,9 +9173,6 @@ class NCLabTurtle:
 
     def getwidth(self):
         return self.linewidth
-
-    def show(self, layer=0, dots=True):
-        NCLabTurtleShow(self, layer, dots)
 
     def visible(self):
         self.isvisible = True
@@ -9167,29 +9192,92 @@ class NCLabTurtle:
         self.down()
         self.goto(x2, y2)
 
-    def extrude(self, height):
+    def extrude(self, height = 1):
+        if height <= 0.000001:
+            raise ExceptionWT("Height 'h' in extrude(h) must be positive!")
+        self.isextruded = True
+        self.isspiral = False
+        self.isrosol = False
+        self.isrosurf = False
+        self.isroshell = False
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
-        p = PRISM(base, height)
-        if not EMPTYSET(p):
-            SHOW(p)
+        self.geom = PRISM(base, height)
 
-    def revolve(self, angle, div=48):
+    # Revolves complete trace including width
+    def revolve(self, angle=360, div=32):   
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in revolve(a) must be positive!")
+        self.isextruded = False
+        self.isspiral = False
+        self.isrosol = False
+        self.isrosurf = False
+        self.isroshell = True
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
-        p = REVOLVE(base, angle, div)
-        if not EMPTYSET(p):
-            SHOW(p)
+        self.geom = REVOLVE(base, angle, div)
 
+    # Another name for revolve()
+    def roshell(self, angle=360, div=32):
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in roshell(a) must be positive!")
+        self.revolve(angle, div)
+
+    # Spiral
     def spiral(self, angle, elevation, div=48):
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in spiral(a, elevation) must be positive!")
+        self.isextruded = False
+        self.isspiral = True
+        self.isrosol = False
+        self.isrosurf = False
+        self.isroshell = False
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
-        p = SPIRAL(base, angle, elevation, div)
-        if not EMPTYSET(p):
-            SHOW(p)
+        self.geom = SPIRAL(base, angle, elevation, div)
+
+    # Rotational solid
+    def rosol(self, angle=360, div=32):     
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in rosol(a) must be positive!")
+        self.isextruded = False
+        self.isspiral = False
+        self.isrosol = True
+        self.isrosurf = False
+        self.isroshell = False
+        self.geom = []
+        for line in self.lines:
+            a = POINT(line.startx, line.starty)
+            b = POINT(line.endx, line.endy)
+            minr = 0
+            nx = 1
+            na = div
+            nr = 1
+            s = ROSOL([a, b], angle, minr, nx, na, nr)
+            COLOR(s, line.linecolor)
+            self.geom.append(s)
+
+    # Rotational surface
+    def rosurf(self, angle=360, div=32):     
+        if angle <= 0.000001:
+            raise ExceptionWT("Angle 'a' in rosurf(a) must be positive!")
+        self.isextruded = False
+        self.isspiral = False
+        self.isrosol = False
+        self.isrosurf = True
+        self.isroshell = False
+        self.geom = []
+        for line in self.lines:
+            a = POINT(line.startx, line.starty)
+            b = POINT(line.endx, line.endy)
+            nx = 1
+            na = div
+            s = ROSURF([a, b], angle, nx, na)
+            COLOR(s, line.linecolor)
+            self.geom.append(s)
 
     def erase(self):
         del self.lines[:]
@@ -9204,3 +9292,43 @@ class NCLabTurtle:
         self.linewidth = 1
         self.canvassize = 100
         self.isvisible = True
+        self.isextruded = False
+        self.isspiral = False
+        self.isrosol = False
+        self.isrosurf = False
+        self.isroshell = False
+        self.geom = None
+
+    def arc(self, angle, radius, direction='r'):
+        if angle < 0.001:
+            raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
+        if radius < 0.001:
+            raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
+        n = (angle / 180) * 18
+        n = round(n)
+        step = 0.174977327052 * radius
+        self.go(0.5*step)
+        if direction == 'r' or direction == 'R' or direction == 'right':
+            self.right(10)
+        else:
+            self.left(10)
+        for j in range(n-1):
+            self.go(step)
+            if direction == 'r' or direction == 'R' or direction == 'right':
+                self.right(10)
+            else:
+                self.left(10)
+        self.go(0.5*step)
+
+    def geometry(self):
+        return self.geom
+
+    def show(self, layer=0, dots=True):
+        # If geom is not None, show geometry,
+        # else show trace:
+        if self.geom != None:
+            SHOW(self.geom)
+        else:
+            NCLabTurtleShow(self, layer, dots)
+          
+
