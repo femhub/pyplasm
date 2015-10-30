@@ -8822,6 +8822,9 @@ def VALIDATE(obj, name, dim):
             if dim == 3 and ooo.dim == 2:
                 return False, "Your object '" + name + "' should be a 3D object (it is a 2D object)."
 
+    if EMPTYSET(obj):
+        return False, "Your object '" + name + "' is an empty set."
+
     return True, None
 
 ######  NCLAB TURTLE - UTILITIES  ######
