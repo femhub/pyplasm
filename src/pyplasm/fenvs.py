@@ -1092,6 +1092,19 @@ def SHOW(*args):
             raise ExceptionWT("The arguments of SHOW(...) must be objects!")
     VIEWBASE(sequence)
 
+# Czech:
+UKAZ = SHOW
+# Polish:
+POKAZ = SHOW
+# German:
+ZEIGE = SHOW
+# Italian:
+MOSTRA = SHOW
+# French:
+MONTRE = SHOW
+# Spanish:
+MOSTRA = SHOW
+
 # ===================================================
 # BASE OBJECT
 # ===================================================
