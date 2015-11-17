@@ -3791,7 +3791,7 @@ def MINX(obj):
         obj = flatten(obj)
         for oo in obj:
             if EMPTYSET(oo):
-                return None
+                raise ExceptionWT("Cannot calculate MINX() of an empty set.")
         minx = obj[0].minx()
         n = len(obj)
         for i in range(1, n):
@@ -3800,7 +3800,7 @@ def MINX(obj):
         return minx
     else:
         if EMPTYSET(obj):
-            return None
+            raise ExceptionWT("Cannot calculate MINX() of an empty set.")
         else:
             return obj.minx()
 
@@ -3814,7 +3814,7 @@ def MINY(obj):
         obj = flatten(obj)
         for oo in obj:
             if EMPTYSET(oo):
-                return None
+                raise ExceptionWT("Cannot calculate MINY() of an empty set.")
         miny = obj[0].miny()
         n = len(obj)
         for i in range(1, n):
@@ -3823,7 +3823,7 @@ def MINY(obj):
         return miny
     else:
         if EMPTYSET(obj):
-            return None
+            raise ExceptionWT("Cannot calculate MINY() of an empty set.")
         else:
             return obj.miny()
 
@@ -3837,7 +3837,7 @@ def MINZ(obj):
         obj = flatten(obj)
         for oo in obj:
             if EMPTYSET(oo):
-                return None
+                raise ExceptionWT("Cannot calculate MINZ() of an empty set.")
         minz = obj[0].minz()
         n = len(obj)
         for i in range(1, n):
@@ -3846,7 +3846,7 @@ def MINZ(obj):
         return minz
     else:
         if EMPTYSET(obj):
-            return None
+            raise ExceptionWT("Cannot calculate MINZ() of an empty set.")
         else:
             return obj.minz()
 
@@ -3860,7 +3860,7 @@ def MAXX(obj):
         obj = flatten(obj)
         for oo in obj:
             if EMPTYSET(oo):
-                return None
+                raise ExceptionWT("Cannot calculate MAXX() of an empty set.")
         maxx = obj[0].maxx()
         n = len(obj)
         for i in range(1, n):
@@ -3869,7 +3869,7 @@ def MAXX(obj):
         return maxx
     else:
         if EMPTYSET(obj):
-            return None
+            raise ExceptionWT("Cannot calculate MAXX() of an empty set.")
         else:
             return obj.maxx()
 
@@ -3883,7 +3883,7 @@ def MAXY(obj):
         obj = flatten(obj)
         for oo in obj:
             if EMPTYSET(oo):
-                return None
+                raise ExceptionWT("Cannot calculate MAXY() of an empty set.")
         maxy = obj[0].maxy()
         n = len(obj)
         for i in range(1, n):
@@ -3892,7 +3892,7 @@ def MAXY(obj):
         return maxy
     else:
         if EMPTYSET(obj):
-            return None
+            raise ExceptionWT("Cannot calculate MAXY() of an empty set.")
         else:
             return obj.maxy()
 
@@ -3906,7 +3906,7 @@ def MAXZ(obj):
         obj = flatten(obj)
         for oo in obj:
             if EMPTYSET(oo):
-                return None
+                raise ExceptionWT("Cannot calculate MAXZ() of an empty set.")
         maxz = obj[0].maxz()
         n = len(obj)
         for i in range(1, n):
@@ -3915,7 +3915,7 @@ def MAXZ(obj):
         return maxz
     else:
         if EMPTYSET(obj):
-            return None
+            raise ExceptionWT("Cannot calculate MAXZ() of an empty set.")
         else:
             return obj.maxz()
 
