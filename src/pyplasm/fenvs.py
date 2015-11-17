@@ -1179,23 +1179,25 @@ class BASEOBJ:
         if not isinstance(obj, list):
             if not isinstance(obj, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found while subtracting objects!")
+                    "Invalid object found while subtracting objects.")
             if self.dim != obj.dim:
                 raise ExceptionWT(
-                    "Trying to subtract objects of different dimensions?")
+                    "Cannot subtract objects of different dimensions.")
             geoms.append(obj.geom)
         else:
             for x in obj:
                 if not isinstance(x, BASEOBJ):
                     raise ExceptionWT(
-                        "Invalid object found while subtracting objects!")
+                        "Invalid object found while subtracting objects.")
                 if self.dim != x.dim:
                     raise ExceptionWT(
-                        "Trying to subtract objects of different dimensions?")
+                        "Cannot subtract objects of different dimensions.")
                 geoms.append(x.geom)
         newgeom = PLASM_DIFF(geoms)
         self.geom = newgeom
         self.setcolor(self.color)
+        if EMPTYSET(self):
+            print("WARNING: Empty object created while subtracting objects.")
 
     # Subtract a single object or list of objects from self, NOT changing
     # self's geometry:
@@ -1222,12 +1224,16 @@ class BASEOBJ:
         newgeom = PLASM_DIFF(geoms)
         newobj = BASEOBJ(newgeom)
         newobj.setcolor(self.color)
+        if EMPTYSET(newobj):
+            print("WARNING: Empty object created while subtracting objects.")
         return newobj
 
     def getcolor(self):
         return self.color
 
     def move(self, t1, t2, t3=0):
+        if EMPTYSET(self):
+            raise ExceptionWT("Cannot move an empty set.")
         if t3 == 0:
             self.geom = PLASM_TRANSLATE([1, 2])([t1, t2])(self.geom)
         else:
@@ -1238,6 +1244,8 @@ class BASEOBJ:
         self.setcolor(self.color)
 
     def rotaterad(self, angle_rad, axis=3, point=[0, 0, 0]):
+        if EMPTYSET(self):
+            raise ExceptionWT("Cannot rotate an empty set.")
         if axis == 'x' or axis == 'X':
             axis = 1
         if axis == 'y' or axis == 'Y':
@@ -1298,6 +1306,8 @@ class BASEOBJ:
         self.setcolor(self.color)
 
     def rotate(self, angle_deg, axis=3, point=[0, 0, 0]):
+        if EMPTYSET(self):
+            raise ExceptionWT("Cannot rotate an empty set.")
         if axis == 'x' or axis == 'X':
             axis = 1
         if axis == 'y' or axis == 'Y':
@@ -1312,6 +1322,8 @@ class BASEOBJ:
         return self.dim
 
     def scale(self, a, b, c=1):
+        if EMPTYSET(self):
+            raise ExceptionWT("Cannot scale an empty set.")
         # if a < 0 or b < 0 or c < 0:
         # THIS WAS IN THE WAY WHEN I DEFINED FLIP()
         #    raise ExceptionWT(
@@ -1331,55 +1343,55 @@ class BASEOBJ:
 
     def minx(self):
         if EMPTYSET(self):
-            return None
+            raise ExceptionWT("Cannot calculate minx() of an empty set.")
         else:
             return MIN(1)(self.geom)
 
     def miny(self):
         if EMPTYSET(self):
-            return None
+            raise ExceptionWT("Cannot calculate miny() of an empty set.")
         else:
             return MIN(2)(self.geom)
 
     def minz(self):
         if EMPTYSET(self):
-            return None
+            raise ExceptionWT("Cannot calculate minz() of an empty set.")
         else:
             return MIN(3)(self.geom)
 
     def maxx(self):
         if EMPTYSET(self):
-            return None
+            raise ExceptionWT("Cannot calculate maxx() of an empty set.")
         else:
             return MAX(1)(self.geom)
 
     def maxy(self):
         if EMPTYSET(self):
-            return None
+            raise ExceptionWT("Cannot calculate maxy() of an empty set.")
         else:
             return MAX(2)(self.geom)
 
     def maxz(self):
         if EMPTYSET(self):
-            return None
+            raise ExceptionWT("Cannot calculate maxz() of an empty set.")
         else:
             return MAX(3)(self.geom)
 
     def sizex(self):
         if EMPTYSET(self):
-            return 0
+            raise ExceptionWT("Cannot calculate sizex() of an empty set.")
         else:
             return MAX(1)(self.geom) - MIN(1)(self.geom)
 
     def sizey(self):
         if EMPTYSET(self):
-            return 0
+            raise ExceptionWT("Cannot calculate sizey() of an empty set.")
         else:
             return MAX(2)(self.geom) - MIN(2)(self.geom)
 
     def sizez(self):
         if EMPTYSET(self):
-            return 0
+            raise ExceptionWT("Cannot calculate sizez() of an empty set.")
         else:
             return MAX(3)(self.geom) - MIN(3)(self.geom)
 
@@ -1412,6 +1424,8 @@ class BASEOBJ:
             MOVE(box, erasexmin, miny - 1, minz - 1)
             self.geom = PLASM_DIFF([self.geom, box.geom])
             self.setcolor(self.color)
+        if EMPTYSET(self):
+            print("WARNING: Empty set created while erasing part of an object.")
 
     def splitx(self, coord):
         minx = self.minx()
@@ -1466,6 +1480,8 @@ class BASEOBJ:
             obj2 = BASEOBJ(PLASM_INTERSECTION([self.geom, box2.geom]))
             obj1.setcolor(self.color)
             obj2.setcolor(self.color)
+        if EMPTYSET(obj1) or EMPTYSET(obj2):
+            print("WARNING: Empty set created while splitting an object.")
         return obj1, obj2
 
 
@@ -7964,7 +7980,7 @@ def PLASM_GETCOLOR(obj):
     else:
         if len(col) < 3:
             print(
-                "Warning: There is some problem with the color of an object.")
+                "WARNING: There is some problem with the color of an object.")
             print("Expected [R, G, B] but list length is", len(col))
             return
     col[0] = int(255 * float(col[0]) + 0.5)
