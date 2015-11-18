@@ -1202,7 +1202,7 @@ class BASEOBJ:
     # Subtract a single object or list of objects from self, NOT changing
     # self's geometry:
 
-    def diff(self, obj):
+    def diff(self, obj, warn=True):
         geoms = [self.geom]
         if not isinstance(obj, list):
             if not isinstance(obj, BASEOBJ):
@@ -1224,7 +1224,7 @@ class BASEOBJ:
         newgeom = PLASM_DIFF(geoms)
         newobj = BASEOBJ(newgeom)
         newobj.setcolor(self.color)
-        if EMPTYSET(newobj):
+        if EMPTYSET(newobj) and warn == True:
             print("WARNING: Empty object created while subtracting objects.")
         return newobj
 
@@ -3082,7 +3082,7 @@ def intersection(*args):
         "Command intersection() is undefined. Try INTERSECTION() instead?")
 
 
-def INTERSECTION(a, b):
+def INTERSECTION(a, b, warn=True):
     if isinstance(a, list):
         if a == []:
             raise ExceptionWT(
@@ -3095,25 +3095,40 @@ def INTERSECTION(a, b):
         b = flatten(b)
     # a is single object, b is single object:
     if not isinstance(a, list) and not isinstance(b, list):
-        return BINARYINTERSECTION(a, b)
+        res = BINARYINTERSECTION(a, b)
+        if EMPTYSET(res) and warn==True:
+            print("WARNING: Empty object created while intersecting objects.")
+        return res
     # a is single object, b is a list:
     if not isinstance(a, list) and isinstance(b, list):
         res = []
         for y in b:
-            res.append(BINARYINTERSECTION(a, y))
+            res0 = BINARYINTERSECTION(a, y)
+            if not EMPTYSET(res0): 
+                res.append(res0)
+        if EMPTYSET(res) and warn==True:
+            print("WARNING: Empty object created while intersecting objects.")
         return res
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
         res = []
         for x in a:
-            res.append(BINARYINTERSECTION(x, b))
+            res0 = BINARYINTERSECTION(x, b)
+            if not EMPTYSET(res0): 
+                res.append(res0)
+        if EMPTYSET(res) and warn==True:
+            print("WARNING: Empty object created while intersecting objects.")
         return res
     # a is a list, b is a list:
     if isinstance(a, list) and isinstance(b, list):
         res = []
         for x in a:
             for y in b:
-                res.append(BINARYINTERSECTION(x, y))
+                res0 = BINARYINTERSECTION(x, y)
+                if not EMPTYSET(res0): 
+                    res.append(res0)
+        if EMPTYSET(res) and warn==True:
+            print("WARNING: Empty object created while intersecting objects.")
         return res
 
 
@@ -3320,24 +3335,24 @@ def diff(*args):
     raise ExceptionWT("Command diff() is undefined. Try DIFF() instead?")
 
 
-def DIFFERENCE(a, b):
+def DIFFERENCE(a, b, warn=True):
     if isinstance(a, list):
         if a == []:
             raise ExceptionWT(
-                "Are you trying to subtract an object from an empty list of objects?")
+                "Cannot subtract an object from an empty list of objects.")
     if isinstance(b, list):
         if b == []:
             raise ExceptionWT(
-                "Are you trying to subtract an empty list of objects from an object?")
+                "Cannot subtract an empty list of objects from an object.")
     # a is single object, b is single object:
     if not isinstance(a, list) and not isinstance(b, list):
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object detected in the SUBTRACT command.")
+                "Invalid object found.")
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object detected in the SUBTRACT command.")
-        out = a.diff(b)
+                "Invalid object found.")
+        out = a.diff(b, warn)
         return out
     # a is single object, b is a list:
     if not isinstance(a, list) and isinstance(b, list):
@@ -3345,11 +3360,11 @@ def DIFFERENCE(a, b):
         for x in flatb:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object detected in the SUBTRACT command.")
+                    "Invalid object found.")
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object detected in the SUBTRACT command.")
-        out = a.diff(flatb)
+                "Invalid object found.")
+        out = a.diff(flatb, warn)
         return out
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
@@ -3357,13 +3372,13 @@ def DIFFERENCE(a, b):
         for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object detected in the SUBTRACT command.")
+                    "Invalid object found.")
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object detected in the SUBTRACT command.")
+                "Invalid object found.")
         newlist = []
         for x in flata:
-            out = x.diff(b)
+            out = x.diff(b, warn)
             newlist.append(out)
         return newlist
     # a is a list, b is a list:
@@ -3372,15 +3387,15 @@ def DIFFERENCE(a, b):
         for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object detected in the SUBTRACT command.")
+                    "Invalid object found.")
         flatb = flatten(b)  # flatten the list as there may be structs
         for x in flatb:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object detected in the SUBTRACT command.")
+                    "Invalid object found.")
         newlist = []
         for x in flata:
-            out = x.diff(flatb)
+            out = x.diff(flatb, warn)
             newlist.append(out)
         return newlist
 
@@ -8261,10 +8276,10 @@ def EMPTYSET(obj):
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object obj detected in EMPTYSET(obj)!")
+                    "Invalid object found.")
     else:
         if not isinstance(obj, BASEOBJ):
-            raise ExceptionWT("Invalid object obj detected in EMPTYSET(obj)!")
+            raise ExceptionWT("Invalid object found.")
     # Emptyset test:
     l = 0
     if isinstance(obj, list):
@@ -8286,7 +8301,8 @@ def EMPTYSET(obj):
 
 
 def SUBSET(small, big):
-    difference = DIFF(small, big)
+    emptysetwarning = False
+    difference = DIFF(small, big, emptysetwarning)
     if EMPTYSET(difference):
         return True
     else:
@@ -8297,8 +8313,9 @@ def SUBSET(small, big):
 # intersection with object "obj":
 
 
-def DISJOINT(obj1, obj2, tol=1e-8):
-    test = INTERSECTION(obj1, obj2)
+def DISJOINT(obj1, obj2):
+    emptysetwarning = False
+    test = INTERSECTION(obj1, obj2, emptysetwarning)
     if EMPTYSET(test):
         return True
     else:
