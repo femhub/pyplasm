@@ -1078,18 +1078,27 @@ def show(*args):
 
 def SHOW(*args):
     sequence = flatten(*args)
+    if sequence == []:
+        print("WARNING: The SHOW command received an empty set.")
+        return
+    # Check if they are valid objects or empty lists:
     for obj in sequence:
-        if not isinstance(obj, BASEOBJ):
+        if not isinstance(obj, BASEOBJ) and obj != []:
             raise ExceptionWT("Attempt to display an invalid object.")
+    # Remove empty lists and empty sets:
+    newseq = []
+    for obj in sequence:
+       if obj != [] and not EMPTYSET(obj):
+           newseq.append(obj)
     # for obj in sequence:
     #    if SIZEX(obj) == 0 and SIZEY(obj) == 0 and SIZEZ(obj) == 0:
     #        raise ExceptionWT("One of the objects that you are trying to display is empty!")
-    if len(sequence) == 0:
+    if len(newseq) == 0:
         raise ExceptionWT(
             "The SHOW(...) command must contain at least one object!")
-    for obj in sequence:
+    for obj in newseq:
         if not isinstance(obj, BASEOBJ):
-            raise ExceptionWT("The arguments of SHOW(...) must be objects!")
+            raise ExceptionWT("The arguments of SHOW(...) must be 2D or 3D objects!")
     VIEWBASE(sequence)
 
 # Czech:
@@ -1196,13 +1205,11 @@ class BASEOBJ:
         newgeom = PLASM_DIFF(geoms)
         self.geom = newgeom
         self.setcolor(self.color)
-        if EMPTYSET(self):
-            print("WARNING: Empty object created while subtracting objects.")
 
     # Subtract a single object or list of objects from self, NOT changing
     # self's geometry:
 
-    def diff(self, obj, warn=True):
+    def diff(self, obj):
         geoms = [self.geom]
         if not isinstance(obj, list):
             if not isinstance(obj, BASEOBJ):
@@ -1224,8 +1231,6 @@ class BASEOBJ:
         newgeom = PLASM_DIFF(geoms)
         newobj = BASEOBJ(newgeom)
         newobj.setcolor(self.color)
-        if EMPTYSET(newobj) and warn == True:
-            print("WARNING: Empty object created while subtracting objects.")
         return newobj
 
     def getcolor(self):
@@ -1424,8 +1429,6 @@ class BASEOBJ:
             MOVE(box, erasexmin, miny - 1, minz - 1)
             self.geom = PLASM_DIFF([self.geom, box.geom])
             self.setcolor(self.color)
-        if EMPTYSET(self):
-            print("WARNING: Empty set created while erasing part of an object.")
 
     def splitx(self, coord):
         minx = self.minx()
@@ -1443,10 +1446,11 @@ class BASEOBJ:
         if self.dim == 2:
             # Cutplane goes past object:
             if coord >= maxx:
-                emptyset = DIFF(SQUARE(1), SQUARE(1))
+                emptysetwarning = False
+                emptyset = DIFF(SQUARE(1), SQUARE(1), emptysetwarning)
                 return self, emptyset
             if coord <= minx:
-                emptyset = DIFF(SQUARE(1), SQUARE(1))
+                emptyset = DIFF(SQUARE(1), SQUARE(1), emptysetwarning)
                 return emptyset, self
             # Object will be split into two new objects:
             box1 = BOX(coord - minx, maxy - miny + 2)
@@ -1466,10 +1470,12 @@ class BASEOBJ:
                 return None, None
             # Cutplane goes past object:
             if coord >= maxx:
-                emptyset = DIFF(CUBE(1), CUBE(1))
+                emptysetwarning = False
+                emptyset = DIFF(CUBE(1), CUBE(1), emptysetwarning)
                 return self, emptyset
             if coord <= minx:
-                emptyset = DIFF(CUBE(1), CUBE(1))
+                emptysetwarning = False
+                emptyset = DIFF(CUBE(1), CUBE(1), emptysetwarning)
                 return emptyset, self
             # Object will be split into two new objects:
             box1 = BOX(coord - minx, maxy - miny + 2, maxz - minz + 2)
@@ -1480,8 +1486,6 @@ class BASEOBJ:
             obj2 = BASEOBJ(PLASM_INTERSECTION([self.geom, box2.geom]))
             obj1.setcolor(self.color)
             obj2.setcolor(self.color)
-        if EMPTYSET(obj1) or EMPTYSET(obj2):
-            print("WARNING: Empty set created while splitting an object.")
         return obj1, obj2
 
 
@@ -1562,7 +1566,7 @@ def erase(*args):
     raise ExceptionWT("Command erase() is undefined. Try ERASE() instead?")
 
 
-def ERASE(obj, axis, minval, maxval):
+def ERASE(obj, axis, minval, maxval, warn=True):
     if axis != 'x' and axis != 'y' and axis != 'z' and axis != 'X' and axis != 'Y' and axis != 'Z' and axis != 1 and axis != 2 and axis != 3:
         raise ExceptionWT(
             "Use X, Y or Z as axis in ERASE(obj, axis, minval, maxval)!")
@@ -1597,14 +1601,16 @@ def ERASE(obj, axis, minval, maxval):
         if axis == 2:
             obj.rotate(-90, 3)
             obj.erasex(minval, maxval)
-            obj.rotate(90, 3)
+            if not EMPTYSET(obj):
+                obj.rotate(90, 3)
         if axis == 3:
             if obj.dim == 2:
                 raise ExceptionWT(
                     "In ERASE(obj, axis, minval, maxval), axis = Z may not be used with 2D objects!")
             obj.rotate(90, 2)
             obj.erasex(minval, maxval)
-            obj.rotate(-90, 2)
+            if not EMPTYSET(obj):
+                obj.rotate(-90, 2)
     else:
         obj = flatten(obj)  # flatten the rest as there may be structs
         for oo in obj:
@@ -1617,14 +1623,18 @@ def ERASE(obj, axis, minval, maxval):
                 if axis == 2:
                     oo.rotate(-90, 3)
                     oo.erasex(minval, maxval)
-                    oo.rotate(90, 3)
+                    if not EMPTYSET(oo):
+                        oo.rotate(90, 3)
                 if axis == 3:
                     if oo.dim == 2:
                         raise ExceptionWT(
                             "In ERASE(obj, axis, minval, maxval), axis = Z may not be used with 2D objects!")
                     oo.rotate(90, 2)
                     oo.erasex(minval, maxval)
-                    oo.rotate(-90, 2)
+                    if not EMPTYSET(oo):
+                        oo.rotate(-90, 2)
+    if EMPTYSET(obj) and warn==True:
+        print("WARNING: Empty object created while erasing part of an object.")
     return COPY(obj)
 
 
@@ -1638,7 +1648,7 @@ def split(*args):
     raise ExceptionWT("Command split() is undefined. Try SPLIT() instead?")
 
 
-def SPLIT(obj, axis, coord):
+def SPLIT(obj, axis, coord, warn=True):
     if axis != 'x' and axis != 'y' and axis != 'z' and axis != 'X' and axis != 'Y' and axis != 'Z' and axis != 1 and axis != 2 and axis != 3:
         raise ExceptionWT("Use X, Y or Z as axis in SPLIT(obj, axis, coord)!")
     if not ISNUMBER(coord):
@@ -1666,16 +1676,28 @@ def SPLIT(obj, axis, coord):
         if axis == 2:
             obj.rotate(-90, 3)
             obj1, obj2 = obj.splitx(coord)
-            obj1.rotate(90, 3)
-            obj2.rotate(90, 3)
+            if not EMPTYSET(obj1):
+                obj1.rotate(90, 3)
+            else:
+                print("WARNING: Empty object created while splitting an object.")
+            if not EMPTYSET(obj2):
+                obj2.rotate(90, 3)
+            else:
+                print("WARNING: Empty object created while splitting an object.")
         if axis == 3:
             if obj.dim == 2:
                 raise ExceptionWT(
                     "In SPLIT(obj, axis, coord), axis = Z may not be used with 2D objects!")
             obj.rotate(90, 2)
             obj1, obj2 = obj.splitx(coord)
-            obj1.rotate(-90, 2)
-            obj2.rotate(-90, 2)
+            if not EMPTYSET(obj1):
+                obj1.rotate(-90, 2)
+            else:
+                print("WARNING: Empty object created while splitting an object.")
+            if not EMPTYSET(obj2):
+                obj2.rotate(-90, 2)
+            else:
+                print("WARNING: Empty object created while splitting an object.")
     else:
         obj = flatten(obj)  # flatten the rest as there may be structs
         obj1 = []
@@ -1687,21 +1709,35 @@ def SPLIT(obj, axis, coord):
             if not EMPTYSET(oo):
                 if axis == 1:
                     oo1, oo2 = oo.splitx(coord)
+                    if not EMPTYSET(oo1):
+                        obj1.append(oo1)
+                    if not EMPTYSET(oo2):
+                        obj2.append(oo2)
                 if axis == 2:
                     oo.rotate(-90, 3)
                     oo1, oo2 = oo.splitx(coord)
-                    oo1.rotate(90, 3)
-                    oo2.rotate(90, 3)
+                    if not EMPTYSET(oo1):
+                        oo1.rotate(90, 3)
+                        obj1.append(oo1)
+                    if not EMPTYSET(oo2):
+                        oo2.rotate(90, 3)
+                        obj2.append(oo2)
                 if axis == 3:
                     if oo.dim == 2:
                         raise ExceptionWT(
                             "In SPLIT(obj, axis, coord), axis = Z may not be used with 2D objects!")
                     oo.rotate(90, 2)
                     oo1, oo2 = oo.splitx(coord)
-                    oo1.rotate(-90, 2)
-                    oo2.rotate(-90, 2)
-                obj1.append(oo1)
-                obj2.append(oo2)
+                    if not EMPTYSET(oo1):
+                        oo1.rotate(-90, 2)
+                        obj1.append(oo1)
+                    if not EMPTYSET(oo2):
+                        oo2.rotate(-90, 2)
+                        obj2.append(oo2)
+    if EMPTYSET(obj1):
+        print("WARNING: Empty object created while splitting an object.")
+    if EMPTYSET(obj2):
+        print("WARNING: Empty object created while splitting an object.")
     return obj1, obj2
 
 
@@ -2396,6 +2432,25 @@ if self_test:
     assert len(temp[0]) == 6 and len(temp[0][0]) == 4 and len(
         temp[1]) == 1 and len(temp[1][0]) == 6 and len(temp[2]) == 1
 
+# ===================================================
+# CLEAN - REMOVE EMPTY SETS FROM OBJECTS WHICH ARE LISTS
+# ===================================================
+
+def CLEAN(obj):
+    if not isinstance(obj, list):
+        return
+    while obj.count([]) > 0:
+        obj.remove([])
+    ok = False
+    while not ok:
+        for x in obj:
+            if EMPTYSET(x):
+                obj.remove(x)
+                ok = False
+                break
+            ok = True
+    return
+
 
 # ===================================================
 # TRANSLATE
@@ -2442,11 +2497,17 @@ def MOVE(obj, t1, t2, t3=0):
             "In MOVE(obj, x, y) or MOVE(obj, x, y, z), y must be a number!")
     if not ISNUMBER(t3):
         raise ExceptionWT("In MOVE(obj, x, y, z), z must be a number!")
+    if obj == []: 
+        return obj
+    # Remove empty sets:
+    CLEAN(obj)
+    # Move it:
     if not isinstance(obj, list):
-        if not isinstance(obj, BASEOBJ):
+        if not isinstance(obj, BASEOBJ) and obj != []:
             raise ExceptionWT(
                 "In MOVE(obj, x, y) or MOVE(obj, x, y, z), obj must be a 2D or 3D object!")
-        obj.move(t1, t2, t3)
+        if not EMPTYSET(obj):
+            obj.move(t1, t2, t3)
         return COPY(obj)
     else:
         obj = flatten(obj)
@@ -2455,8 +2516,9 @@ def MOVE(obj, t1, t2, t3=0):
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
                     "In MOVE(obj, x, y) or MOVE(obj, x, y, z), obj must be a 2D or 3D object!")
-            oo.move(t1, t2, t3)
-            newobj.append(COPY(oo))
+            if not EMPTYSET(oo) and oo != []:
+                oo.move(t1, t2, t3)
+                newobj.append(COPY(oo))
         return newobj
 
 
@@ -2538,18 +2600,25 @@ def SCALE(obj, a, b, c=1):
             "In SCALE(obj, sx, sy) or SCALE(obj, sx, sy, sz), sy must be a number!")
     if not ISNUMBER(c):
         raise ExceptionWT("In SCALE(obj, sx, sy, sz), sz must be a number!")
+    if obj == []:
+        return
+    # Remove empty sets:
+    CLEAN(obj)
+    # Scale it:
     if not isinstance(obj, list):
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT(
                 "In SCALE(obj, sx, sy) or SCALE(obj, sx, sy, sz), obj must be a 2D or 3D object!")
-        obj.scale(a, b, c)
+        if not EMPTYSET(obj) and obj != []:
+            obj.scale(a, b, c)
     else:
         obj = flatten(obj)
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
                     "In SCALE(obj, sx, sy) or SCALE(obj, sx, sy, sz), obj must be a 2D or 3D object!")
-            oo.scale(a, b, c)
+            if not EMPTYSET(oo) and oo != []:
+                oo.scale(a, b, c)
     return COPY(obj)
 
 
@@ -2702,18 +2771,23 @@ def ROTATERAD(obj, angle_rad, axis=3, point=[0, 0, 0]):
     if not isinstance(centerpoint, list):
         raise ExceptionWT(
             "In ROTATERAD(obj, angle, axis, point), point must be a list (use square brackets)!")
+    # Remove empty sets:
+    CLEAN(obj)
+    # Rotate it:
     if not isinstance(obj, list):
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT(
                 "In ROTATERAD(obj, angle, axis), obj must be a 2D or 3D object!")
-        obj.rotaterad(angle_rad, axis, centerpoint)
+        if not EMPTYSET(obj) and obj != []:
+            obj.rotaterad(angle_rad, axis, centerpoint)
     else:
         obj = flatten(obj)
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
                     "In ROTATERAD(obj, angle, axis), obj must be a 2D or 3D object!")
-            oo.rotaterad(angle_rad, axis, centerpoint)
+            if not EMPTYSET(oo) and oo != []:
+                oo.rotaterad(angle_rad, axis, centerpoint)
     return COPY(obj)
 
 
@@ -3237,24 +3311,26 @@ def subtract(*args):
         "Command subtract() is undefined. Try SUBTRACT() instead?")
 
 
-def SUBTRACT(a, b):
+def SUBTRACT(a, b, warn=True):
     if isinstance(a, list):
         if a == []:
             raise ExceptionWT(
-                "Are you trying to subtract an object from an empty list of objects?")
+                "Cannot subtract an object from an empty list of objects.")
     if isinstance(b, list):
         if b == []:
             raise ExceptionWT(
-                "Are you trying to subtract an empty list of objects from an object?")
+                "Cannot subtract an empty list of objects from an object.")
     # a is single object, b is single object:
     if not isinstance(a, list) and not isinstance(b, list):
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object detected in the SUBTRACT command.")
+                "Invalid object found.")
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object detected in the SUBTRACT command.")
+                "Invalid object found.")
         a.subtract(b)
+        if EMPTYSET(a) and warn==True:
+            print("WARNING: Empty object created while subtracting objects.")
         return COPY(a)
     # a is single object, b is a list:
     if not isinstance(a, list) and isinstance(b, list):
@@ -3262,26 +3338,31 @@ def SUBTRACT(a, b):
         for x in flatb:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object detected in the SUBTRACT command.")
+                    "Invalid object found.")
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object detected in the SUBTRACT command.")
+                "Invalid object found.")
         a.subtract(flatb)
+        if EMPTYSET(a) and warn==True:
+            print("WARNING: Empty object created while subtracting objects.")
         return COPY(a)
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object detected in the SUBTRACT command.")
+                "Invalid object found.")
         flata = flatten(a)  # flatten the list as there may be structs
         for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object detected in the SUBTRACT command.")
+                    "Invalid object found.")
         newlist = []
         for x in flata:
             x.subtract(b)
-            newlist.append(COPY(x))
+            if not EMPTYSET(x):
+                newlist.append(COPY(x))
+        if EMPTYSET(newlist) and warn==True:
+            print("WARNING: Empty object created while subtracting objects.")
         return newlist
     # a is a list, b is a list:
     if isinstance(a, list) and isinstance(b, list):
@@ -3289,16 +3370,19 @@ def SUBTRACT(a, b):
         for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object detected in the SUBTRACT command.")
+                    "Invalid object found.")
         flatb = flatten(b)  # flatten the list as there may be structs
         for x in flatb:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object detected in the SUBTRACT command.")
+                    "Invalid object found.")
         newlist = []
         for x in flata:
             x.subtract(flatb)
-            newlist.append(COPY(x))
+            if not EMPTYSET(x):
+                newlist.append(COPY(x))
+        if EMPTYSET(newlist) and warn==True:
+            print("WARNING: Empty object created while subtracting objects.")
         return newlist
 
 # English:
@@ -3352,7 +3436,9 @@ def DIFFERENCE(a, b, warn=True):
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found.")
-        out = a.diff(b, warn)
+        out = a.diff(b)
+        if EMPTYSET(out) and warn == True:
+            print("WARNING: Empty set created while subtracting objects.")
         return out
     # a is single object, b is a list:
     if not isinstance(a, list) and isinstance(b, list):
@@ -3364,7 +3450,9 @@ def DIFFERENCE(a, b, warn=True):
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found.")
-        out = a.diff(flatb, warn)
+        out = a.diff(flatb)
+        if EMPTYSET(out) and warn == True:
+            print("WARNING: Empty set created while subtracting objects.")
         return out
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
@@ -3378,8 +3466,11 @@ def DIFFERENCE(a, b, warn=True):
                 "Invalid object found.")
         newlist = []
         for x in flata:
-            out = x.diff(b, warn)
-            newlist.append(out)
+            out = x.diff(b)
+            if not EMPTYSET(out):
+                newlist.append(out)
+        if EMPTYSET(newlist) and warn == True:
+            print("WARNING: Empty set created while subtracting objects.")
         return newlist
     # a is a list, b is a list:
     if isinstance(a, list) and isinstance(b, list):
@@ -3395,8 +3486,11 @@ def DIFFERENCE(a, b, warn=True):
                     "Invalid object found.")
         newlist = []
         for x in flata:
-            out = x.diff(flatb, warn)
-            newlist.append(out)
+            out = x.diff(flatb)
+            if not EMPTYSET(out):
+                newlist.append(out)
+        if EMPTYSET(newlist) and warn == True:
+            print("WARNING: Empty set created while subtracting objects.")
         return newlist
 
 # English:
@@ -8270,6 +8364,10 @@ def IS3D(tested):
 
 
 def EMPTYSET(obj):
+    # If it is an empty list, return True:
+    if isinstance(obj, list):
+        if obj == []:
+            return True
     # Sanity test:
     if isinstance(obj, list):
         obj = flatten(obj)
