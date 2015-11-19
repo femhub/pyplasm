@@ -1238,7 +1238,7 @@ class BASEOBJ:
 
     def move(self, t1, t2, t3=0):
         if EMPTYSET(self):
-            raise ExceptionWT("Cannot move an empty set.")
+            return
         if t3 == 0:
             self.geom = PLASM_TRANSLATE([1, 2])([t1, t2])(self.geom)
         else:
@@ -1250,7 +1250,7 @@ class BASEOBJ:
 
     def rotaterad(self, angle_rad, axis=3, point=[0, 0, 0]):
         if EMPTYSET(self):
-            raise ExceptionWT("Cannot rotate an empty set.")
+            return
         if axis == 'x' or axis == 'X':
             axis = 1
         if axis == 'y' or axis == 'Y':
@@ -1312,7 +1312,7 @@ class BASEOBJ:
 
     def rotate(self, angle_deg, axis=3, point=[0, 0, 0]):
         if EMPTYSET(self):
-            raise ExceptionWT("Cannot rotate an empty set.")
+            return
         if axis == 'x' or axis == 'X':
             axis = 1
         if axis == 'y' or axis == 'Y':
@@ -1328,7 +1328,7 @@ class BASEOBJ:
 
     def scale(self, a, b, c=1):
         if EMPTYSET(self):
-            raise ExceptionWT("Cannot scale an empty set.")
+            return
         # if a < 0 or b < 0 or c < 0:
         # THIS WAS IN THE WAY WHEN I DEFINED FLIP()
         #    raise ExceptionWT(
