@@ -9190,6 +9190,14 @@ class NCLabTurtle:
         self.isrosurf = False
         self.isroshell = False
         self.geom = None
+        # These commands can be called only once:
+        self.rosolcalled = False
+        self.rosurfcalled = False
+        self.roshellcalled = False
+        self.spiralcalled = False
+        self.revolvecalled = False
+        self.extrudecalled = False
+        self.showcalled = False
 
     def angle(self, a):
         self.turtleangle = a
@@ -9340,6 +9348,9 @@ class NCLabTurtle:
         self.goto(x2, y2)
 
     def extrude(self, height = 1):
+        if self.extrudecalled == True:
+            raise ExceptionWT("Command extrude() can be only called once!")
+        self.extrudecalled = True:
         if height <= 0.000001:
             raise ExceptionWT("Height 'h' in extrude(h) must be positive!")
         self.isextruded = True
@@ -9354,6 +9365,9 @@ class NCLabTurtle:
 
     # Revolves complete trace including width
     def revolve(self, angle=360, div=32):   
+        if self.revolvecalled == True:
+            raise ExceptionWT("Command revolve() can be only called once!")
+        self.revolvecalled = True:
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in revolve(a) must be positive!")
         self.isextruded = False
@@ -9368,12 +9382,18 @@ class NCLabTurtle:
 
     # Another name for revolve()
     def roshell(self, angle=360, div=32):
+        if self.roshellcalled == True:
+            raise ExceptionWT("Command roshell() can be only called once!")
+        self.roshellcalled = True:
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in roshell(a) must be positive!")
         self.revolve(angle, div)
 
     # Spiral
     def spiral(self, angle, elevation, div=48):
+        if self.spiralcalled == True:
+            raise ExceptionWT("Command spiral() can be only called once!")
+        self.spiralcalled = True:
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in spiral(a, elevation) must be positive!")
         self.isextruded = False
@@ -9388,6 +9408,9 @@ class NCLabTurtle:
 
     # Rotational solid
     def rosol(self, angle=360, div=32):     
+        if self.rosolcalled == True:
+            raise ExceptionWT("Command rosol() can be only called once!")
+        self.rosolcalled = True:
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in rosol(a) must be positive!")
         self.isextruded = False
@@ -9409,6 +9432,9 @@ class NCLabTurtle:
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
+        if self.rosurfcalled == True:
+            raise ExceptionWT("Command roshell() can be only called once!")
+        self.rosurfcalled = True:
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in rosurf(a) must be positive!")
         self.isextruded = False
@@ -9445,6 +9471,14 @@ class NCLabTurtle:
         self.isrosurf = False
         self.isroshell = False
         self.geom = None
+        # These commands can be called only once:
+        self.rosolcalled = False
+        self.rosurfcalled = False
+        self.roshellcalled = False
+        self.spiralcalled = False
+        self.revolvecalled = False
+        self.extrudecalled = False
+        self.showcalled = False
 
     def arc(self, angle, radius, direction='r'):
         if angle < 0.001:
