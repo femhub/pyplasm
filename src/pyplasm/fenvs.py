@@ -9505,8 +9505,10 @@ class NCLabTurtle:
         return self.geom
 
     def show(self, layer=0, dots=True):
-        # If geom is not None, show geometry,
-        # else show trace:
+        if self.showcalled == True:
+            raise ExceptionWT("Command show() can be only called once!")
+        self.showcalled = True
+        # If geom is not None, show geometry, else show trace:
         if self.geom != None:
             SHOW(self.geom)
         else:
