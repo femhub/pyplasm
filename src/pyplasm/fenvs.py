@@ -9181,6 +9181,7 @@ class NCLabTurtle:
         self.linecolor = [0, 0, 255]
         self.draw = True
         self.linewidth = 1
+        self.height = 0
         self.canvassize = 100
         self.lines = []
         self.isvisible = True
@@ -9329,6 +9330,9 @@ class NCLabTurtle:
     def getwidth(self):
         return self.linewidth
 
+    def getheight(self):
+        return self.height
+
     def visible(self):
         self.isvisible = True
 
@@ -9353,6 +9357,7 @@ class NCLabTurtle:
         self.extrudecalled = True
         if height <= 0.000001:
             raise ExceptionWT("Height 'h' in extrude(h) must be positive!")
+        self.height = height
         self.isextruded = True
         self.isspiral = False
         self.isrosol = False
@@ -9361,7 +9366,7 @@ class NCLabTurtle:
         layer = 0
         dots = True
         base = NCLabTurtleTrace(self, layer, dots)
-        self.geom = PRISM(base, height)
+        self.geom = PRISM(base, self.height)
 
     # Revolves complete trace including width
     def revolve(self, angle=360, div=32):   
@@ -9463,6 +9468,7 @@ class NCLabTurtle:
         self.linecolor = [0, 0, 255]
         self.draw = True
         self.linewidth = 1
+        self.height = 0
         self.canvassize = 100
         self.isvisible = True
         self.isextruded = False
