@@ -9268,7 +9268,7 @@ class NCLabTurtle:
         self.turtleangle -= da
 
     def rt(self, da):
-        self.rt(da)
+        self.right(da)
 
     def back(self, dist):
         if dist <= 0:
