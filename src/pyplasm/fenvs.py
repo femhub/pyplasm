@@ -9288,11 +9288,14 @@ class NCLabTurtle:
         self.back(dist)
 
     def goto(self, newx, newy):
+        dx = newx - self.posx
+        dy = newy - self.posy
+        dist = sqrt(dx * dx + dy * dy)
+        if dist < 1e-6:
+            raise ExceptionWT("You used the command goto() but the turtle did not move.")
         if self.draw == True:
             newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.linecolor)
             self.lines.append(newline)
-        dx = newx - self.posx
-        dy = newy - self.posy
         self.turtleangle = arctan2(dy, dx) * 180 / pi
         self.posx = newx
         self.posy = newy
