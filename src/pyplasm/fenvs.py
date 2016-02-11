@@ -1112,7 +1112,7 @@ MOSTRA = SHOW
 # French:
 MONTRE = SHOW
 # Spanish:
-MOSTRA = SHOW
+MUESTRA = SHOW
 
 # ===================================================
 # BASE OBJECT
