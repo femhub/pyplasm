@@ -7166,9 +7166,9 @@ def PLASM_EXTRUSION(angle):
 
 def EXTRUDEONE(shape2d, height, angle_deg, n=1):
     if shape2d.dim != 2:
-        raise ExceptionWT("Base object in EXTRUDE(...) must be 2-dimensional!")
+        raise ExceptionWT("Base object in EXTRUDE(base, height, angle, n) must be 2-dimensional!")
     if height <= 0:
-        raise ExceptionWT("Extrusion height in EXTRUDE(...) must be positive!")
+        raise ExceptionWT("Extrusion height in EXTRUDE(base, height, angle, n) must be positive!")
     col = shape2d.getcolor()
     dh = float(height) / n
     angle_rad = angle_deg * PI / 180.0
@@ -7189,10 +7189,24 @@ def extrude(*args):
     raise ExceptionWT("Command extrude() is undefined. Try EXTRUDE() instead?")
 
 
-def EXTRUDE(basis, height, angle_deg, n=1):
+def EXTRUDE(*args):
+    arglist = list(*args)
+    if len(arglist) < 2:
+        raise ExceptionWT(
+            "EXTRUDE(base, height, ...) takes at least two arguments!")
+    base = arglist[0]
+    height = arglist[1]
     if height <= 0:
         raise ExceptionWT(
-            "Height in EXTRUDE(base, height, angle, n) must be positive!")
+            "Height in EXTRUDE(base, height, ...) must be positive!")
+    if len(arglist) == 2:
+        return PRISM(base, height)
+    angle_deg = 0
+    if len(arglist) == 3:
+        angle_deg = arglist[2]
+    n = 1
+    if len(arglist) >= 4:
+        n = arglist[3]
     # Check that the basis is two-dimensional:
     if not isinstance(basis, list):
         if basis.dim != 2:
