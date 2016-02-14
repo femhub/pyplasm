@@ -9371,6 +9371,9 @@ class NCLabTurtle:
         base = NCLabTurtleTrace(self, layer, dots)
         self.geom = PRISM(base, self.height)
 
+    def export(self):
+        return self.geom
+
     # Revolves complete trace including width
     def revolve(self, angle=360, div=32):   
         if self.revolvecalled == True:
