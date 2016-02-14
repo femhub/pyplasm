@@ -2503,7 +2503,6 @@ def MOVE(*args):
         if t2 == 'x' or t2 == 'X':
             if not ISNUMBER(t1):
                 raise ExceptionWT("In MOVE(obj, dist, X), dist must be a number!")
-            t1 = 0
             t2 = 0
             t3 = 0
             letterfound = True
