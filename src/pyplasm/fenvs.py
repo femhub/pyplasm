@@ -7194,13 +7194,13 @@ def EXTRUDE(*args):
     if len(arglist) < 2:
         raise ExceptionWT(
             "EXTRUDE(base, height, ...) takes at least two arguments!")
-    base = arglist[0]
+    basis = arglist[0]
     height = arglist[1]
     if height <= 0:
         raise ExceptionWT(
             "Height in EXTRUDE(base, height, ...) must be positive!")
     if len(arglist) == 2:
-        return PRISM(base, height)
+        return PRISM(basis, height)
     angle_deg = 0
     if len(arglist) == 3:
         angle_deg = arglist[2]
