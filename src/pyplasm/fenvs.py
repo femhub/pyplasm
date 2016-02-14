@@ -7202,7 +7202,7 @@ def EXTRUDE(*args):
     if len(arglist) == 2:
         return PRISM(basis, height)
     angle_deg = 0
-    if len(arglist) == 3:
+    if len(arglist) >= 3:
         angle_deg = arglist[2]
     n = 1
     if len(arglist) >= 4:
