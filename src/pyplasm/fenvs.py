@@ -2488,7 +2488,20 @@ def move(*args):
     raise ExceptionWT("Command move() is undefined. Try MOVE() instead?")
 
 
-def MOVE(obj, t1, t2, t3=0):
+def MOVE(*args):
+    arglist = list(args)
+    if len(arglist) <= 1:
+        raise ExceptionWT(
+            "Command MOVE(obj, x, ...) expects at least two arguments!")
+    obj = arglist[0]
+    t1 = arglist[1]
+    t2 = 0
+    t3 = 0
+    if len(arglist) >= 3:
+        t2 = arglist[2]
+    if len(arglist) >= 4:
+        t3 = arglist[3]
+    # Tests:
     if not ISNUMBER(t1):
         raise ExceptionWT(
             "In MOVE(obj, x, y) or MOVE(obj, x, y, z), x must be a number!")
