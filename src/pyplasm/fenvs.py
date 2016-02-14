@@ -2501,9 +2501,12 @@ def MOVE(*args):
     if len(arglist) == 3:
         t2 = arglist[2]
         if t2 == 'x' or t2 == 'X':
-            letterfound = True
             if not ISNUMBER(t1):
                 raise ExceptionWT("In MOVE(obj, dist, X), dist must be a number!")
+            t1 = 0
+            t2 = 0
+            t3 = 0
+            letterfound = True
         if t2 == 'y' or t2 == 'Y':
             if not ISNUMBER(t1):
                 raise ExceptionWT("In MOVE(obj, dist, Y), dist must be a number!")
