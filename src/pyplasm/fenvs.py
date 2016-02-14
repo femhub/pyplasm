@@ -7190,7 +7190,7 @@ def extrude(*args):
 
 
 def EXTRUDE(*args):
-    arglist = list(*args)
+    arglist = list(args)
     if len(arglist) < 2:
         raise ExceptionWT(
             "EXTRUDE(base, height, ...) takes at least two arguments!")
