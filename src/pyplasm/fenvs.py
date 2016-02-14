@@ -2492,24 +2492,44 @@ def MOVE(*args):
     arglist = list(args)
     if len(arglist) <= 1:
         raise ExceptionWT(
-            "Command MOVE(obj, x, ...) expects at least two arguments!")
+            "Command MOVE() expects at least two arguments: a 2D or 3D object and a distance!")
     obj = arglist[0]
     t1 = arglist[1]
     t2 = 0
     t3 = 0
-    if len(arglist) >= 3:
+    letterfound = False
+    if len(arglist) == 3:
         t2 = arglist[2]
+        if t2 == 'x' or t2 == 'X':
+            letterfound = True
+            if not ISNUMBER(t1):
+                raise ExceptionWT("In MOVE(obj, dist, X), dist must be a number!")
+        if t2 == 'y' or t2 == 'Y':
+            if not ISNUMBER(t1):
+                raise ExceptionWT("In MOVE(obj, dist, Y), dist must be a number!")
+            t2 = t1
+            t1 = 0
+            t3 = 0
+            letterfound = True
+        if t2 == 'z' or t2 == 'Z':
+            if not ISNUMBER(t1):
+                raise ExceptionWT("In MOVE(obj, dist, Z), dist must be a number!")
+            t3 = t1
+            t1 = 0
+            t2 = 0
+            letterfound = True
     if len(arglist) >= 4:
+        t2 = arglist[2]
         t3 = arglist[3]
     # Tests:
     if not ISNUMBER(t1):
         raise ExceptionWT(
-            "In MOVE(obj, x, y) or MOVE(obj, x, y, z), x must be a number!")
+            "In MOVE(obj, dx, ...), dx must be a number!")
     if not ISNUMBER(t2):
         raise ExceptionWT(
-            "In MOVE(obj, x, y) or MOVE(obj, x, y, z), y must be a number!")
+            "In MOVE(obj, dx, dy, ...), dy must be a number!")
     if not ISNUMBER(t3):
-        raise ExceptionWT("In MOVE(obj, x, y, z), z must be a number!")
+        raise ExceptionWT("In MOVE(obj, dx, dy, dz), dz must be a number!")
     if obj == []: 
         return obj
     # Remove empty sets:
@@ -2518,7 +2538,7 @@ def MOVE(*args):
     if not isinstance(obj, list):
         if not isinstance(obj, BASEOBJ) and obj != []:
             raise ExceptionWT(
-                "In MOVE(obj, x, y) or MOVE(obj, x, y, z), obj must be a 2D or 3D object!")
+                "In MOVE(obj, ...), obj must be a 2D or 3D object!")
         if not EMPTYSET(obj):
             obj.move(t1, t2, t3)
         return COPY(obj)
@@ -2528,7 +2548,7 @@ def MOVE(*args):
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
-                    "In MOVE(obj, x, y) or MOVE(obj, x, y, z), obj must be a 2D or 3D object!")
+                    "In MOVE(obj, ...), obj must be a 2D or 3D object!")
             if not EMPTYSET(oo) and oo != []:
                 oo.move(t1, t2, t3)
                 newobj.append(COPY(oo))
