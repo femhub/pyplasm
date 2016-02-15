@@ -9421,7 +9421,8 @@ class NCLabTurtle:
         self.geom = PRISM(base, self.height)
 
     def export(self):
-        if self.height < 0.000001:          # Trace is 2D:
+        is3d = isrosol or isrosurf or isroshell or isspiral or isextruded 
+        if not is3d:                        # Trace is 2D:
             return NCLabTurtleTrace(self)
         else:                               # Trace is 3D:
             return self.geom
