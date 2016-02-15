@@ -5170,6 +5170,7 @@ def SPIRAL(basis, angle, elevation, division=48):
         color = basis.getcolor()
         obj = BASEOBJ(PLASM_REVOLVE([basis, angle, elevation, division]))
         obj.setcolor(color)
+        obj.dim = 3
         return obj
     else:
         basis = flatten(basis)
@@ -5182,6 +5183,7 @@ def SPIRAL(basis, angle, elevation, division=48):
             color = oo.getcolor()
             oo3d = BASEOBJ(PLASM_REVOLVE([oo, angle, elevation, division]))
             oo3d.setcolor(color)
+            oo3d.dim = 3
             obj.append(oo3d)
         return obj
 
@@ -6084,6 +6086,7 @@ def ROTATIONALSOLID(point_list, angle=360, minr=0, nx=32, na=32, nr=1):
     out = BASEOBJ(PLASM_ROTSOLID([curve_xz, anglerad, minr])([nx, na, nr]))
     # Rotate object back:
     ROTATE(out, -90, X)
+    out.dim = 3
     return out
 
 
@@ -6145,6 +6148,7 @@ def ROTATIONALSHELL(point_list, thickness, angle=360, nx=32, na=32, nr=1):
         PLASM_ROTSHELL([curve_xz, anglerad, thickness])([nx, na, nr]))
     # Rotate object back:
     ROTATE(out, -90, X)
+    out.dim = 3
     return out
 
 
@@ -6483,6 +6487,7 @@ def PRISM(basis, h, n=1):
         color = basis.getcolor()
         obj = PRODUCT(basis, GRID(*gridlist))  # PRODUCT returns a class instance!
         obj.setcolor(color)
+        obj.dim = 3
         return obj
     else:
         basis = flatten(basis)
@@ -6495,6 +6500,7 @@ def PRISM(basis, h, n=1):
             color = oo.getcolor()
             oo3d = PRODUCT(oo, GRID(*gridlist))  # PRODUCT returns a class instance!
             oo3d.setcolor(color)
+            oo3d.dim = 3
             obj.append(oo3d)
         return obj
 
@@ -7216,6 +7222,7 @@ def EXTRUDEONE(shape2d, height, angle_deg, n=1):
         S(newlayer, 1, 1, dh)
         MOVE(newlayer, 0, 0, i * dh)
         ROTATE(newlayer, i * dangle, 3)
+        newlayer.dim = 3
         L.append(newlayer)
     return L  # I tried to return a union but it took too much time
 
