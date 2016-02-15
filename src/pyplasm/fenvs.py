@@ -9493,18 +9493,20 @@ class NCLabTurtle:
         for line in self.lines:
             a = POINT(line.startx, line.starty)
             b = POINT(line.endx, line.endy)
+            paralleltox = abs(line.endy - line.starty) < 0.00001
             minr = 0
             nx = 1
             na = div
             nr = 1
-            s = ROSOL([a, b], angle, minr, nx, na, nr)
-            COLOR(s, line.linecolor)
-            self.geom.append(s)
+            if not paralleltox:
+                s = ROSOL([a, b], angle, minr, nx, na, nr)
+                COLOR(s, line.linecolor)
+                self.geom.append(s)
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
         if self.rosurfcalled == True:
-            raise ExceptionWT("Command roshell() can be only called once!")
+            raise ExceptionWT("Command rosurf() can be only called once!")
         self.rosurfcalled = True
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in rosurf(a) must be positive!")
