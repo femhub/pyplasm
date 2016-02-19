@@ -5485,6 +5485,10 @@ def TRIANGLE(a, b, c):
     if la != lb or la != lc or lb != lc:
         raise ExceptionWT(
             "All points a, b, c in TRIANGLE(a, b, c) must be 2D points, or all must be 3D points!")
+    # Are some of the points the same?
+    if (a == b) or (b == c) or (a == c):
+        raise ExceptionWT(
+            "Invalid triangle detected - two or more vertices are the same!")
     return BASEOBJ(PLASM_CONVEXHULL([a, b, c]))
 
 # English:
@@ -5595,6 +5599,10 @@ def QUAD(a, b, c, d):
     if m1 != 2 and m1 != 3:
         raise ExceptionWT(
             "All points a, b, c, d in QUAD(a, b, c, d) must be 2D points, or all must be 3D points.")
+    # Are some of the points the same?
+    if (a == b) or (a == c) or (a == d) or (b == c) or (b == d) or (c == d):
+        raise ExceptionWT(
+            "Invalid quadrilateral detected - two or more vertices are the same!")
     return BASEOBJ(PLASM_CONVEXHULL([a, b, c, d]))
 
 
