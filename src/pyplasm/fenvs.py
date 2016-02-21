@@ -9287,16 +9287,10 @@ class NCLabTurtle:
     def penup(self):
         self.draw = False
 
-    def up(self):
-        self.draw = False
-
     def pu(self):
         self.draw = False
 
     def pendown(self):
-        self.draw = True
-
-    def down(self):
         self.draw = True
 
     def pd(self):
@@ -9304,6 +9298,12 @@ class NCLabTurtle:
 
     def isdown(self):
         return self.draw
+
+    def up(self):
+        raise ExceptionWT("Command up() is reserved for spatial drawing with NCLabTurtle3D. Please use penup() or pu().")
+
+    def down(self):
+        raise ExceptionWT("Command down() is reserved for spatial drawing with NCLabTurtle3D. Please use pendown() or pd().")
 
     def go(self, dist):
         if dist <= 0:
