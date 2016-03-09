@@ -9413,9 +9413,9 @@ class NCLabTurtle:
         self.isvisible = False
 
     def line(self, x1, y1, x2, y2):
-        self.up()
+        self.penup()
         self.goto(x1, y1)
-        self.down()
+        self.pendown()
         self.goto(x2, y2)
 
     def extrude(self, height = 1):
