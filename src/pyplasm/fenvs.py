@@ -2626,10 +2626,33 @@ def scale(*args):
     raise ExceptionWT("Command scale() is undefined. Try SCALE() instead?")
 
 
-def SCALE(obj, a, b, c=1):
+def SCALE(*args):
+    arglist = list(args)
+    if len(arglist) <= 2:
+        raise ExceptionWT(
+            "Command SCALE() expects at least three arguments!")
+    obj = arglist[0]
+    a = arglist[1]
+    b = arglist[2]
+    c = 1
+    if len(arglist) >= 4:
+      c = arglist[3]
+    else:
+      if b == 'x' or b == 'X':
+         b = 1
+         c = 1
+      if b == 'y' or b == 'Y':
+         b = a
+         a = 1
+         c = 1
+      if b == 'z' or b == 'Z':
+         c = a
+         a = 1
+         b = 1
+    # Sanity tests:
     if not ISNUMBER(a):
         raise ExceptionWT(
-            "In SCALE(obj, sx, sy) or SCALE(obj, sx, sy, sz), sx must be a number!")
+            "In the SCALE command, the first argument is a 2D or 3D object and the second one is a number!")
     if not ISNUMBER(b):
         raise ExceptionWT(
             "In SCALE(obj, sx, sy) or SCALE(obj, sx, sy, sz), sy must be a number!")
