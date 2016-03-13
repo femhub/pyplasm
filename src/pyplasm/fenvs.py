@@ -9718,7 +9718,7 @@ def NCLabTurtleImage3D(turtle):
     t2 = PRISM(t, 1)
     t3 = SPHERE(5, 10)
     ERASE(t3, Z, -10, 0)
-    SCALE(t1, 0.75, X)
+    SCALE(t3, 0.75, X)
     SCALE(t3, 0.75, Z)
     COLOR(t3, turtle.linecolor)
     t2 = UNION(t2, t3)
