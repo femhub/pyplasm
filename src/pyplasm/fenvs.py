@@ -9685,10 +9685,6 @@ def NCLabTurtleTrace3D(turtle, layer=0):
 # Shape of the turtle:
 def NCLabTurtleImage3D(turtle):
     t = []
-    t2 = RING(5, 5.5, 10)
-    COLOR(t2, BLACK)
-    SCALE(t2, 0.75, 1)
-    t.append(t2)
     t3 = CIRCLE(1.5, 8)
     MOVE(t3, 0, 6.25)
     COLOR(t3, BLACK)
@@ -9712,7 +9708,8 @@ def NCLabTurtleImage3D(turtle):
     COLOR(t7, BLACK)
     t.append(t7)
     t8 = PRISM(t, 1)
-    t9 = SPHERE(5, 10)
+    t9 = SPHERE(5.5, 10)
+    ROTATE(t9, 90, Y)
     ERASE(t9, Z, -10, 0)
     SCALE(t9, 0.75, X)
     SCALE(t9, 0.75, Z)
