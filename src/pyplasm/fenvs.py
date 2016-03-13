@@ -9643,7 +9643,10 @@ def NCLabTurtleRectangle3D(l, layer):
     ROTATE(rect2, -angle2, Y)
     ROTATE(rect2, angle1, Z)
     COLOR(rect1, l.linecolor)
-    COLOR(rect2, BLACK)
+    if self.linecolor2 == None:
+        COLOR(rect2, l.linecolor)
+    else:
+        COLOR(rect2, l.linecolor2)
     MOVE(rect1, l.startx, l.starty, l.startz)
     MOVE(rect2, l.startx, l.starty, l.startz)
     return [rect1, rect2]
@@ -9734,7 +9737,7 @@ def NCLabTurtleShow3D(turtle, layer=0):
 
 # Class Line3D:
 class NCLabTurtleLine3D:
-    def __init__(self, sx, sy, sz, dist, a1, a2, a3, w, c):
+    def __init__(self, sx, sy, sz, dist, a1, a2, a3, w, c, c2):
         self.startx = sx
         self.starty = sy
         self.startz = sz
@@ -9747,6 +9750,7 @@ class NCLabTurtleLine3D:
         self.endz = sz + dist * sin(a2 * pi / 180)
         self.linewidth = w
         self.linecolor = c
+        self.linecolor2 = c2
 
 # Class Turtle3D:
 class NCLabTurtle3D:
@@ -9758,6 +9762,7 @@ class NCLabTurtle3D:
         self.turtleangle2 = 0   # angle between the XY plane and the vector
         self.turtleangle3 = 0   # axial rotation about the Turtle's own axis
         self.linecolor = [0, 0, 255]
+        self.linecolor2 = None
         self.draw = True
         self.linewidth = 1
         self.canvassize = 100
@@ -9772,7 +9777,7 @@ class NCLabTurtle3D:
         self.turtleangle2 = a2
         self.turtleangle3 = a3
 
-    def color(self, col):
+    def color(self, col, col2=None):
         if not isinstance(col, list):
             raise ExceptionWT("Attempt to set invalid color. Have you forgotten square brackets?")
         if len(col) != 3:
@@ -9781,6 +9786,15 @@ class NCLabTurtle3D:
             if col[i] < 0 or col[i] > 255:
                 raise ExceptionWT("Attempt to set invalid color. Have you used three integers between 0 and 255?")
         self.linecolor = col
+        if col2 != None:     # Second color is defined
+            if not isinstance(col2, list):
+                raise ExceptionWT("Attempt to set invalid optional 2nd color. Have you forgotten square brackets?")
+            if len(col2) != 3:
+                raise ExceptionWT("Attempt to set invalid optional 2nd color. Have you used three integers between 0 and 255?")
+            for i in range(3):
+                if col2[i] < 0 or col2[i] > 255:
+                    raise ExceptionWT("Attempt to set invalid optional 2nd color. Have you used three integers between 0 and 255?")
+        self.linecolor2 = col2
 
     def width(self, w):
         if w < 0.1:
@@ -9817,7 +9831,9 @@ class NCLabTurtle3D:
         if dist <= 0:
             raise ExceptionWT("The distance d in go(d) must be positive!")
         if self.draw == True:
-            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, self.a1, self.a2, self.a3, self.linewidth, self.linecolor)
+            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, 
+                                        self.turtleangle1, self.turtleangle2, self.turtleangle3, 
+                                        self.linewidth, self.linecolor, self.linecolor2)
             self.lines.append(newline)
         # Store new position:
         newx = self.posx + dist * cos(self.turtleangle1 * pi / 180) * cos(self.turtleangle2 * pi / 180)
@@ -9884,8 +9900,8 @@ class NCLabTurtle3D:
         self.turtleangle2 = arctan2(dz, dd) * 180 / pi
         if self.draw == True:
             newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, 
-                      self.turtleangle1, self.turtleangle2, self.turtleangle3, 
-                      self.linewidth, self.linecolor)
+                                        self.turtleangle1, self.turtleangle2, self.turtleangle3, 
+                                        self.linewidth, self.linecolor, self.linecolor2)
             self.lines.append(newline)
         # Store new end position:
         self.posx = newx
@@ -9964,6 +9980,7 @@ class NCLabTurtle3D:
         self.turtleangle2 = 0
         self.turtleangle3 = 0
         self.linecolor = [0, 0, 255]
+        self.linecolor2 = None
         self.draw = True
         self.linewidth = 1
         self.canvassize = 100
