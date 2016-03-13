@@ -9632,12 +9632,20 @@ def NCLabTurtleRectangle3D(l, layer):
     angle1 = arctan2(dy, dx) * 180 / pi
     dd = sqrt(dx*dx + dy*dy)
     angle2 = arctan2(dz, dd) * 180 / pi
-    rect = BOX(dist + l.linewidth + 2 * layer, l.linewidth + 2 * layer, l.linewidth + 2 * layer)
-    MOVE(rect, -0.5 * l.linewidth - layer, -0.5 * l.linewidth - layer, -0.5 * l.linewidth - layer)
-    ROTATE(rect, -angle2, Y)
-    ROTATE(rect, angle1, Z)
-    COLOR(rect, l.linecolor)
-    MOVE(rect, l.startx, l.starty, l.startz)
+    rect1 = BOX(-0.5 * l.linewidth - layer, dist + 0.5 * l.linewidth + layer, 
+                -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
+                -0.25 * l.linewidth - layer, 0.5 * l.linewidth + layer)
+    rect2 = BOX(-0.5 * l.linewidth - layer, dist + 0.5 * l.linewidth + layer, 
+                -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
+                -0.5 * l.linewidth - layer, -0.25 * l.linewidth + layer)    
+    ROTATE(rect1, -angle2, Y)
+    ROTATE(rect1, angle1, Z)
+    ROTATE(rect2, -angle2, Y)
+    ROTATE(rect2, angle1, Z)
+    COLOR(rect1, l.linecolor)
+    COLOR(rect2, BLACK)
+    MOVE(rect1, l.startx, l.starty, l.startz)
+    MOVE(rect2, l.startx, l.starty, l.startz)
     return rect
 
 
