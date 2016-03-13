@@ -9617,3 +9617,66 @@ class NCLabTurtle:
 
 ######  NCLAB TURTLE 3D - UTILITIES  ######
 
+
+# 3D Rectangle given via start point, distance, 
+# angle, width and color):
+def NCLabTurtleRectangle3D(l, layer):
+    dx = l.endx - l.startx
+    dy = l.endy - l.starty
+    dz = l.endz - l.startz
+    dist = sqrt(dx * dx + dy * dy + dz * dz)
+    angle1 = arctan2(dy, dx) * 180 / pi
+    dd = sqrt(dx*dx + dy*dy)
+    angle2 = arctan2(dz, dd) * 180 / pi
+    rect = BOX(dist + 2 * layer, l.linewidth + 2 * layer, l.linewidth + 2 * layer)
+    MOVE(rect, -layer, -0.5 * l.linewidth - layer, -0.5 * l.linewidth - layer)
+    ROTATE(rect, angle2, Y)
+    ROTATE(rect, angle1, Z)
+    COLOR(rect, l.linecolor)
+    MOVE(rect, l.startx, l.starty, l.startz)
+    return rect
+
+
+# Dots to set area size:
+def NCLabTurtleCanvas3D(turtle):
+    r = turtle.canvassize
+    r /= 2
+    dot1 = BOX(-0.05, 0.05, -0.05, 0.05, -0.05, 0.05)
+    dot5 = COPY(dot1)
+    MOVE(dot1, r, 0, -r)
+    MOVE(dot5, r, 0, r)
+    dot2 = COPY(dot1)
+    dot6 = COPY(dot5)
+    ROTATE(dot2, 90)
+    ROTATE(dot6, 90)
+    dot3 = COPY(dot2)
+    dot7 = COPY(dot6)
+    ROTATE(dot3, 90)
+    ROTATE(dot7, 90)
+    dot4 = COPY(dot3)
+    dot8 = COPY(dot7)
+    ROTATE(dot4, 90)
+    ROTATE(dot8, 90)
+    return [dot1, dot2, dot3, dot4, dot5, dot6, dot7, dot8]
+
+
+# Return trace as list of PLaSM objects:
+def NCLabTurtleTrace3D(turtle, layer=0):
+    out = []
+    n = len(turtle.lines)
+    # List of lines is empty - just return:
+    if n == 0:
+        return out
+    # There is at leats one line segment:
+    for i in range(n):
+        l = turtle.lines[i]
+        # Add rectangle corresponding to the line:
+        rect = NCLabTurtleRectangle3D(l, layer)
+        out.append(rect)
+        # If dots == True, add circles:
+    return out
+
+def NCLabTurtleShow3D(turtle, layer=0):
+    canvas = NCLabTurtleCanvas3D(turtle)
+    trace = NCLabTurtleTrace3D(turtle, layer)
+    SHOW(canvas, trace)
