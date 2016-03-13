@@ -9628,8 +9628,8 @@ def NCLabTurtleRectangle3D(l, layer):
     angle1 = arctan2(dy, dx) * 180 / pi
     dd = sqrt(dx*dx + dy*dy)
     angle2 = arctan2(dz, dd) * 180 / pi
-    rect = BOX(dist + 2 * layer, l.linewidth + 2 * layer, l.linewidth + 2 * layer)
-    MOVE(rect, -layer, -0.5 * l.linewidth - layer, -0.5 * l.linewidth - layer)
+    rect = BOX(dist + l.linewidth + 2 * layer, l.linewidth + 2 * layer, l.linewidth + 2 * layer)
+    MOVE(rect, -0.5 * l.linewidth - layer, -0.5 * l.linewidth - layer, -0.5 * l.linewidth - layer)
     ROTATE(rect, angle2, Y)
     ROTATE(rect, angle1, Z)
     COLOR(rect, l.linecolor)
@@ -9896,5 +9896,5 @@ class NCLabTurtle3D:
         if self.showcalled == True:
             raise ExceptionWT("Command show() can be only called once!")
         self.showcalled = True
-        NCLabTurtleShow3D(self, self.linewidth/2)
+        NCLabTurtleShow3D(self)
 
