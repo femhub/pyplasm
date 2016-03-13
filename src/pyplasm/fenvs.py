@@ -9680,3 +9680,221 @@ def NCLabTurtleShow3D(turtle, layer=0):
     canvas = NCLabTurtleCanvas3D(turtle)
     trace = NCLabTurtleTrace3D(turtle, layer)
     SHOW(canvas, trace)
+
+######  NCLAB TURTLE 3D - CLASSES  ######
+
+# Class Line3D:
+class NCLabTurtleLine3D:
+    def __init__(self, sx, sy, sz, ex, ey, ez, w, c):
+        self.startx = sx
+        self.starty = sy
+        self.startz = sz
+        self.endx = ex
+        self.endy = ey
+        self.endz = ez
+        self.linewidth = w
+        self.linecolor = c
+
+# Class Turtle3D:
+class NCLabTurtle3D:
+    def __init__(self, px=0, py=0, pz=0):
+        self.posx = px
+        self.posy = py
+        self.posz = pz
+        self.turtleangle1 = 0
+        self.turtleangle2 = 0
+        self.linecolor = [0, 0, 255]
+        self.draw = True
+        self.linewidth = 1
+        self.canvassize = 100
+        self.lines = []
+        self.geom = None
+        # These commands can be called only once:
+        self.showcalled = False
+
+    def angles(self, a1, a2):
+        self.turtleangle1 = a1
+        self.turtleangle2 = a2
+
+    def color(self, col):
+        if not isinstance(col, list):
+            raise ExceptionWT("Attempt to set invalid color. Have you forgotten square brackets?")
+        if len(col) != 3:
+            raise ExceptionWT("Attempt to set invalid color. Have you used three integers between 0 and 255?")
+        for i in range(3):
+            if col[i] < 0 or col[i] > 255:
+                raise ExceptionWT("Attempt to set invalid color. Have you used three integers between 0 and 255?")
+        self.linecolor = col
+
+    def width(self, w):
+        if w < 0.1:
+            raise ExceptionWT("Line width must be between 0.1 and 10.0.")
+        if w > 10.0:
+            raise ExceptionWT("Line width must be between 0.1 and 10.0.")
+        self.linewidth = w
+
+    def penup(self):
+        self.draw = False
+
+    def pu(self):
+        self.draw = False
+
+    def pendown(self):
+        self.draw = True
+
+    def pd(self):
+        self.draw = True
+
+    def isdown(self):
+        return self.draw
+
+    def up(self, da):
+        self.turtleangle2 += da
+
+    def down(self, da):
+        self.turtleangle2 -= da
+
+    def go(self, dist):
+        if dist <= 0:
+            raise ExceptionWT("The distance d in go(d) must be positive!")
+        newx = self.posx + dist * cos(self.turtleangle1 * pi / 180) * cos(self.turtleangle2 * pi / 180)
+        newy = self.posy + dist * sin(self.turtleangle1 * pi / 180) * cos(self.turtleangle2 * pi / 180)
+        newz = self.posz + dist * sin(self.turtleangle2 * pi / 180)
+        if self.draw == True:
+            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, newx, newy, newz, self.linewidth, self.linecolor)
+            self.lines.append(newline)
+        self.posx = newx
+        self.posy = newy
+        self.posz = newz
+
+    def printlines(self):
+        for line in self.lines:
+            print("Start:", line.startx, line.starty, line.startz, "End:", line.endx, line.endy, line.endz)
+
+    def forward(self, dist):
+        self.go(dist)
+
+    def fd(self, dist):
+        self.go(dist)
+
+    def left(self, da):
+        self.turtleangle1 += da
+
+    def lt(self, da):
+        self.left(da)
+
+    def right(self, da):
+        self.turtleangle1 -= da
+
+    def rt(self, da):
+        self.right(da)
+
+    def back(self, dist):
+        if dist <= 0:
+            raise ExceptionWT("The distance d in back(d) must be positive!")
+        draw = self.draw
+        self.left(180)
+        self.turtleangle2 *= -1
+        self.penup()  # do not draw while backing
+        self.go(dist)
+        self.right(180)
+        self.turtleangle2 *= -1
+        if draw == True:
+            self.pendown()
+
+    def backward(self, dist):
+        self.back(dist)
+
+    def bk(self, dist):
+        self.back(dist)
+
+    def goto(self, newx, newy, newz):
+        dx = newx - self.posx
+        dy = newy - self.posy
+        dz = newz - self.posz
+        if self.draw == True:
+            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, newx, newy, newz, self.linewidth, self.linecolor)
+            self.lines.append(newline)
+        self.turtleangle1 = arctan2(dy, dx) * 180 / pi
+        dd = sqrt(dx*dx + dy*dy)
+        self.turtleangle2 = arctan2(dz, dd) * 180 / pi
+        self.posx = newx
+        self.posy = newy
+        self.posz = newz
+
+    def setpos(self, newx, newy, newz):
+        self.goto(newx, newy, newz)
+
+    def setposition(self, newx, newy, newz):
+        self.goto(newx, newy, newz)
+
+    def setx(self, newx):
+        self.goto(newx, self.posy, self.posz)
+
+    def sety(self, newy):
+        self.goto(self.posx, newy, self.posz)
+
+    def setz(self, newz):
+        self.goto(self.posx, self.posy, newz)
+
+    def home(self):
+        self.penup()
+        self.goto(0, 0, 0)
+        self.angles(0, 0)
+        self.pendown()
+
+    def getx(self):
+        return self.posx
+
+    def gety(self):
+        return self.posy
+
+    def getz(self):
+        return self.posz
+
+    def getangles(self):
+        return self.turtleangle1, self.turtleangle2
+
+    def getcolor(self):
+        return self.linecolor
+
+    def getwidth(self):
+        return self.linewidth
+
+    def line(self, x1, y1, z1, x2, y2, z2):
+        self.penup()
+        self.goto(x1, y1, z1)
+        self.pendown()
+        self.goto(x2, y2, z2)
+
+    def export(self):
+        return self.geom
+
+    def erase(self):
+        del self.lines[:]
+
+    def reset(self):
+        del self.lines[:]
+        self.posx = 0
+        self.posy = 0
+        self.posz = 0
+        self.turtleangle1 = 0
+        self.turtleangle2 = 0
+        self.linecolor = [0, 0, 255]
+        self.draw = True
+        self.linewidth = 1
+        self.canvassize = 100
+        self.isvisible = True
+        self.geom = None
+        # These commands can be called only once:
+        self.showcalled = False
+
+    def geometry(self):
+        return self.geom
+
+    def show(self, layer=0, dots=True):
+        if self.showcalled == True:
+            raise ExceptionWT("Command show() can be only called once!")
+        self.showcalled = True
+        NCLabTurtleShow3D(self, self.width/2):
+
