@@ -9713,7 +9713,7 @@ def NCLabTurtleImage3D(turtle):
     ERASE(t9, Z, -10, 0)
     SCALE(t9, 0.75, X)
     SCALE(t9, 0.75, Z)
-    MOVE(y9, -0.01, Z)
+    MOVE(t9, -0.01, Z)
     COLOR(t9, turtle.linecolor)
     t10 = UNION(t8, t9)
     ROTATE(t10, -90, Z)
