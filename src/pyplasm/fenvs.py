@@ -9337,6 +9337,10 @@ class NCLabTurtle:
         self.posx = newx
         self.posy = newy
 
+    def printlines(self):
+        for line in self.lines:
+            print("Start:", line.startx, line.starty, "End:", line.endx, line.endy)
+
     def forward(self, dist):
         self.go(dist)
 
