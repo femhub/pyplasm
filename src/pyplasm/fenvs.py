@@ -9634,7 +9634,7 @@ def NCLabTurtleRectangle3D(l, layer):
     angle2 = arctan2(dz, dd) * 180 / pi
     rect = BOX(dist + l.linewidth + 2 * layer, l.linewidth + 2 * layer, l.linewidth + 2 * layer)
     MOVE(rect, -0.5 * l.linewidth - layer, -0.5 * l.linewidth - layer, -0.5 * l.linewidth - layer)
-    ROTATE(rect, angle2, Y)
+    ROTATE(rect, -angle2, Y)
     ROTATE(rect, angle1, Z)
     COLOR(rect, l.linecolor)
     MOVE(rect, l.startx, l.starty, l.startz)
@@ -9646,22 +9646,14 @@ def NCLabTurtleCanvas3D(turtle):
     r = turtle.canvassize
     r /= 2
     dot1 = BOX(-0.05, 0.05, -0.05, 0.05, -0.05, 0.05)
-    dot5 = COPY(dot1)
     MOVE(dot1, r, 0, -r)
-    MOVE(dot5, r, 0, r)
     dot2 = COPY(dot1)
-    dot6 = COPY(dot5)
-    ROTATE(dot2, 90)
-    ROTATE(dot6, 90)
+    ROTATE(dot2, 90, Z)
     dot3 = COPY(dot2)
-    dot7 = COPY(dot6)
-    ROTATE(dot3, 90)
-    ROTATE(dot7, 90)
+    ROTATE(dot3, 90, Z)
     dot4 = COPY(dot3)
-    dot8 = COPY(dot7)
-    ROTATE(dot4, 90)
-    ROTATE(dot8, 90)
-    return [dot1, dot2, dot3, dot4, dot5, dot6, dot7, dot8]
+    ROTATE(dot4, 90, Z)
+    return [dot1, dot2, dot3, dot4]
 
 
 # Return trace as list of PLaSM objects:
