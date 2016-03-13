@@ -9643,7 +9643,7 @@ def NCLabTurtleRectangle3D(l, layer):
     ROTATE(rect2, -angle2, Y)
     ROTATE(rect2, angle1, Z)
     COLOR(rect1, l.linecolor)
-    if self.linecolor2 == None:
+    if l.linecolor2 == None:
         COLOR(rect2, l.linecolor)
     else:
         COLOR(rect2, l.linecolor2)
