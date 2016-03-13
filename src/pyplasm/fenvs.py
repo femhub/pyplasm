@@ -9629,8 +9629,6 @@ def NCLabTurtleRectangle3D(l, layer):
     dy = l.endy - l.starty
     dz = l.endz - l.startz
     dist = l.dist
-    angle1 = l.a1
-    angle2 = arctan2(dz, dd) * 180 / pi
     rect1 = BOX(-0.5 * l.linewidth - layer, dist + 0.5 * l.linewidth + layer, 
                 -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
                 -0.25 * l.linewidth - layer, 0.5 * l.linewidth + layer)
