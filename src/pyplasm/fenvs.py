@@ -9680,22 +9680,71 @@ def NCLabTurtleTrace3D(turtle, layer=0):
         # If dots == True, add circles:
     return out
 
+# Shape of the turtle:
+def NCLabTurtleImage3D(turtle):
+    t = []
+    t1 = CIRCLE(5, 10)
+    COLOR(t1, turtle.linecolor)
+    SCALE(t1, 0.75, 1)
+    t.append(t1)
+    t2 = RING(5, 5.5, 10)
+    COLOR(t2, BLACK)
+    SCALE(t2, 0.75, 1)
+    t.append(t2)
+    t3 = CIRCLE(1.5, 8)
+    MOVE(t3, 0, 6.25)
+    COLOR(t3, BLACK)
+    t.append(t3)
+    t4a = QUAD([1, 5], [4, 5], [6, 3], [3, 3])
+    COLOR(t4a, BLACK)
+    t.append(t4a)
+    t4b = TRIANGLE([4, 3], [6, 3], [6, 1])
+    COLOR(t4b, BLACK)
+    t.append(t4b)
+    t5a = QUAD([-1, 5], [-4, 5], [-6, 3], [-3, 3])
+    COLOR(t5a, BLACK)
+    t.append(t5a)
+    t5b = TRIANGLE([-4, 3], [-6, 3], [-6, 1])
+    COLOR(t5b, BLACK)
+    t.append(t5b)
+    t6 = QUAD([2, -4], [3.25, -3], [4, -5], [3, -6])
+    COLOR(t6, BLACK)
+    t.append(t6)
+    t7 = QUAD([-2, -4], [-3.25, -3], [-4, -5], [-3, -6])
+    COLOR(t7, BLACK)
+    t.append(t7)
+    t2 = PRISM(t, 1)
+    ROTATE(t2, -90, Z)
+    ROTATE(t2, -turtle.turtleangle3, X)
+    ROTATE(t2, -turtle.turtleangle2, Y)
+    ROTATE(t2, turtle.turtleangle1, Z)
+    MOVE(2, turtle.posx, turtle.posy, turtle.posz)
+    return t
+
 def NCLabTurtleShow3D(turtle, layer=0):
     canvas = NCLabTurtleCanvas3D(turtle)
     trace = NCLabTurtleTrace3D(turtle, layer)
-    SHOW(canvas, trace)
+    image = NCLabTurtleImage3D(turtle)
+    if turtle.isvisible:
+        SHOW(image, canvas, trace)
+    else:
+        SHOW(canvas, trace)
 
 ######  NCLAB TURTLE 3D - CLASSES  ######
 
 # Class Line3D:
 class NCLabTurtleLine3D:
-    def __init__(self, sx, sy, sz, ex, ey, ez, w, c):
+    def __init__(self, sx, sy, sz, dist, a1, a2, a3, w, c):
         self.startx = sx
         self.starty = sy
         self.startz = sz
-        self.endx = ex
-        self.endy = ey
-        self.endz = ez
+        self.dist = dist
+        self.a1 = a1
+        self.a2 = a2
+        self.a3 = a3
+        self.endx = sx + dist * cos(a1 * pi / 180) * cos(a2 * pi / 180)
+        self.endy = sy + dist * sin(a1 * pi / 180) * cos(a2 * pi / 180)
+        self.endz = sz + dist * sin(a2 * pi / 180)
         self.linewidth = w
         self.linecolor = c
 
@@ -9705,20 +9754,23 @@ class NCLabTurtle3D:
         self.posx = px
         self.posy = py
         self.posz = pz
-        self.turtleangle1 = 0
-        self.turtleangle2 = 0
+        self.turtleangle1 = 0   # angle between the XZ plane and the vector
+        self.turtleangle2 = 0   # angle between the XY plane and the vector
+        self.turtleangle3 = 0   # axial rotation about the Turtle's own axis
         self.linecolor = [0, 0, 255]
         self.draw = True
         self.linewidth = 1
         self.canvassize = 100
         self.lines = []
+        self.isvisible = True
         self.geom = None
         # These commands can be called only once:
         self.showcalled = False
 
-    def angles(self, a1, a2):
+    def angles(self, a1, a2, a3):
         self.turtleangle1 = a1
         self.turtleangle2 = a2
+        self.turtleangle3 = a3
 
     def color(self, col):
         if not isinstance(col, list):
@@ -9755,18 +9807,22 @@ class NCLabTurtle3D:
     def up(self, da):
         self.turtleangle2 += da
 
+    def pitch(self, da):
+        self.up(da)
+
     def down(self, da):
         self.turtleangle2 -= da
 
     def go(self, dist):
         if dist <= 0:
             raise ExceptionWT("The distance d in go(d) must be positive!")
+        if self.draw == True:
+            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, self.a1, self.a2, self.a3, self.linewidth, self.linecolor)
+            self.lines.append(newline)
+        # Store new position:
         newx = self.posx + dist * cos(self.turtleangle1 * pi / 180) * cos(self.turtleangle2 * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle1 * pi / 180) * cos(self.turtleangle2 * pi / 180)
         newz = self.posz + dist * sin(self.turtleangle2 * pi / 180)
-        if self.draw == True:
-            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, newx, newy, newz, self.linewidth, self.linecolor)
-            self.lines.append(newline)
         self.posx = newx
         self.posy = newy
         self.posz = newz
@@ -9784,6 +9840,9 @@ class NCLabTurtle3D:
     def left(self, da):
         self.turtleangle1 += da
 
+    def yaw(self, da):
+        self.left(da)
+
     def lt(self, da):
         self.left(da)
 
@@ -9792,6 +9851,9 @@ class NCLabTurtle3D:
 
     def rt(self, da):
         self.right(da)
+
+    def roll(self, da):
+        self.turtleangle3 -= da
 
     def back(self, dist):
         if dist <= 0:
@@ -9816,12 +9878,16 @@ class NCLabTurtle3D:
         dx = newx - self.posx
         dy = newy - self.posy
         dz = newz - self.posz
-        if self.draw == True:
-            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, newx, newy, newz, self.linewidth, self.linecolor)
-            self.lines.append(newline)
+        dist = sqrt(dx*dx + dy*dy + dz*dz)
         self.turtleangle1 = arctan2(dy, dx) * 180 / pi
         dd = sqrt(dx*dx + dy*dy)
         self.turtleangle2 = arctan2(dz, dd) * 180 / pi
+        if self.draw == True:
+            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, 
+                      self.turtleangle1, self.turtleangle2, self.turtleangle3, 
+                      self.linewidth, self.linecolor)
+            self.lines.append(newline)
+        # Store new end position:
         self.posx = newx
         self.posy = newy
         self.posz = newz
@@ -9857,13 +9923,25 @@ class NCLabTurtle3D:
         return self.posz
 
     def getangles(self):
-        return self.turtleangle1, self.turtleangle2
+        return self.turtleangle1, self.turtleangle2, self.turtleangle3
 
     def getcolor(self):
         return self.linecolor
 
     def getwidth(self):
         return self.linewidth
+
+    def visible(self):
+        self.isvisible = True
+
+    def reveal(self):
+        self.isvisible = True
+
+    def invisible(self):
+        self.isvisible = False
+
+    def hide(self):
+        self.isvisible = False
 
     def line(self, x1, y1, z1, x2, y2, z2):
         self.penup()
@@ -9884,6 +9962,7 @@ class NCLabTurtle3D:
         self.posz = 0
         self.turtleangle1 = 0
         self.turtleangle2 = 0
+        self.turtleangle3 = 0
         self.linecolor = [0, 0, 255]
         self.draw = True
         self.linewidth = 1
