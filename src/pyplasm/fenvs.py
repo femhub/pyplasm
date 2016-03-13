@@ -9646,7 +9646,7 @@ def NCLabTurtleRectangle3D(l, layer):
     COLOR(rect2, BLACK)
     MOVE(rect1, l.startx, l.starty, l.startz)
     MOVE(rect2, l.startx, l.starty, l.startz)
-    return rect
+    return [rect1, rect2]
 
 
 # Dots to set area size:
