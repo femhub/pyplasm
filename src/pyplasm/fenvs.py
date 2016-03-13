@@ -9685,10 +9685,6 @@ def NCLabTurtleTrace3D(turtle, layer=0):
 # Shape of the turtle:
 def NCLabTurtleImage3D(turtle):
     t = []
-    t1 = CIRCLE(5, 10)
-    COLOR(t1, turtle.linecolor)
-    SCALE(t1, 0.75, 1)
-    t.append(t1)
     t2 = RING(5, 5.5, 10)
     COLOR(t2, BLACK)
     SCALE(t2, 0.75, 1)
@@ -9715,19 +9711,19 @@ def NCLabTurtleImage3D(turtle):
     t7 = QUAD([-2, -4], [-3.25, -3], [-4, -5], [-3, -6])
     COLOR(t7, BLACK)
     t.append(t7)
-    t2 = PRISM(t, 1)
-    t3 = SPHERE(5, 10)
-    ERASE(t3, Z, -10, 0)
-    SCALE(t3, 0.75, X)
-    SCALE(t3, 0.75, Z)
-    COLOR(t3, turtle.linecolor)
-    t2 = UNION(t2, t3)
-    ROTATE(t2, -90, Z)
-    ROTATE(t2, -turtle.turtleangle3, X)
-    ROTATE(t2, -turtle.turtleangle2, Y)
-    ROTATE(t2, turtle.turtleangle1, Z)
-    MOVE(t2, turtle.posx, turtle.posy, turtle.posz)
-    return t2
+    t8 = PRISM(t, 1)
+    t9 = SPHERE(5, 10)
+    ERASE(t9, Z, -10, 0)
+    SCALE(t9, 0.75, X)
+    SCALE(t9, 0.75, Z)
+    COLOR(t9, turtle.linecolor)
+    t10 = UNION(t8, t9)
+    ROTATE(t10, -90, Z)
+    ROTATE(t10, -turtle.turtleangle3, X)
+    ROTATE(t10, -turtle.turtleangle2, Y)
+    ROTATE(t10, turtle.turtleangle1, Z)
+    MOVE(t10, turtle.posx, turtle.posy, turtle.posz)
+    return t10
 
 def NCLabTurtleShow3D(turtle, layer=0):
     canvas = NCLabTurtleCanvas3D(turtle)
