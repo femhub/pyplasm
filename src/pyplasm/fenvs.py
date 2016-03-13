@@ -9716,7 +9716,7 @@ def NCLabTurtleImage3D(turtle):
     COLOR(t7, BLACK)
     t.append(t7)
     t2 = PRISM(t, 1)
-    t3 = SPHERE(5, 8)
+    t3 = SPHERE(5, 10)
     ERASE(t3, Z, -10, 0)
     SCALE(t1, 0.75, X)
     SCALE(t3, 0.75, Z)
