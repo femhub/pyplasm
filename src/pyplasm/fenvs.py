@@ -9896,5 +9896,5 @@ class NCLabTurtle3D:
         if self.showcalled == True:
             raise ExceptionWT("Command show() can be only called once!")
         self.showcalled = True
-        NCLabTurtleShow3D(self, self.width/2)
+        NCLabTurtleShow3D(self, self.linewidth/2)
 
