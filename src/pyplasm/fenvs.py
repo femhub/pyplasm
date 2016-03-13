@@ -9628,9 +9628,8 @@ def NCLabTurtleRectangle3D(l, layer):
     dx = l.endx - l.startx
     dy = l.endy - l.starty
     dz = l.endz - l.startz
-    dist = sqrt(dx * dx + dy * dy + dz * dz)
-    angle1 = arctan2(dy, dx) * 180 / pi
-    dd = sqrt(dx*dx + dy*dy)
+    dist = l.dist
+    angle1 = l.a1
     angle2 = arctan2(dz, dd) * 180 / pi
     rect1 = BOX(-0.5 * l.linewidth - layer, dist + 0.5 * l.linewidth + layer, 
                 -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
@@ -9638,10 +9637,12 @@ def NCLabTurtleRectangle3D(l, layer):
     rect2 = BOX(-0.5 * l.linewidth - layer, dist + 0.5 * l.linewidth + layer, 
                 -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
                 -0.5 * l.linewidth - layer, -0.25 * l.linewidth + layer)    
-    ROTATE(rect1, -angle2, Y)
-    ROTATE(rect1, angle1, Z)
-    ROTATE(rect2, -angle2, Y)
-    ROTATE(rect2, angle1, Z)
+    ROTATE(rect1, -l.a3, X)
+    ROTATE(rect2, -l.a3, X)
+    ROTATE(rect1, -l.a2, Y)
+    ROTATE(rect2, -l.a2, Y)
+    ROTATE(rect1, l.a1, Z)
+    ROTATE(rect2, l.a1, Z)
     COLOR(rect1, l.linecolor)
     if l.linecolor2 == None:
         COLOR(rect2, l.linecolor)
@@ -9721,8 +9722,8 @@ def NCLabTurtleImage3D(turtle):
     ROTATE(t2, -turtle.turtleangle3, X)
     ROTATE(t2, -turtle.turtleangle2, Y)
     ROTATE(t2, turtle.turtleangle1, Z)
-    MOVE(2, turtle.posx, turtle.posy, turtle.posz)
-    return t
+    MOVE(t2, turtle.posx, turtle.posy, turtle.posz)
+    return t2
 
 def NCLabTurtleShow3D(turtle, layer=0):
     canvas = NCLabTurtleCanvas3D(turtle)
