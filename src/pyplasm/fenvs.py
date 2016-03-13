@@ -9868,7 +9868,7 @@ class NCLabTurtle3D:
         self.right(da)
 
     def roll(self, da):
-        self.turtleangle3 -= da
+        self.turtleangle3 += da
 
     def back(self, dist):
         if dist <= 0:
