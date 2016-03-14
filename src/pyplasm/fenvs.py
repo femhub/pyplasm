@@ -9862,8 +9862,6 @@ class NCLabTurtle3D:
         print("dref4 =", dxref4, dyref4, dzref4)
         # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
-        if abs(1.0 - dist) > 1e-4:
-            raise ExceptionWT("Internal in up(): Unit vector length was changed.")
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
         self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
         print("New angles:", self.turtleangle1, self.turtleangle2, self.turtleangle3)
