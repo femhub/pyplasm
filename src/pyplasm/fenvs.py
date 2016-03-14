@@ -9824,7 +9824,7 @@ class NCLabTurtle3D:
         dxref = 1.0 * cos(da2 * pi / 180)
         dyref = 0
         dzref = 1.0 * sin(da2 * pi / 180)
-        print("dref =", dxref, dyref, dzref)
+        #print("dref =", dxref, dyref, dzref)
         # Next let's transform it to the global coordinates, and 
         # calculate new angles on the way.
         # First, we need to roll the vector about the X axis:
@@ -9832,34 +9832,34 @@ class NCLabTurtle3D:
         #   1        0          0
         #   0    cos(alpha)  sin(alpha)
         #   0   -sin(alpha)  cos(alpha)
-        print("turtleangle3 =", self.turtleangle3)
+        #print("turtleangle3 =", self.turtleangle3)
         alpha = self.turtleangle3 * pi / 180
         dxref2 = dxref
         dyref2 = dzref * sin(alpha)
         dzref2 = dzref * cos(alpha)
-        print("dref2 =", dxref2, dyref2, dzref2)
+        #print("dref2 =", dxref2, dyref2, dzref2)
         # Next rotate this vector by turtleangle2 about the Y axis:
         # Rotational matrix:
         #   cos(alpha)  0  -sin(alpha)
         #       0       1        0 
         #   sin(alpha)  0   cos(alpha)
-        print("turtleangle2 =", self.turtleangle2)
+        #print("turtleangle2 =", self.turtleangle2)
         alpha = self.turtleangle2 * pi / 180
         dxref3 = cos(alpha) * dxref2 - sin(alpha) * dzref2
         dyref3 = dyref2
         dzref3 = sin(alpha) * dxref2 + cos(alpha) * dzref2
-        print("dref3 =", dxref3, dyref3, dzref3)
+        #print("dref3 =", dxref3, dyref3, dzref3)
         # Last rotate this vector by turtleangle1 about the Z axis:
         # Rotational matrix:
         #   cos(alpha)   -sin(alpha)    0
         #   sin(alpha)    cos(alpha)    0 
         #       0              0        1
-        print("turtleangle1 =", self.turtleangle1)
+        #print("turtleangle1 =", self.turtleangle1)
         alpha = self.turtleangle1 * pi / 180
         dxref4 = cos(alpha) * dxref3 - sin(alpha) * dyref3
         dyref4 = sin(alpha) * dxref3 + cos(alpha) * dyref3
         dzref4 = dzref3
-        print("dref4 =", dxref4, dyref4, dzref4)
+        print("New unit vector:", dxref4, dyref4, dzref4)
         # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
