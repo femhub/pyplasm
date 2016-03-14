@@ -10006,6 +10006,9 @@ class NCLabTurtle3D:
         self.turtleangle3 = -arctan2(dzside4, dd) * 180 / pi
         # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
+        print("dzref4, dist  :", dzref4, dist)
+        print("dyref4, dxref4:", dyref4, dxref4)
+        
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
         self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
         print("LEFT: New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
