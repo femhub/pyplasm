@@ -9847,7 +9847,7 @@ class NCLabTurtle3D:
         alpha = self.turtleangle2 * pi / 180
         dxref3 = cos(alpha) * dxref2 - sin(alpha) * dzref2
         dyref3 = dyref2
-        dzref3 = sin(alpha) * dxref2 - cos(alpha) * dzref2
+        dzref3 = sin(alpha) * dxref2 + cos(alpha) * dzref2
         print("dref3 =", dxref3, dyref3, dzref3)
         # Last rotate this vector by turtleangle1 about the Z axis:
         # Rotational matrix:
