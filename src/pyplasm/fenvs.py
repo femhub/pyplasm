@@ -9916,8 +9916,8 @@ class NCLabTurtle3D:
         print("turtleangle3 =", self.turtleangle3)
         alpha = self.turtleangle3 * pi / 180
         dxref2 = dxref
-        dyref2 = dzref * sin(alpha)
-        dzref2 = dzref * cos(alpha)
+        dyref2 = dyref * cos(alpha) + dzref * sin(alpha)
+        dzref2 = -dyref * sin(alpha) + dzref * cos(alpha)
         print("dref2 =", dxref2, dyref2, dzref2)
         # Next rotate this vector by turtleangle2 about the Y axis:
         # Rotational matrix:
