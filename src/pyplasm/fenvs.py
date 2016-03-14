@@ -9949,7 +9949,7 @@ class NCLabTurtle3D:
         dxside = 0
         dyside = 1.0 * cos(self.turtleangle3 * pi / 180)
         dzside = -1.0 * sin(self.turtleangle3 * pi / 180)
-        #print("dref =", dxref, dyref, dzref)
+        print("dside =", dxside, dyside, dzside)
         # Next let's transform it to the global coordinates, and 
         # calculate new angles on the way.
         # First, we need to rotate by da1 about the Z axis:
@@ -9957,10 +9957,11 @@ class NCLabTurtle3D:
         #   cos(alpha)   -sin(alpha)    0
         #   sin(alpha)    cos(alpha)    0 
         #       0              0        1
-        alpha = self.turtleangle1 * pi / 180
+        alpha = da1 * pi / 180
         dxside2 = cos(alpha) * dxside - sin(alpha) * dyside
         dyside2 = sin(alpha) * dxside + cos(alpha) * dyside
         dzside2 = dzside
+        print("dside2 =", dxside2, dyside2, dzside2)
         # Next rotate this vector by turtleangle2 about the Y axis:
         # Rotational matrix:
         #   cos(alpha)  0  -sin(alpha)
