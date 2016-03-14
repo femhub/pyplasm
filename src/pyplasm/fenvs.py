@@ -9859,12 +9859,12 @@ class NCLabTurtle3D:
         dxref4 = cos(alpha) * dxref3 - sin(alpha) * dyref3
         dyref4 = sin(alpha) * dxref3 + cos(alpha) * dyref3
         dzref4 = dzref3
-        print("New unit vector:", dxref4, dyref4, dzref4)
+        print("New unit vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
         # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
         self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
-        print("New angles:", self.turtleangle1, self.turtleangle2, self.turtleangle3)
+        print("New angles:", round(self.turtleangle1, 3), round(self.turtleangle2), round(self.turtleangle3))
 
     def pitch(self, da):
         self.up(da)
