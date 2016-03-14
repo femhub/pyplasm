@@ -9942,7 +9942,7 @@ class NCLabTurtle3D:
         dzref4 = dzref3
         print("New unit vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
         # First let's adjust roll angle:
-        self.turtleangle3 += sin(da1) * self.turtleangle2
+        self.turtleangle3 += sin(da1 * pi / 180) * self.turtleangle2
         # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
