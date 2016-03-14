@@ -9946,7 +9946,7 @@ class NCLabTurtle3D:
         # In the local coordinate system associated with the Turtle, 
         # we take the unit vector in the Y direction, tilted depending 
         # on roll angle. 
-        alpha = -self.turtleangle3 * pi / 180
+        alpha = self.turtleangle3 * pi / 180
         dxside = 0
         dyside = 1.0 * cos(alpha)
         dzside = -1.0 * sin(alpha)
