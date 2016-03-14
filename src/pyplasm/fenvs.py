@@ -9817,8 +9817,49 @@ class NCLabTurtle3D:
     def isdown(self):
         return self.draw
 
-    def up(self, da):
-        self.turtleangle2 += da
+    def up(self, da2):
+        # In the local coordinate system associated with the Turtle, 
+        # we take the unit vector in the X direction. 
+        # This unit vector will be rotated by da2 degrees up:
+        dxref = 1.0 * cos(da2 * pi / 180)
+        dyref = 0
+        dzref = 1.0 * sin(da2 * pi / 180)
+        # Next let's transform it to the global coordinates, and 
+        # calculate new angles on the way.
+        # First, we need to roll the vector about the X axis:
+        # Rotation matrix:
+        #   1        0          0
+        #   0    cos(alpha)  sin(alpha)
+        #   0   -sin(alpha)  cos(alpha)
+        alpha = self.turtleangle3 * pi / 180
+        dxref2 = dxref
+        dyref2 = dzref * sin(alpha)
+        dzref2 = dzref * cos(alpha)
+        # Next rotate this vector by turtleangle2 about the Y axis:
+        # Rotational matrix:
+        #   cos(alpha)  0  -sin(alpha)
+        #       0       1        0 
+        #   sin(alpha)  0   cos(alpha)
+        alpha = self.turtleangle3 * pi / 180
+        dxref3 = cos(alpha) * dxref2 - sin(alpha) * dzref2
+        dyref3 = dyref2
+        dzref3 = sin(alpha) * dxref2 - cos(alpha) * dzref2
+        # Last rotate this vector by turtleangle1 about the Z axis:
+        # Rotational matrix:
+        #   cos(alpha)   -sin(alpha)    0
+        #   sin(alpha)    cos(alpha)    0 
+        #       0              0        1
+        alpha = self.turtleangle1 * pi / 180
+        dxref4 = cos(alpha) * dxref3 - sin(alpha) * dyref3
+        dyref4 = sin(alpha) * dxref3 + cos(alpha) * dyref3
+        dzref4 = dzref3
+        # We have the global vector, now calculate the new angles:
+        dist = sqrt(dxref4**2 + dyref4**2 + dzref4**2)
+        if abs(1.0 - dist) > 1e-4:
+            raise ExceptionWT("Internal in up(): Unit vector length was changed.")
+        self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
+        dist2 = sqrt(dxref4**2 + dyref4**2)
+        self.turtleangle1 = arctan2(dyref4, dist2) * 180 / pi
 
     def pitch(self, da):
         self.up(da)
