@@ -9864,7 +9864,7 @@ class NCLabTurtle3D:
         dist = sqrt(dxref4**2 + dyref4**2)
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
         self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
-        print("New angles:", round(self.turtleangle1, 3), round(self.turtleangle2), round(self.turtleangle3))
+        print("New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
 
     def pitch(self, da):
         self.up(da)
