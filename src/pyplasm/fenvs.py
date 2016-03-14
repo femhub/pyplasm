@@ -9859,12 +9859,12 @@ class NCLabTurtle3D:
         dxref4 = cos(alpha) * dxref3 - sin(alpha) * dyref3
         dyref4 = sin(alpha) * dxref3 + cos(alpha) * dyref3
         dzref4 = dzref3
-        print("New unit vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
+        print("UP: New unit forward vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
         # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
         self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
-        print("New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
+        print("UP: New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
 
     def pitch(self, da):
         self.up(da)
@@ -9941,7 +9941,7 @@ class NCLabTurtle3D:
         dxref4 = cos(alpha) * dxref3 - sin(alpha) * dyref3
         dyref4 = sin(alpha) * dxref3 + cos(alpha) * dyref3
         dzref4 = dzref3
-        print("New unit forward vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
+        print("LEFT: New unit forward vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
         # SIDE VECTOR:
         # In the local coordinate system associated with the Turtle, 
         # we take the unit vector in the Y direction, tilted depending 
@@ -9972,14 +9972,14 @@ class NCLabTurtle3D:
         dyside3 = dyside2
         dzside3 = sin(alpha) * dxside2 + cos(alpha) * dzside2
         #print("dref3 =", dxref3, dyref3, dzref3)
-        print("New unit side vector:", round(dxside3, 3), round(dyside3, 3), round(dzside3, 3))
+        print("LEFT: New unit side vector:", round(dxside3, 3), round(dyside3, 3), round(dzside3, 3))
         dd = sqrt(dxside3**2 + dyside3**2)
         self.turtleangle3 = arctan2(dzside3, dd) * 180 / pi
         # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
         self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
-        print("New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
+        print("LEFT: New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
 
     def yaw(self, da1):
         self.left(da1)
