@@ -10010,9 +10010,8 @@ class NCLabTurtle3D:
         if dist > 1e-5:
             self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
         else:
-            sideangle = arctan2(dyside4, dxside4)
+            sideangle = arctan2(dyside4, dxside4) * 180 / pi
             sideangle += 90
-            sideangle *= 180 / pi
             self.turtleangle1 = sideangle
         print("LEFT: New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
 
