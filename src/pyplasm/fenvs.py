@@ -9840,7 +9840,7 @@ class NCLabTurtle3D:
         #   cos(alpha)  0  -sin(alpha)
         #       0       1        0 
         #   sin(alpha)  0   cos(alpha)
-        alpha = self.turtleangle3 * pi / 180
+        alpha = self.turtleangle2 * pi / 180
         dxref3 = cos(alpha) * dxref2 - sin(alpha) * dzref2
         dyref3 = dyref2
         dzref3 = sin(alpha) * dxref2 - cos(alpha) * dzref2
