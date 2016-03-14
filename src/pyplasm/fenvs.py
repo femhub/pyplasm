@@ -10002,9 +10002,14 @@ class NCLabTurtle3D:
         dyside4 = sin(alpha) * dxside3 + cos(alpha) * dyside3
         dzside4 = dzside3
         print("LEFT: New unit side vector:", round(dxside4, 3), round(dyside4, 3), round(dzside4, 3))
+        # Normal vector:
+        normalx = dyref4 * dzside4 - dzref4 * dyside4 
+        normaly = dzref4 * dxside4 - dxref4 * dzside4 
+        normalz = dxref4 * dyside4 - dyref4 * dxside4 
+        print("LEFT: New unit normal vector:", round(normalx, 3), round(normaly, 3), round(normalz, 3))
+        # We have the global vector, now calculate the new angles:
         dd = sqrt(dxside4**2 + dyside4**2)
         self.turtleangle3 = -arctan2(dzside4, dd) * 180 / pi
-        # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
         if dist > 1e-5:
