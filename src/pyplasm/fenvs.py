@@ -9902,9 +9902,18 @@ class NCLabTurtle3D:
         # FORWARD VECTOR:
         # In the local coordinate system associated with the Turtle, 
         # we take the unit vector in the X direction. 
-        # This unit vector will be rotated by da1 degrees left:
-        dxref = 1.0 * cos(da1 * pi / 180)
-        dyref = 1.0 * sin(da1 * pi / 180)
+        # This unit vector will be rotated by da1 degrees about the Z axis:
+        # Rotational matrix:
+        #   cos(alpha)   -sin(alpha)    0
+        #   sin(alpha)    cos(alpha)    0 
+        #       0              0        1
+        #print("turtleangle1 =", self.turtleangle1)
+        unitvecx = 1
+        unitvecy = 0
+        unitvecz = 0
+        alpha = da1 * pi / 180
+        dxref = unitvecx * cos(alpha) - unitvecy * sin(alpha) 
+        dyref = unitvecx * sin(alpha) + unitvecy * cos(alpha) 
         dzref = 0
         #print("dref =", dxref, dyref, dzref)
         # Next let's transform it to the global coordinates, and 
@@ -9944,38 +9953,57 @@ class NCLabTurtle3D:
         print("LEFT: New unit forward vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
         # SIDE VECTOR:
         # In the local coordinate system associated with the Turtle, 
-        # we take the unit vector in the Y direction, tilted depending 
-        # on roll angle. 
-        alpha = self.turtleangle3 * pi / 180
-        dxside = 0
-        dyside = 1.0 * cos(alpha)
-        dzside = -1.0 * sin(alpha)
-        print("dside =", dxside, dyside, dzside)
-        # Next let's transform it to the global coordinates, and 
-        # calculate new angles on the way.
-        # First, we need to rotate by da1 about the Z axis:
+        # we take the unit vector in the Y direction. 
+        # This unit vector will be rotated by da1 degrees about the Z axis:
         # Rotational matrix:
         #   cos(alpha)   -sin(alpha)    0
         #   sin(alpha)    cos(alpha)    0 
         #       0              0        1
+        unitvecx = 0
+        unitvecy = 1
+        unitvecz = 0
         alpha = da1 * pi / 180
-        dxside2 = cos(alpha) * dxside - sin(alpha) * dyside
-        dyside2 = sin(alpha) * dxside + cos(alpha) * dyside
-        dzside2 = dzside
-        print("dside2 =", dxside2, dyside2, dzside2)
+        dxside = unitvecx * cos(alpha) - unitvecy * sin(alpha) 
+        dyside = unitvecx * sin(alpha) + unitvecy * cos(alpha) 
+        dzside = 0
+        #print("dref =", dxref, dyref, dzref)
+        # Next let's transform it to the global coordinates, and 
+        # calculate new angles on the way.
+        # First, we need to roll the vector about the X axis:
+        # Rotation matrix:
+        #   1        0          0
+        #   0    cos(alpha)  sin(alpha)
+        #   0   -sin(alpha)  cos(alpha)
+        #print("turtleangle3 =", self.turtleangle3)
+        alpha = self.turtleangle3 * pi / 180
+        dxside2 = dxside
+        dyside2 = dyside * cos(alpha) + dzside * sin(alpha)
+        dzside2 = -dyside * sin(alpha) + dzside * cos(alpha)
+        #print("dref2 =", dxref2, dyref2, dzref2)
         # Next rotate this vector by turtleangle2 about the Y axis:
         # Rotational matrix:
         #   cos(alpha)  0  -sin(alpha)
         #       0       1        0 
         #   sin(alpha)  0   cos(alpha)
-        print("turtleangle2 =", self.turtleangle2)
+        #print("turtleangle2 =", self.turtleangle2)
         alpha = self.turtleangle2 * pi / 180
         dxside3 = cos(alpha) * dxside2 - sin(alpha) * dzside2
         dyside3 = dyside2
         dzside3 = sin(alpha) * dxside2 + cos(alpha) * dzside2
-        print("LEFT: New unit side vector:", round(dxside3, 3), round(dyside3, 3), round(dzside3, 3))
-        dd = sqrt(dxside3**2 + dyside3**2)
-        self.turtleangle3 = -arctan2(dzside3, dd) * 180 / pi
+        #print("dref3 =", dxref3, dyref3, dzref3)
+        # Last rotate this vector by turtleangle1 about the Z axis:
+        # Rotational matrix:
+        #   cos(alpha)   -sin(alpha)    0
+        #   sin(alpha)    cos(alpha)    0 
+        #       0              0        1
+        #print("turtleangle1 =", self.turtleangle1)
+        alpha = self.turtleangle1 * pi / 180
+        dxside4 = cos(alpha) * dxside3 - sin(alpha) * dyside3
+        dyside4 = sin(alpha) * dxside3 + cos(alpha) * dyside3
+        dzside4 = dzside3
+        print("LEFT: New unit side vector:", round(dxside4, 3), round(dyside4, 3), round(dzside4, 3))
+        dd = sqrt(dxside4**2 + dyside4**2)
+        self.turtleangle3 = -arctan2(dzside4, dd) * 180 / pi
         # We have the global vector, now calculate the new angles:
         dist = sqrt(dxref4**2 + dyref4**2)
         self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
