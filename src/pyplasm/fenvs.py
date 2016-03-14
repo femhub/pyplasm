@@ -9968,12 +9968,11 @@ class NCLabTurtle3D:
         #   cos(alpha)  0  -sin(alpha)
         #       0       1        0 
         #   sin(alpha)  0   cos(alpha)
-        #print("turtleangle2 =", self.turtleangle2)
+        print("turtleangle2 =", self.turtleangle2)
         alpha = self.turtleangle2 * pi / 180
         dxside3 = cos(alpha) * dxside2 - sin(alpha) * dzside2
         dyside3 = dyside2
         dzside3 = sin(alpha) * dxside2 + cos(alpha) * dzside2
-        #print("dref3 =", dxref3, dyref3, dzref3)
         print("LEFT: New unit side vector:", round(dxside3, 3), round(dyside3, 3), round(dzside3, 3))
         dd = sqrt(dxside3**2 + dyside3**2)
         self.turtleangle3 = -arctan2(dzside3, dd) * 180 / pi
