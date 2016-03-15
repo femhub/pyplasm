@@ -9625,30 +9625,50 @@ class NCLabTurtle:
 # 3D Rectangle given via start point, distance, 
 # angle, width and color):
 def NCLabTurtleRectangle3D(l, layer):
-    dx = l.endx - l.startx
-    dy = l.endy - l.starty
-    dz = l.endz - l.startz
-    dist = l.dist
-    rect1 = BOX(-layer, dist + layer, 
+    sx = l.startx
+    sy = l.starty
+    sz = l.startz
+    w = l.linewidth
+    rect1 = BOX(-layer, l.length + layer, 
                 -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
                 -0.25 * l.linewidth - layer, 0.5 * l.linewidth + layer)
-    rect2 = BOX(- layer, dist + layer, 
+    rect2 = BOX(- layer, l.length + layer, 
                 -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
-                -0.5 * l.linewidth - layer, -0.25 * l.linewidth + layer)    
-    ROTATE(rect1, -l.a3, X)
-    ROTATE(rect2, -l.a3, X)
-    ROTATE(rect1, -l.a2, Y)
-    ROTATE(rect2, -l.a2, Y)
-    ROTATE(rect1, l.a1, Z)
-    ROTATE(rect2, l.a1, Z)
-    COLOR(rect1, l.linecolor)
+                -0.5 * l.linewidth - layer, -0.25 * l.linewidth + layer)
+    # Figure out eight vertices in the local coordinate system:
+    # Upper box:
+    # P1 = vertex on negative local Y axis
+    p1 = [sx - layer * u1 - w/2 * v1, sy - layer * u2 - w/2 * v2, sz - layer * u3 - w/2 * v3]
+    # P2 = P1 + (w + 2*layer) * V
+    l2 = w + 2*layer
+    p2 = [p1[0] + l2 * v1, p1[1] + l2 * v2, p1[2] + l2 * v3]
+    # P3 = P1 + (w/2 + layer) * W
+    l3 = w/2 + layer
+    p3 = [p1[0] + l3 * w1, p1[1] + l3 * w2, p1[2] + l3 * w3]
+    # P4 = P3 + (w + 2*layer) * V
+    l4 = w + 2*layer
+    p4 = [p3[0] + l4 * v1, p3[1] + l4 * v2, p3[2] + l4 * v3]
+    # P5 = P1 + (l.length + 2*layer) * X
+    l5 = l.length + 2*layer
+    p5 = [p1[0] + l5 * u1, p1[1] + l5 * u2, p1[2] + l5 * u3]
+    # P6 = P2 + (l.length + 2*layer) * X
+    l6 = l.length + 2*layer
+    p6 = [p2[0] + l5 * u1, p2[1] + l5 * u2, p2[2] + l5 * u3]
+    # P7 = P3 + (l.length + 2*layer) * X
+    l7 = l.length + 2*layer
+    p7 = [p3[0] + l5 * u1, p3[1] + l5 * u2, p3[2] + l5 * u3]
+    # P8 = P4 + (l.length + 2*layer) * X
+    l8 = l.length + 2*layer
+    p8 = [p4[0] + l5 * u1, p4[1] + l5 * u2, p4[2] + l5 * u3]
+    box1 = CHULL(p1, p2, p3, p4, p5, p6, p7, p8)
+    COLOR(box1, l.linecolor)
+    box2 = COPY(box1)
+    MOVE(box2, -(w/2 + layer) * w1, -(w/2 + layer) * w2, -(w/2 + layer) * w3)
     if l.linecolor2 == None:
-        COLOR(rect2, l.linecolor)
+        COLOR(box2, l.linecolor)
     else:
-        COLOR(rect2, l.linecolor2)
-    MOVE(rect1, l.startx, l.starty, l.startz)
-    MOVE(rect2, l.startx, l.starty, l.startz)
-    return [rect1, rect2]
+        COLOR(box2, l.linecolor2)
+    return [box1, box2]
 
 
 # Dots to set area size:
@@ -9717,9 +9737,8 @@ def NCLabTurtleImage3D(turtle):
     COLOR(t9, turtle.linecolor)
     t10 = UNION(t8, t9)
     ROTATE(t10, -90, Z)
-    ROTATE(t10, -turtle.turtleangle3, X)
-    ROTATE(t10, -turtle.turtleangle2, Y)
-    ROTATE(t10, turtle.turtleangle1, Z)
+    # TODO: Rotate the Turtle accordingly
+
     MOVE(t10, turtle.posx, turtle.posy, turtle.posz)
     return t10
 
@@ -9736,18 +9755,25 @@ def NCLabTurtleShow3D(turtle, layer=0):
 
 # Class Line3D:
 class NCLabTurtleLine3D:
-    def __init__(self, sx, sy, sz, dist, a1, a2, a3, w, c, c2):
+    def __init__(self, startx, starty, startz, length, 
+                 u1, u2, u3, v1, v2, v3, w1, w2, w3, width, c, c2):
         self.startx = sx
         self.starty = sy
         self.startz = sz
-        self.dist = dist
-        self.a1 = a1
-        self.a2 = a2
-        self.a3 = a3
-        self.endx = sx + dist * cos(a1 * pi / 180) * cos(a2 * pi / 180)
-        self.endy = sy + dist * sin(a1 * pi / 180) * cos(a2 * pi / 180)
-        self.endz = sz + dist * sin(a2 * pi / 180)
-        self.linewidth = w
+        self.dist = length
+        # Unit vector in the direction of the line (local X)
+        self.u1 = u1
+        self.u2 = u2
+        self.u3 = u3
+        # Unit vector in the local Y direction
+        self.v1 = v1
+        self.v2 = v2
+        self.v3 = v3
+        # Unit vector in the local Z direction
+        self.w1 = w1
+        self.w2 = w2
+        self.w3 = w3
+        self.linewidth = width
         self.linecolor = c
         self.linecolor2 = c2
 
@@ -9757,9 +9783,19 @@ class NCLabTurtle3D:
         self.posx = px
         self.posy = py
         self.posz = pz
-        self.turtleangle1 = 0   # angle between the XZ plane and the vector
-        self.turtleangle2 = 0   # angle between the XY plane and the vector
-        self.turtleangle3 = 0   # axial rotation about the Turtle's own axis
+        # Unit vector in local X direction:
+        self.u1 = 1
+        self.u2 = 0
+        self.u3 = 0
+        # Unit vector in local Y direction:
+        self.v1 = 0
+        self.v2 = 1
+        self.v3 = 0
+        # Unit vector in local Z direction:
+        self.w1 = 0
+        self.w2 = 0
+        self.w3 = 1
+        # Line color etc.
         self.linecolor = [0, 0, 255]
         self.linecolor2 = None
         self.draw = True
@@ -9770,11 +9806,6 @@ class NCLabTurtle3D:
         self.geom = None
         # These commands can be called only once:
         self.showcalled = False
-
-    def angles(self, a1, a2, a3):
-        self.turtleangle1 = a1
-        self.turtleangle2 = a2
-        self.turtleangle3 = a3
 
     def color(self, col, col2=None):
         if not isinstance(col, list):
@@ -9818,53 +9849,7 @@ class NCLabTurtle3D:
         return self.draw
 
     def up(self, da2):
-        # In the local coordinate system associated with the Turtle, 
-        # we take the unit vector in the X direction. 
-        # This unit vector will be rotated by da2 degrees up:
-        dxref = 1.0 * cos(da2 * pi / 180)
-        dyref = 0
-        dzref = 1.0 * sin(da2 * pi / 180)
-        #print("dref =", dxref, dyref, dzref)
-        # Next let's transform it to the global coordinates, and 
-        # calculate new angles on the way.
-        # First, we need to roll the vector about the X axis:
-        # Rotation matrix:
-        #   1        0          0
-        #   0    cos(alpha)  sin(alpha)
-        #   0   -sin(alpha)  cos(alpha)
-        #print("turtleangle3 =", self.turtleangle3)
-        alpha = self.turtleangle3 * pi / 180
-        dxref2 = dxref
-        dyref2 = dzref * sin(alpha)
-        dzref2 = dzref * cos(alpha)
-        #print("dref2 =", dxref2, dyref2, dzref2)
-        # Next rotate this vector by turtleangle2 about the Y axis:
-        # Rotational matrix:
-        #   cos(alpha)  0  -sin(alpha)
-        #       0       1        0 
-        #   sin(alpha)  0   cos(alpha)
-        #print("turtleangle2 =", self.turtleangle2)
-        alpha = self.turtleangle2 * pi / 180
-        dxref3 = cos(alpha) * dxref2 - sin(alpha) * dzref2
-        dyref3 = dyref2
-        dzref3 = sin(alpha) * dxref2 + cos(alpha) * dzref2
-        #print("dref3 =", dxref3, dyref3, dzref3)
-        # Last rotate this vector by turtleangle1 about the Z axis:
-        # Rotational matrix:
-        #   cos(alpha)   -sin(alpha)    0
-        #   sin(alpha)    cos(alpha)    0 
-        #       0              0        1
-        #print("turtleangle1 =", self.turtleangle1)
-        alpha = self.turtleangle1 * pi / 180
-        dxref4 = cos(alpha) * dxref3 - sin(alpha) * dyref3
-        dyref4 = sin(alpha) * dxref3 + cos(alpha) * dyref3
-        dzref4 = dzref3
-        print("UP: New unit forward vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
-        # We have the global vector, now calculate the new angles:
-        dist = sqrt(dxref4**2 + dyref4**2)
-        self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
-        self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
-        print("UP: New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
+        raise ExceptionWT("up() not implemented yet.")
 
     def pitch(self, da):
         self.up(da)
@@ -9877,20 +9862,22 @@ class NCLabTurtle3D:
             raise ExceptionWT("The distance d in go(d) must be positive!")
         if self.draw == True:
             newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, 
-                                        self.turtleangle1, self.turtleangle2, self.turtleangle3, 
+                                        self.u1, self.u2, self.u3,
+                                        self.v1, self.v2, self.v3,
+                                        self.w1, self.w2, self.w3,
                                         self.linewidth, self.linecolor, self.linecolor2)
             self.lines.append(newline)
-        # Store new position:
-        newx = self.posx + dist * cos(self.turtleangle1 * pi / 180) * cos(self.turtleangle2 * pi / 180)
-        newy = self.posy + dist * sin(self.turtleangle1 * pi / 180) * cos(self.turtleangle2 * pi / 180)
-        newz = self.posz + dist * sin(self.turtleangle2 * pi / 180)
-        self.posx = newx
-        self.posy = newy
-        self.posz = newz
+        # Update position:
+        self.posx += dist * self.u1
+        self.posy += dist * self.u2
+        self.posz += dist * self.u3
 
     def printlines(self):
         for line in self.lines:
-            print("Start:", line.startx, line.starty, line.startz, "End:", line.endx, line.endy, line.endz)
+            print("---")
+            print("Start:", line.startx, line.starty, line.startz)
+            d = line.length
+            print("End:  ", line.startx + d * line.u1, line.starty + d * line.u2, line.startz + d * line.u3)
 
     def forward(self, dist):
         self.go(dist)
@@ -9899,126 +9886,7 @@ class NCLabTurtle3D:
         self.go(dist)
 
     def left(self, da1):
-        # FORWARD VECTOR:
-        # In the local coordinate system associated with the Turtle, 
-        # we take the unit vector in the X direction. 
-        # This unit vector will be rotated by da1 degrees about the Z axis:
-        # Rotational matrix:
-        #   cos(alpha)   -sin(alpha)    0
-        #   sin(alpha)    cos(alpha)    0 
-        #       0              0        1
-        #print("turtleangle1 =", self.turtleangle1)
-        unitvecx = 1
-        unitvecy = 0
-        unitvecz = 0
-        alpha = da1 * pi / 180
-        dxref = unitvecx * cos(alpha) - unitvecy * sin(alpha) 
-        dyref = unitvecx * sin(alpha) + unitvecy * cos(alpha) 
-        dzref = 0
-        #print("dref =", dxref, dyref, dzref)
-        # Next let's transform it to the global coordinates, and 
-        # calculate new angles on the way.
-        # First, we need to roll the vector about the X axis:
-        # Rotation matrix:
-        #   1        0          0
-        #   0    cos(alpha)  sin(alpha)
-        #   0   -sin(alpha)  cos(alpha)
-        #print("turtleangle3 =", self.turtleangle3)
-        alpha = self.turtleangle3 * pi / 180
-        dxref2 = dxref
-        dyref2 = dyref * cos(alpha) + dzref * sin(alpha)
-        dzref2 = -dyref * sin(alpha) + dzref * cos(alpha)
-        #print("dref2 =", dxref2, dyref2, dzref2)
-        # Next rotate this vector by turtleangle2 about the Y axis:
-        # Rotational matrix:
-        #   cos(alpha)  0  -sin(alpha)
-        #       0       1        0 
-        #   sin(alpha)  0   cos(alpha)
-        #print("turtleangle2 =", self.turtleangle2)
-        alpha = self.turtleangle2 * pi / 180
-        dxref3 = cos(alpha) * dxref2 - sin(alpha) * dzref2
-        dyref3 = dyref2
-        dzref3 = sin(alpha) * dxref2 + cos(alpha) * dzref2
-        #print("dref3 =", dxref3, dyref3, dzref3)
-        # Last rotate this vector by turtleangle1 about the Z axis:
-        # Rotational matrix:
-        #   cos(alpha)   -sin(alpha)    0
-        #   sin(alpha)    cos(alpha)    0 
-        #       0              0        1
-        #print("turtleangle1 =", self.turtleangle1)
-        alpha = self.turtleangle1 * pi / 180
-        dxref4 = cos(alpha) * dxref3 - sin(alpha) * dyref3
-        dyref4 = sin(alpha) * dxref3 + cos(alpha) * dyref3
-        dzref4 = dzref3
-        print("LEFT: New unit forward vector:", round(dxref4, 3), round(dyref4, 3), round(dzref4, 3))
-        # SIDE VECTOR:
-        # In the local coordinate system associated with the Turtle, 
-        # we take the unit vector in the Y direction. 
-        # This unit vector will be rotated by da1 degrees about the Z axis:
-        # Rotational matrix:
-        #   cos(alpha)   -sin(alpha)    0
-        #   sin(alpha)    cos(alpha)    0 
-        #       0              0        1
-        unitvecx = 0
-        unitvecy = 1
-        unitvecz = 0
-        alpha = da1 * pi / 180
-        dxside = unitvecx * cos(alpha) - unitvecy * sin(alpha) 
-        dyside = unitvecx * sin(alpha) + unitvecy * cos(alpha) 
-        dzside = 0
-        #print("dref =", dxref, dyref, dzref)
-        # Next let's transform it to the global coordinates, and 
-        # calculate new angles on the way.
-        # First, we need to roll the vector about the X axis:
-        # Rotation matrix:
-        #   1        0          0
-        #   0    cos(alpha)  sin(alpha)
-        #   0   -sin(alpha)  cos(alpha)
-        #print("turtleangle3 =", self.turtleangle3)
-        alpha = self.turtleangle3 * pi / 180
-        dxside2 = dxside
-        dyside2 = dyside * cos(alpha) + dzside * sin(alpha)
-        dzside2 = -dyside * sin(alpha) + dzside * cos(alpha)
-        #print("dref2 =", dxref2, dyref2, dzref2)
-        # Next rotate this vector by turtleangle2 about the Y axis:
-        # Rotational matrix:
-        #   cos(alpha)  0  -sin(alpha)
-        #       0       1        0 
-        #   sin(alpha)  0   cos(alpha)
-        #print("turtleangle2 =", self.turtleangle2)
-        alpha = self.turtleangle2 * pi / 180
-        dxside3 = cos(alpha) * dxside2 - sin(alpha) * dzside2
-        dyside3 = dyside2
-        dzside3 = sin(alpha) * dxside2 + cos(alpha) * dzside2
-        #print("dref3 =", dxref3, dyref3, dzref3)
-        # Last rotate this vector by turtleangle1 about the Z axis:
-        # Rotational matrix:
-        #   cos(alpha)   -sin(alpha)    0
-        #   sin(alpha)    cos(alpha)    0 
-        #       0              0        1
-        #print("turtleangle1 =", self.turtleangle1)
-        alpha = self.turtleangle1 * pi / 180
-        dxside4 = cos(alpha) * dxside3 - sin(alpha) * dyside3
-        dyside4 = sin(alpha) * dxside3 + cos(alpha) * dyside3
-        dzside4 = dzside3
-        print("LEFT: New unit side vector:", round(dxside4, 3), round(dyside4, 3), round(dzside4, 3))
-        # Normal vector:
-        normalx = dyref4 * dzside4 - dzref4 * dyside4 
-        normaly = dzref4 * dxside4 - dxref4 * dzside4 
-        normalz = dxref4 * dyside4 - dyref4 * dxside4 
-        print("LEFT: New unit normal vector:", round(normalx, 3), round(normaly, 3), round(normalz, 3))
-        # We have the global vector, now calculate the new angles:
-        dd = sqrt(dxside4**2 + dyside4**2)
-        self.turtleangle3 = -arctan2(dzside4, dd) * 180 / pi
-        dist = sqrt(dxref4**2 + dyref4**2)
-        self.turtleangle2 = arctan2(dzref4, dist) * 180 / pi
-        if dist > 1e-5:
-            self.turtleangle1 = arctan2(dyref4, dxref4) * 180 / pi
-        else:
-            sideangle = arctan2(dyside4, dxside4) * 180 / pi
-            sideangle += 90
-            self.turtleangle1 = sideangle
-        print("LEFT: New angles:", round(self.turtleangle1, 3), round(self.turtleangle2, 3), round(self.turtleangle3, 3))
+        raise ExceptionWT("left() not implemented yet.")
 
     def yaw(self, da1):
         self.left(da1)
@@ -10033,20 +9901,10 @@ class NCLabTurtle3D:
         self.right(da1)
 
     def roll(self, da):
-        self.turtleangle3 += da
+        raise ExceptionWT("roll() not implemented yet.")
 
     def back(self, dist):
-        if dist <= 0:
-            raise ExceptionWT("The distance d in back(d) must be positive!")
-        draw = self.draw
-        self.left(180)
-        self.turtleangle2 *= -1
-        self.penup()  # do not draw while backing
-        self.go(dist)
-        self.right(180)
-        self.turtleangle2 *= -1
-        if draw == True:
-            self.pendown()
+        raise ExceptionWT("back() not implemented yet.")
 
     def backward(self, dist):
         self.back(dist)
@@ -10055,22 +9913,7 @@ class NCLabTurtle3D:
         self.back(dist)
 
     def goto(self, newx, newy, newz):
-        dx = newx - self.posx
-        dy = newy - self.posy
-        dz = newz - self.posz
-        dist = sqrt(dx*dx + dy*dy + dz*dz)
-        self.turtleangle1 = arctan2(dy, dx) * 180 / pi
-        dd = sqrt(dx*dx + dy*dy)
-        self.turtleangle2 = arctan2(dz, dd) * 180 / pi
-        if self.draw == True:
-            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, 
-                                        self.turtleangle1, self.turtleangle2, self.turtleangle3, 
-                                        self.linewidth, self.linecolor, self.linecolor2)
-            self.lines.append(newline)
-        # Store new end position:
-        self.posx = newx
-        self.posy = newy
-        self.posz = newz
+        raise ExceptionWT("goto() not implemented yet.")
 
     def setpos(self, newx, newy, newz):
         self.goto(newx, newy, newz)
@@ -10101,9 +9944,6 @@ class NCLabTurtle3D:
 
     def getz(self):
         return self.posz
-
-    def getangles(self):
-        return self.turtleangle1, self.turtleangle2, self.turtleangle3
 
     def getcolor(self):
         return self.linecolor
@@ -10140,9 +9980,15 @@ class NCLabTurtle3D:
         self.posx = 0
         self.posy = 0
         self.posz = 0
-        self.turtleangle1 = 0
-        self.turtleangle2 = 0
-        self.turtleangle3 = 0
+        self.u1 = 1
+        self.u2 = 0
+        self.u3 = 0
+        self.v1 = 0
+        self.v2 = 1
+        self.v3 = 0
+        self.w1 = 0
+        self.w2 = 0
+        self.w3 = 1
         self.linecolor = [0, 0, 255]
         self.linecolor2 = None
         self.draw = True
