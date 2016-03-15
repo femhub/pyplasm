@@ -9432,7 +9432,7 @@ class NCLabTurtle:
         self.isvisible = False
 
     def hide(self):
-        self.isvisible = False
+       self.isvisible = False
 
     def line(self, x1, y1, x2, y2):
         self.penup()
@@ -9629,12 +9629,6 @@ def NCLabTurtleRectangle3D(l, layer):
     sy = l.starty
     sz = l.startz
     w = l.linewidth
-    rect1 = BOX(-layer, l.length + layer, 
-                -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
-                -0.25 * l.linewidth - layer, 0.5 * l.linewidth + layer)
-    rect2 = BOX(- layer, l.length + layer, 
-                -0.5 * l.linewidth - layer, 0.5 * l.linewidth + layer, 
-                -0.5 * l.linewidth - layer, -0.25 * l.linewidth + layer)
     # Figure out eight vertices in the local coordinate system:
     # Upper box:
     # P1 = vertex on negative local Y axis
@@ -9648,17 +9642,17 @@ def NCLabTurtleRectangle3D(l, layer):
     # P4 = P3 + (w + 2*layer) * V
     l4 = w + 2*layer
     p4 = [p3[0] + l4 * v1, p3[1] + l4 * v2, p3[2] + l4 * v3]
-    # P5 = P1 + (l.length + 2*layer) * X
-    l5 = l.length + 2*layer
+    # P5 = P1 + (l.dist + 2*layer) * X
+    l5 = l.dist + 2*layer
     p5 = [p1[0] + l5 * u1, p1[1] + l5 * u2, p1[2] + l5 * u3]
-    # P6 = P2 + (l.length + 2*layer) * X
-    l6 = l.length + 2*layer
+    # P6 = P2 + (l.dist + 2*layer) * X
+    l6 = l.dist + 2*layer
     p6 = [p2[0] + l5 * u1, p2[1] + l5 * u2, p2[2] + l5 * u3]
-    # P7 = P3 + (l.length + 2*layer) * X
-    l7 = l.length + 2*layer
+    # P7 = P3 + (l.dist + 2*layer) * X
+    l7 = l.dist + 2*layer
     p7 = [p3[0] + l5 * u1, p3[1] + l5 * u2, p3[2] + l5 * u3]
-    # P8 = P4 + (l.length + 2*layer) * X
-    l8 = l.length + 2*layer
+    # P8 = P4 + (l.dist + 2*layer) * X
+    l8 = l.dist + 2*layer
     p8 = [p4[0] + l5 * u1, p4[1] + l5 * u2, p4[2] + l5 * u3]
     box1 = CHULL(p1, p2, p3, p4, p5, p6, p7, p8)
     COLOR(box1, l.linecolor)
@@ -9755,12 +9749,12 @@ def NCLabTurtleShow3D(turtle, layer=0):
 
 # Class Line3D:
 class NCLabTurtleLine3D:
-    def __init__(self, sx, sy, sz, length, 
+    def __init__(self, sx, sy, sz, dist, 
                  u1, u2, u3, v1, v2, v3, w1, w2, w3, width, c, c2):
         self.startx = sx
         self.starty = sy
         self.startz = sz
-        self.dist = length
+        self.dist = dist
         # Unit vector in the direction of the line (local X)
         self.u1 = u1
         self.u2 = u2
