@@ -9917,9 +9917,9 @@ class NCLabTurtle3D:
     def printlines(self):
         for line in self.lines:
             print("---")
-            print("Start:", line.startx, line.starty, line.startz)
+            print("Start:", round(line.startx, 3), round(line.starty, 3), round(line.startz, 3))
             d = line.dist
-            print("End:  ", line.startx + d * line.u1, line.starty + d * line.u2, line.startz + d * line.u3)
+            print("End:  ", round(line.startx + d * line.u1, 3), round(line.starty + d * line.u2, 3), round(line.startz + d * line.u3, 3))
             print("X:", round(line.u1, 3), round(line.u2, 3), round(line.u3, 3))
             print("Y:", round(line.v1, 3), round(line.v2, 3), round(line.v3, 3))
             print("Z:", round(line.w1, 3), round(line.w2, 3), round(line.w3, 3))
