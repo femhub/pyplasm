@@ -9920,9 +9920,9 @@ class NCLabTurtle3D:
             print("Start:", line.startx, line.starty, line.startz)
             d = line.dist
             print("End:  ", line.startx + d * line.u1, line.starty + d * line.u2, line.startz + d * line.u3)
-            print("X:", line.u1, line.u2, line.u3)
-            print("Y:", line.v1, line.v2, line.v3)
-            print("Z:", line.w1, line.w2, line.w3)
+            print("X:", round(line.u1, 3), round(line.u2, 3), round(line.u3, 3))
+            print("Y:", round(line.v1, 3), round(line.v2, 3), round(line.v3, 3))
+            print("Z:", round(line.w1, 3), round(line.w2, 3), round(line.w3, 3))
 
     def forward(self, dist):
         self.go(dist)
