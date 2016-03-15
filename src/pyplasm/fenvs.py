@@ -9637,19 +9637,22 @@ def NCLabTurtleRectangle3D(l, layer):
     w1 = l.w1
     w2 = l.w2
     w3 = l.w3
-    w = l.linewidth
+    width1 = l.linewidth
+    width2 = l.linewidth2
+    if width2 == None:
+        width2 = width
     # Figure out eight vertices in the local coordinate system:
     # Upper box:
     # P1 = vertex on negative local Y axis
-    p1 = [sx - layer * u1 - w/2 * v1, sy - layer * u2 - w/2 * v2, sz - layer * u3 - w/2 * v3]
-    # P2 = P1 + (w + 2*layer) * V
-    l2 = w + 2*layer
+    p1 = [sx - layer * u1 - width1/2 * v1, sy - layer * u2 - width1/2 * v2, sz - layer * u3 - width1/2 * v3]
+    # P2 = P1 + (width1 + 2*layer) * V
+    l2 = width1 + 2*layer
     p2 = [p1[0] + l2 * v1, p1[1] + l2 * v2, p1[2] + l2 * v3]
-    # P3 = P1 + (w/2 + layer) * W
-    l3 = w/2 + layer
+    # P3 = P1 + (width2/2 + layer) * W
+    l3 = width2/2 + layer
     p3 = [p1[0] + l3 * w1, p1[1] + l3 * w2, p1[2] + l3 * w3]
-    # P4 = P3 + (w + 2*layer) * V
-    l4 = w + 2*layer
+    # P4 = P3 + (width1 + 2*layer) * V
+    l4 = width1 + 2*layer
     p4 = [p3[0] + l4 * v1, p3[1] + l4 * v2, p3[2] + l4 * v3]
     # P5 = P1 + (l.dist + 2*layer) * X
     l5 = l.dist + 2*layer
@@ -9759,7 +9762,7 @@ def NCLabTurtleShow3D(turtle, layer=0):
 # Class Line3D:
 class NCLabTurtleLine3D:
     def __init__(self, sx, sy, sz, dist, 
-                 u1, u2, u3, v1, v2, v3, w1, w2, w3, width, c, c2):
+                 u1, u2, u3, v1, v2, v3, w1, w2, w3, width1, width2, c, c2):
         self.startx = sx
         self.starty = sy
         self.startz = sz
@@ -9776,7 +9779,8 @@ class NCLabTurtleLine3D:
         self.w1 = w1
         self.w2 = w2
         self.w3 = w3
-        self.linewidth = width
+        self.linewidth = width1
+        self.linewidth2 = width2
         self.linecolor = c
         self.linecolor2 = c2
 
@@ -9803,6 +9807,7 @@ class NCLabTurtle3D:
         self.linecolor2 = None
         self.draw = True
         self.linewidth = 1
+        self.linewidth2 = None
         self.canvassize = 100
         self.lines = []
         self.isvisible = True
@@ -9829,12 +9834,19 @@ class NCLabTurtle3D:
                     raise ExceptionWT("Attempt to set invalid optional 2nd color. Have you used three integers between 0 and 255?")
         self.linecolor2 = col2
 
-    def width(self, w):
-        if w < 0.1:
+    def width(self, width1, width2 = None):
+        if width1 < 0.1:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
-        if w > 10.0:
+        if width1 > 10.0:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
-        self.linewidth = w
+        self.linewidth = width1
+        if width2 != None:
+            if width2 < 0.1:
+                raise ExceptionWT("Line width must be between 0.1 and 10.0.")
+            if width2 > 10.0:
+                raise ExceptionWT("Line width must be between 0.1 and 10.0.")
+        self.linewidth2 = width2
+ 
 
     def penup(self):
         self.draw = False
@@ -9868,7 +9880,8 @@ class NCLabTurtle3D:
                                         self.u1, self.u2, self.u3,
                                         self.v1, self.v2, self.v3,
                                         self.w1, self.w2, self.w3,
-                                        self.linewidth, self.linecolor, self.linecolor2)
+                                        self.linewidth, self.linewidth2, 
+                                        self.linecolor, self.linecolor2)
             self.lines.append(newline)
         # Update position:
         self.posx += dist * self.u1
@@ -9952,7 +9965,7 @@ class NCLabTurtle3D:
         return self.linecolor
 
     def getwidth(self):
-        return self.linewidth
+        return self.linewidth, self.linewidth2
 
     def visible(self):
         self.isvisible = True
@@ -9996,6 +10009,7 @@ class NCLabTurtle3D:
         self.linecolor2 = None
         self.draw = True
         self.linewidth = 1
+        self.linewidth2 = None
         self.canvassize = 100
         self.isvisible = True
         self.geom = None
