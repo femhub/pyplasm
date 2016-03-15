@@ -9973,7 +9973,34 @@ class NCLabTurtle3D:
         self.right(da1)
 
     def roll(self, da):
-        raise ExceptionWT("roll() not implemented yet.")
+        # Create new vector Y by rotating (0, 1, 0) by da degrees about the X axis:
+        y1 = 0
+        y2 = cos(da * pi / 180)
+        y3 = -sin(da * pi / 180)
+        # Create new vector Z by rotating (0, 0, 1) by da degrees about the X axis:
+        z1 = 0
+        z2 = sin(da * pi / 180)
+        z3 = cos(da * pi / 180)
+        # Rotation matrix:
+        # u1   v1   w1
+        # u2   v2   w2
+        # u3   v3   w3
+        # Create new vector V: Multiply this matrix with new Y:
+        newv1 = self.u1 * y1 + self.v1 * y2 + self.w1 * y3
+        newv2 = self.u2 * y1 + self.v2 * y2 + self.w2 * y3
+        newv3 = self.u3 * y1 + self.v3 * y2 + self.w3 * y3
+        # Create new vector W: Multiply this matrix with new Z:
+        neww1 = self.u1 * z1 + self.v1 * z2 + self.w1 * z3
+        neww2 = self.u2 * z1 + self.v2 * z2 + self.w2 * z3
+        neww3 = self.u3 * z1 + self.v3 * z2 + self.w3 * z3
+        # Update vectors U (local X) and V (local Y):
+        self.v1 = newv1
+        self.v2 = newv2
+        self.v3 = newv3
+        self.w1 = neww1
+        self.w2 = neww2
+        self.w3 = neww3
+
 
     def back(self, dist):
         raise ExceptionWT("back() not implemented yet.")
