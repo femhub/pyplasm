@@ -9877,13 +9877,13 @@ class NCLabTurtle3D:
         # u2   v2   w2
         # u3   v3   w3
         # Create new vector U: Multiply this matrix with new X:
-        newu1 = u1 * x1 + v1 * x2 + w1 * x3
-        newu2 = u2 * x1 + v2 * x2 + w2 * x3
-        newu3 = u3 * x1 + v3 * x2 + w3 * x3
+        newu1 = self.u1 * x1 + self.v1 * x2 + self.w1 * x3
+        newu2 = self.u2 * x1 + self.v2 * x2 + self.w2 * x3
+        newu3 = self.u3 * x1 + self.v3 * x2 + self.w3 * x3
         # Create new vector Z: Multiply this matrix with new Z:
-        neww1 = u1 * z1 + v1 * z2 + w1 * z3
-        neww2 = u2 * z1 + v2 * z2 + w2 * z3
-        neww3 = u3 * z1 + v3 * z2 + w3 * z3
+        neww1 = self.u1 * z1 + self.v1 * z2 + self.w1 * z3
+        neww2 = self.u2 * z1 + self.v2 * z2 + self.w2 * z3
+        neww3 = self.u3 * z1 + self.v3 * z2 + self.w3 * z3
         # Update vectors U (local X) and W (local Z):
         self.u1 = newu1
         self.u2 = newu2
