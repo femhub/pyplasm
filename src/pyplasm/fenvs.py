@@ -9864,7 +9864,33 @@ class NCLabTurtle3D:
         return self.draw
 
     def up(self, da2):
-        raise ExceptionWT("up() not implemented yet.")
+        # Create new vector X by rotating (1, 0, 0) by da2 degrees about the Y axis:
+        x1 = cos(da2 * pi / 180)
+        x2 = 0
+        x3 = sin(da2 * pi / 180)
+        # Create new vector Z by rotating (0, 0, 1) by da2 degrees about the Y axis:
+        z1 = -sin(da2 * pi / 180)
+        z2 = 0
+        z3 = cos(da2 * pi / 180)
+        # Rotation matrix:
+        # u1   v1   w1
+        # u2   v2   w2
+        # u3   v3   w3
+        # Create new vector U: Multiply this matrix with new X:
+        newu1 = u1 * x1 + v1 * x2 + w1 * x3
+        newu2 = u2 * x1 + v2 * x2 + w2 * x3
+        newu3 = u3 * x1 + v3 * x2 + w3 * x3
+        # Create new vector Z: Multiply this matrix with new Z:
+        neww1 = u1 * z1 + v1 * z2 + w1 * z3
+        neww2 = u2 * z1 + v2 * z2 + w2 * z3
+        neww3 = u3 * z1 + v3 * z2 + w3 * z3
+        # Update vectors U (local X) and W (local Z):
+        self.u1 = newu1
+        self.u2 = newu2
+        self.u3 = newu3
+        self.w1 = neww1
+        self.w2 = neww2
+        self.w3 = neww3
 
     def pitch(self, da):
         self.up(da)
