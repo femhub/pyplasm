@@ -9669,7 +9669,7 @@ def NCLabTurtleRectangle3D(l, layer):
     box1 = CHULL(p1, p2, p3, p4, p5, p6, p7, p8)
     COLOR(box1, l.linecolor)
     box2 = COPY(box1)
-    MOVE(box2, -(w/2 + layer) * w1, -(w/2 + layer) * w2, -(w/2 + layer) * w3)
+    MOVE(box2, -(width2/2 + layer) * w1, -(width2/2 + layer) * w2, -(width2/2 + layer) * w3)
     if l.linecolor2 == None:
         COLOR(box2, l.linecolor)
     else:
