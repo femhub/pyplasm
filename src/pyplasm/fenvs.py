@@ -9755,7 +9755,7 @@ def NCLabTurtleShow3D(turtle, layer=0):
 
 # Class Line3D:
 class NCLabTurtleLine3D:
-    def __init__(self, startx, starty, startz, length, 
+    def __init__(self, sx, sy, sz, length, 
                  u1, u2, u3, v1, v2, v3, w1, w2, w3, width, c, c2):
         self.startx = sx
         self.starty = sy
