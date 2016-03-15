@@ -9931,7 +9931,34 @@ class NCLabTurtle3D:
         self.go(dist)
 
     def left(self, da1):
-        raise ExceptionWT("left() not implemented yet.")
+        # Create new vector X by rotating (1, 0, 0) by da1 degrees about the Z axis:
+        x1 = cos(da1 * pi / 180)
+        x2 = sin(da1 * pi / 180)
+        x3 = 0
+        # Create new vector Y by rotating (0, 1, 0) by da1 degrees about the Z axis:
+        y1 = -sin(da1 * pi / 180)
+        y2 = cos(da1 * pi / 180)
+        y3 = 0
+        # Rotation matrix:
+        # u1   v1   w1
+        # u2   v2   w2
+        # u3   v3   w3
+        # Create new vector U: Multiply this matrix with new X:
+        newu1 = self.u1 * x1 + self.v1 * x2 + self.w1 * x3
+        newu2 = self.u2 * x1 + self.v2 * x2 + self.w2 * x3
+        newu3 = self.u3 * x1 + self.v3 * x2 + self.w3 * x3
+        # Create new vector Z: Multiply this matrix with new Y:
+        newv1 = self.u1 * y1 + self.v1 * y2 + self.w1 * y3
+        newv2 = self.u2 * y1 + self.v2 * y2 + self.w2 * y3
+        newv3 = self.u3 * y1 + self.v3 * y2 + self.w3 * y3
+        # Update vectors U (local X) and V (local Y):
+        self.u1 = newu1
+        self.u2 = newu2
+        self.u3 = newu3
+        self.v1 = newv1
+        self.v2 = newv2
+        self.v3 = newv3
+
 
     def yaw(self, da1):
         self.left(da1)
