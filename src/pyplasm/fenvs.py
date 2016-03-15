@@ -9628,6 +9628,15 @@ def NCLabTurtleRectangle3D(l, layer):
     sx = l.startx
     sy = l.starty
     sz = l.startz
+    u1 = l.u1
+    u2 = l.u2
+    u3 = l.u3
+    v1 = l.v1
+    v2 = l.v2
+    v3 = l.v3
+    w1 = l.w1
+    w2 = l.w2
+    w3 = l.w3
     w = l.linewidth
     # Figure out eight vertices in the local coordinate system:
     # Upper box:
