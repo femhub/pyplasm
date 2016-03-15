@@ -9892,7 +9892,7 @@ class NCLabTurtle3D:
         for line in self.lines:
             print("---")
             print("Start:", line.startx, line.starty, line.startz)
-            d = line.length
+            d = line.dist
             print("End:  ", line.startx + d * line.u1, line.starty + d * line.u2, line.startz + d * line.u3)
 
     def forward(self, dist):
