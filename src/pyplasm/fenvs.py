@@ -9640,7 +9640,7 @@ def NCLabTurtleRectangle3D(l, layer):
     width1 = l.linewidth
     width2 = l.linewidth2
     if width2 == None:
-        width2 = width
+        width2 = l.linewidth
     # Figure out eight vertices in the local coordinate system:
     # Upper box:
     # P1 = vertex on negative local Y axis
