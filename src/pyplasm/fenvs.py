@@ -9856,9 +9856,9 @@ class NCLabTurtle3D:
         a3 = 0
         dd = sqrt(self.u1**2 + self.u2**2)
         print("dd =", dd)
-        print("u1, u2, u3:", self.u1, self.u2, self.u3)
-        print("v1, v2, v3:", self.v1, self.v2, self.v3)
-        print("w1, w2, w3:", self.w1, self.w2, self.w3)
+        print("u1, u2, u3:", round(self.u1, 3), round(self.u2, 3), round(self.u3, 3))
+        print("v1, v2, v3:", round(self.v1, 3), round(self.v2, 3), round(self.v3, 3))
+        print("w1, w2, w3:", round(self.w1, 3), round(self.w2, 3), round(self.w3, 3))
         if dd > 1e-4:
             a1 = arctan2(self.u2, self.u1) * 180 / pi
             a2 = arctan2(self.u3, dd) * 180 / pi
@@ -9867,10 +9867,10 @@ class NCLabTurtle3D:
             a1 = 0    # OK
             if self.u3 > 0: 
                 a2 = 90  # Local X points up
-                a3 = arctan2(self.w2, self.w1) * 180 / pi
+                a3 = arctan2(self.w2, self.w1) * 180 / pi - 180
             else: 
                 a2 = -90           # Local X points down
-                a3 = arctan2(self.w2, self.w1) * 180 / pi - 180
+                a3 = arctan2(self.w2, self.w1) * 180 / pi
         return a1, a2, a3
 
     def penup(self):
