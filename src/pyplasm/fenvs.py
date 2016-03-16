@@ -9870,7 +9870,7 @@ class NCLabTurtle3D:
                 a3 = arctan2(self.w2, self.w1) * 180 / pi - 180
             else: 
                 a2 = -90           # Local X points down
-                a3 = arctan2(self.w2, self.w1) * 180 / pi
+                a3 = - arctan2(self.w2, self.w1) * 180 / pi
         return a1, a2, a3
 
     def penup(self):
