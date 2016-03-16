@@ -9743,8 +9743,10 @@ def NCLabTurtleImage3D(turtle):
     COLOR(t9, turtle.linecolor)
     t10 = UNION(t8, t9)
     ROTATE(t10, -90, Z)
-    # TODO: Rotate the Turtle accordingly
-
+    a1, a2, a3 = turtle.getangles()
+    ROTATE(t10, a3, X)
+    ROTATE(t10, a2, Y)
+    ROTATE(t10, a1, Z)
     MOVE(t10, turtle.posx, turtle.posy, turtle.posz)
     return t10
 
@@ -9847,6 +9849,20 @@ class NCLabTurtle3D:
                 raise ExceptionWT("Line width must be between 0.1 and 10.0.")
         self.linewidth2 = width2
  
+    def getangles(self):
+        a1 = 0
+        a2 = 0
+        a3 = 0
+        dd = sqrt(self.u1**2 + self.u2**2)
+        if dd > 1e-4:
+            a1 = arctan2(self.u2, self.u1) * 180 / pi
+            a2 = arctan2(self.u3, dd) * 180 / pi
+            a3 = 0
+        else:
+            a1 = 0
+            a2 = 0
+            a3 = 0
+        return a1, a2, a3
 
     def penup(self):
         self.draw = False
