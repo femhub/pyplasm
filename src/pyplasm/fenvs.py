@@ -9745,7 +9745,7 @@ def NCLabTurtleImage3D(turtle):
     ROTATE(t10, -90, Z)
     a1, a2, a3 = turtle.getangles()
     ROTATE(t10, a3, X)
-    ROTATE(t10, a2, Y)
+    ROTATE(t10, -a2, Y)
     ROTATE(t10, a1, Z)
     MOVE(t10, turtle.posx, turtle.posy, turtle.posz)
     return t10
