@@ -9744,6 +9744,7 @@ def NCLabTurtleImage3D(turtle):
     t10 = UNION(t8, t9)
     ROTATE(t10, -90, Z)
     a1, a2, a3 = turtle.getangles()
+    print("Angles:", a1, a2, a3)
     ROTATE(t10, a3, X)
     ROTATE(t10, -a2, Y)
     ROTATE(t10, a1, Z)
@@ -9861,7 +9862,7 @@ class NCLabTurtle3D:
         else:         # local X is vertical
             a1 = 0    # OK
             if self.u1 > 0: a2 = 90  # Local X points up
-            else: a2 = 90           # Local X points down
+            else: a2 = -90           # Local X points down
             a3 = arctan2(self.w2, self.w1) * 180 / pi - 180
         return a1, a2, a3
 
