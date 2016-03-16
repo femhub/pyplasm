@@ -9865,7 +9865,7 @@ class NCLabTurtle3D:
                 a2 = 90  # Local X points up
                 a3 = arctan2(self.w2, self.w1) * 180 / pi
             else: 
-                a2 = -90           # Local X points down
+                a2 = 90           # Local X points down
                 a3 = arctan2(self.w2, self.w1) * 180 / pi - 180
         return a1, a2, a3
 
