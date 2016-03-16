@@ -9744,7 +9744,7 @@ def NCLabTurtleImage3D(turtle):
     t10 = UNION(t8, t9)
     ROTATE(t10, -90, Z)
     a1, a2, a3 = turtle.getangles()
-    print("Angles:", a1, a2, a3)
+    #print("Angles:", a1, a2, a3)
     ROTATE(t10, a3, X)
     ROTATE(t10, -a2, Y)
     ROTATE(t10, a1, Z)
@@ -9855,10 +9855,10 @@ class NCLabTurtle3D:
         a2 = 0
         a3 = 0
         dd = sqrt(self.u1**2 + self.u2**2)
-        print("dd =", dd)
-        print("u1, u2, u3:", round(self.u1, 3), round(self.u2, 3), round(self.u3, 3))
-        print("v1, v2, v3:", round(self.v1, 3), round(self.v2, 3), round(self.v3, 3))
-        print("w1, w2, w3:", round(self.w1, 3), round(self.w2, 3), round(self.w3, 3))
+        #print("dd =", dd)
+        #print("u1, u2, u3:", round(self.u1, 3), round(self.u2, 3), round(self.u3, 3))
+        #print("v1, v2, v3:", round(self.v1, 3), round(self.v2, 3), round(self.v3, 3))
+        #print("w1, w2, w3:", round(self.w1, 3), round(self.w2, 3), round(self.w3, 3))
         if dd > 1e-4:
             a1 = arctan2(self.u2, self.u1) * 180 / pi
             a2 = arctan2(self.u3, dd) * 180 / pi
