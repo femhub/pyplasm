@@ -9862,7 +9862,7 @@ class NCLabTurtle3D:
         if dd > 1e-4:
             a1 = arctan2(self.u2, self.u1) * 180 / pi
             a2 = arctan2(self.u3, dd) * 180 / pi
-            a3 = arctan2(self.v3, w3) * 180 / pi
+            a3 = arctan2(self.v3, self.w3) * 180 / pi
         else:         # local X is vertical
             a1 = 0    # OK
             if self.u3 > 0: 
