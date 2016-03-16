@@ -10041,7 +10041,9 @@ class NCLabTurtle3D:
         self.back(dist)
 
     def goto(self, newx, newy, newz):
-        raise ExceptionWT("goto() not implemented yet.")
+        self.posx = newx
+        self.posy = newy
+        self.posz = newz
 
     def setpos(self, newx, newy, newz):
         self.goto(newx, newy, newz)
@@ -10127,6 +10129,27 @@ class NCLabTurtle3D:
         self.geom = None
         # These commands can be called only once:
         self.showcalled = False
+
+    def arc(self, angle, radius, direction='r'):
+        if angle < 0.001:
+            raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
+        if radius < 0.001:
+            raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
+        n = (angle / 180) * 18
+        n = round(n)
+        step = 0.174977327052 * radius
+        self.go(0.5*step)
+        if direction == 'r' or direction == 'R' or direction == 'right':
+            self.right(10)
+        else:
+            self.left(10)
+        for j in range(n-1):
+            self.go(step)
+            if direction == 'r' or direction == 'R' or direction == 'right':
+                self.right(10)
+            else:
+                self.left(10)
+        self.go(0.5*step)
 
     def geometry(self):
         return self.geom
