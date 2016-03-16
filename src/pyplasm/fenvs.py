@@ -9856,6 +9856,9 @@ class NCLabTurtle3D:
         a3 = 0
         dd = sqrt(self.u1**2 + self.u2**2)
         print("dd =", dd)
+        print("u1, u2, u3:", self.u1, self.u2, self.u3)
+        print("v1, v2, v3:", self.v1, self.v2, self.v3)
+        print("w1, w2, w3:", self.w1, self.w2, self.w3)
         if dd > 1e-4:
             a1 = arctan2(self.u2, self.u1) * 180 / pi
             a2 = arctan2(self.u3, dd) * 180 / pi
