@@ -9993,7 +9993,7 @@ class NCLabTurtle3D:
         neww1 = self.u1 * z1 + self.v1 * z2 + self.w1 * z3
         neww2 = self.u2 * z1 + self.v2 * z2 + self.w2 * z3
         neww3 = self.u3 * z1 + self.v3 * z2 + self.w3 * z3
-        # Update vectors U (local X) and V (local Y):
+        # Update vectors V (local Y) and W (local Z):
         self.v1 = newv1
         self.v2 = newv2
         self.v3 = newv3
@@ -10003,7 +10003,11 @@ class NCLabTurtle3D:
 
 
     def back(self, dist):
-        raise ExceptionWT("back() not implemented yet.")
+        if dist <= 0:
+            raise ExceptionWT("The distance d in back(d) must be positive!")
+        self.posx -= dist * self.u1
+        self.posy -= dist * self.u2
+        self.posz -= dist * self.u3
 
     def backward(self, dist):
         self.back(dist)
