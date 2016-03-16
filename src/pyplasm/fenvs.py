@@ -10000,7 +10000,7 @@ class NCLabTurtle3D:
     def roll(self, da, direction='r'):
         if da <= 0:
             raise ExceptionWT("The roll angle must be positive!")
-        if direction == 'l' or direction == 'L' or direction == 'left':
+        if direction == 'r' or direction == 'R' or direction == 'right':
             da *= -1
         # Create new vector Y by rotating (0, 1, 0) by da degrees about the X axis:
         y1 = 0
