@@ -9640,12 +9640,11 @@ def NCLabTurtleUpperBoxPoints3D(l, layer=0):
     width2 = l.linewidth2
     if width2 == None:
         width2 = l.linewidth
-    # Figure out eight vertices in the local coordinate system:
     # Upper box:
-    # P1 = vertex on negative local Y axis
-    p1 = [sx - layer * u1 - width1/2 * v1, 
-          sy - layer * u2 - width1/2 * v2, 
-          sz - layer * u3 - width1/2 * v3]
+    # P1 = S - layer * U - (width1/2 + layer) * V
+    p1 = [sx - layer * u1 - (width1/2 + layer) * v1, 
+          sy - layer * u2 - (width1/2 + layer) * v2, 
+          sz - layer * u3 - (width1/2 + layer) * v3]
     # P2 = P1 + (width1 + 2*layer) * V
     l2 = width1 + 2*layer
     p2 = [p1[0] + l2 * v1, p1[1] + l2 * v2, p1[2] + l2 * v3]
@@ -9690,10 +9689,10 @@ def NCLabTurtleLowerBoxPoints3D(l, layer=0):
         width2 = l.linewidth
     # Figure out eight vertices in the local coordinate system:
     # Lower box:
-    # P1 = S - width1/2 * V - width2/2 * W
-    p1 = [sx - layer * u1 - width1/2 * v1 - width2/2 * w1, 
-          sy - layer * u2 - width1/2 * v2 - width2/2 * w2, 
-          sz - layer * u3 - width1/2 * v3 - width2/2 * w3]
+    # P1 = S - layer * U - (width1/2 + layer) * V - (width2/2 + layer) * W
+    p1 = [sx - layer * u1 - (width1/2 + layer) * v1 - (width2/2 + layer) * w1, 
+          sy - layer * u2 - (width1/2 + layer) * v2 - (width2/2 + layer) * w2, 
+          sz - layer * u3 - (width1/2 + layer) * v3 - (width2/2 + layer) * w3]
     # P2 = P1 + (width1 + 2*layer) * V
     l2 = width1 + 2*layer
     p2 = [p1[0] + l2 * v1, p1[1] + l2 * v2, p1[2] + l2 * v3]
