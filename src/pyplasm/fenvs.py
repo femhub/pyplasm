@@ -9623,7 +9623,7 @@ class NCLabTurtle:
 
 # Returns the vertices of the upper box (for each Turtle line 
 # there are two boxes in case two different colors are used:
-def NCLabTurtleUpperBoxPoints3D(l, layer):
+def NCLabTurtleUpperBoxPoints3D(l, layer=0):
     sx = l.startx
     sy = l.starty
     sz = l.startz
@@ -9643,7 +9643,9 @@ def NCLabTurtleUpperBoxPoints3D(l, layer):
     # Figure out eight vertices in the local coordinate system:
     # Upper box:
     # P1 = vertex on negative local Y axis
-    p1 = [sx - layer * u1 - width1/2 * v1, sy - layer * u2 - width1/2 * v2, sz - layer * u3 - width1/2 * v3]
+    p1 = [sx - layer * u1 - width1/2 * v1, 
+          sy - layer * u2 - width1/2 * v2, 
+          sz - layer * u3 - width1/2 * v3]
     # P2 = P1 + (width1 + 2*layer) * V
     l2 = width1 + 2*layer
     p2 = [p1[0] + l2 * v1, p1[1] + l2 * v2, p1[2] + l2 * v3]
@@ -9669,7 +9671,7 @@ def NCLabTurtleUpperBoxPoints3D(l, layer):
 
 # Returns the vertices of the upper box (for each Turtle line 
 # there are two boxes in case two different colors are used:
-def NCLabTurtleLowerBoxPoints3D(l, layer):
+def NCLabTurtleLowerBoxPoints3D(l, layer=0):
     sx = l.startx
     sy = l.starty
     sz = l.startz
