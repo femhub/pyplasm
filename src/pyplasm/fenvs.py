@@ -9743,11 +9743,11 @@ def NCLabTurtleConnect3D(l1, l2):
     p1, p2, p3, p4, p5, p6, p7, p8 = NCLabTurtleLowerBoxPoints3D(l1)
     q1, q2, q3, q4, q5, q6, q7, q8 = NCLabTurtleLowerBoxPoints3D(l2)
     con2 = CHULL(p5, p6, p7, p8, q1, q2, q3, q4)
-    COLOR(con1, l.linecolor)
-    if l.linecolor2 == None:
-        COLOR(con2, l.linecolor)
+    COLOR(con1, l1.linecolor)
+    if l2.linecolor2 == None:
+        COLOR(con2, l2.linecolor)
     else:
-        COLOR(con2, l.linecolor2)
+        COLOR(con2, l2.linecolor2)
     return con1, con2
 
 
