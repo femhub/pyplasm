@@ -9621,10 +9621,9 @@ class NCLabTurtle:
 
 ######  NCLAB TURTLE 3D - UTILITIES  ######
 
-
-# 3D Rectangle given via start point, distance, 
-# angle, width and color):
-def NCLabTurtleRectangle3D(l, layer):
+# Returns the vertices of the upper box (for each Turtle line 
+# there are two boxes in case two different colors are used:
+def NCLabTurtleUpperBoxPoints3D(l, layer):
     sx = l.startx
     sy = l.starty
     sz = l.startz
@@ -9666,15 +9665,89 @@ def NCLabTurtleRectangle3D(l, layer):
     # P8 = P4 + (l.dist + 2*layer) * X
     l8 = l.dist + 2*layer
     p8 = [p4[0] + l5 * u1, p4[1] + l5 * u2, p4[2] + l5 * u3]
+    return p1, p2, p3, p4, p5, p6, p7, p8
+
+# Returns the vertices of the upper box (for each Turtle line 
+# there are two boxes in case two different colors are used:
+def NCLabTurtleLowerBoxPoints3D(l, layer):
+    sx = l.startx
+    sy = l.starty
+    sz = l.startz
+    u1 = l.u1
+    u2 = l.u2
+    u3 = l.u3
+    v1 = l.v1
+    v2 = l.v2
+    v3 = l.v3
+    w1 = l.w1
+    w2 = l.w2
+    w3 = l.w3
+    width1 = l.linewidth
+    width2 = l.linewidth2
+    if width2 == None:
+        width2 = l.linewidth
+    # Figure out eight vertices in the local coordinate system:
+    # Lower box:
+    # P1 = S - width1/2 * V - width2/2 * W
+    p1 = [sx - layer * u1 - width1/2 * v1 - width2/2 * w1, 
+          sy - layer * u2 - width1/2 * v2 - width2/2 * w2, 
+          sz - layer * u3 - width1/2 * v3 - width2/2 * w3]
+    # P2 = P1 + (width1 + 2*layer) * V
+    l2 = width1 + 2*layer
+    p2 = [p1[0] + l2 * v1, p1[1] + l2 * v2, p1[2] + l2 * v3]
+    # P3 = P1 + (width2/2 + layer) * W
+    l3 = width2/2 + layer
+    p3 = [p1[0] + l3 * w1, p1[1] + l3 * w2, p1[2] + l3 * w3]
+    # P4 = P3 + (width1 + 2*layer) * V
+    l4 = width1 + 2*layer
+    p4 = [p3[0] + l4 * v1, p3[1] + l4 * v2, p3[2] + l4 * v3]
+    # P5 = P1 + (l.dist + 2*layer) * X
+    l5 = l.dist + 2*layer
+    p5 = [p1[0] + l5 * u1, p1[1] + l5 * u2, p1[2] + l5 * u3]
+    # P6 = P2 + (l.dist + 2*layer) * X
+    l6 = l.dist + 2*layer
+    p6 = [p2[0] + l5 * u1, p2[1] + l5 * u2, p2[2] + l5 * u3]
+    # P7 = P3 + (l.dist + 2*layer) * X
+    l7 = l.dist + 2*layer
+    p7 = [p3[0] + l5 * u1, p3[1] + l5 * u2, p3[2] + l5 * u3]
+    # P8 = P4 + (l.dist + 2*layer) * X
+    l8 = l.dist + 2*layer
+    p8 = [p4[0] + l5 * u1, p4[1] + l5 * u2, p4[2] + l5 * u3]
+    return p1, p2, p3, p4, p5, p6, p7, p8
+
+
+# 3D Rectangle given via start point, distance, 
+# angle, width and color):
+def NCLabTurtleRectangle3D(l, layer):
+    p1, p2, p3, p4, p5, p6, p7, p8 = NCLabTurtleUpperBoxPoints3D(l, layer)
     box1 = CHULL(p1, p2, p3, p4, p5, p6, p7, p8)
     COLOR(box1, l.linecolor)
-    box2 = COPY(box1)
-    MOVE(box2, -(width2/2 + layer) * w1, -(width2/2 + layer) * w2, -(width2/2 + layer) * w3)
+    q1, q2, q3, q4, q5, q6, q7, q8 = NCLabTurtleLowerBoxPoints3D(l, layer)
+    box2 = CHULL(q1, q2, q3, q4, q5, q6, q7, q8)
     if l.linecolor2 == None:
         COLOR(box2, l.linecolor)
     else:
         COLOR(box2, l.linecolor2)
     return [box1, box2]
+
+
+# This function takes the four end points of the box,
+# and the first four points of the next one, and returns 
+# a convex hull. This convex hull will be used to optically 
+# connect two pieces of Tina's trace:
+def NCLabTurtleConnect3D(l1, l2):
+    p1, p2, p3, p4, p5, p6, p7, p8 = NCLabTurtleUpperBoxPoints3D(l1)
+    q1, q2, q3, q4, q5, q6, q7, q8 = NCLabTurtleUpperBoxPoints3D(l2)
+    con1 = CHULL(p5, p6, p7, p8, q1, q2, q3, q4)
+    p1, p2, p3, p4, p5, p6, p7, p8 = NCLabTurtleLowerBoxPoints3D(l1)
+    q1, q2, q3, q4, q5, q6, q7, q8 = NCLabTurtleLowerBoxPoints3D(l2)
+    con2 = CHULL(p5, p6, p7, p8, q1, q2, q3, q4)
+    COLOR(con1, l.linecolor)
+    if l.linecolor2 == None:
+        COLOR(con2, l.linecolor)
+    else:
+        COLOR(con2, l.linecolor2)
+    return con1, con2
 
 
 # Dots to set area size:
@@ -9693,7 +9766,7 @@ def NCLabTurtleCanvas3D(turtle):
 
 
 # Return trace as list of PLaSM objects:
-def NCLabTurtleTrace3D(turtle, layer=0):
+def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
     out = []
     n = len(turtle.lines)
     # List of lines is empty - just return:
@@ -9706,6 +9779,11 @@ def NCLabTurtleTrace3D(turtle, layer=0):
         rect = NCLabTurtleRectangle3D(l, layer)
         out.append(rect)
         # If dots == True, add circles:
+        if dots == True:
+            if i < n-1:            # Not the last line
+                con1, con2 = NCLabTurtleConnect3D(turtle.lines[i], turtle.lines[i+1])
+                out.append(con1)
+                out.append(con2)
     return out
 
 # Shape of the turtle:
