@@ -9782,11 +9782,11 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
         rect = NCLabTurtleRectangle3D(l, layer)
         out.append(rect)
         # If dots == True, add connectors:
-        #if dots == True:
-        #    if i < n-1:            # Not the last line
-        #        con1, con2 = NCLabTurtleConnect3D(turtle.lines[i], turtle.lines[i+1])
-        #        out.append(con1)
-        #        out.append(con2)
+        if dots == True:
+            if i < n-1:            # Not the last line
+                con1, con2 = NCLabTurtleConnect3D(turtle.lines[i], turtle.lines[i+1])
+                out.append(con1)
+                out.append(con2)
     return out
 
 # Shape of the turtle:
