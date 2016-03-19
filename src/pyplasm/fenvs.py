@@ -3415,7 +3415,7 @@ def SUBTRACT(a, b, warn=True):
         for i in range(n):
             if not isinstance(a[i], BASEOBJ):
                 raise ExceptionWT("Invalid object found.")
-            a[i].subtract(b)
+            a[i].subtract(COPY(b))
             if not EMPTYSET(a[i]):
                 newlist.append(COPY(a[i]))
             if EMPTYSET(a[i]) and warn==True:
