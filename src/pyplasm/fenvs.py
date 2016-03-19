@@ -3406,19 +3406,19 @@ def SUBTRACT(a, b, warn=True):
         return COPY(a)
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
-        print("I am here")
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found.")
         #flata = flatten(a)  # THIS CREATED PROBLEMS
         newlist = []
-        for x in a:
-            if not isinstance(x, BASEOBJ):
+        n = len(a)
+        for i in range(n):
+            if not isinstance(a[i], BASEOBJ):
                 raise ExceptionWT("Invalid object found.")
-            x.subtract(b)
-            if not EMPTYSET(x):
-                newlist.append(x)
-            if EMPTYSET(x) and warn==True:
+            a[i].subtract(b)
+            if not EMPTYSET(a[i]):
+                newlist.append(COPY(a[i]))
+            if EMPTYSET(a[i]) and warn==True:
                 print("WARNING: Empty object created while subtracting objects.")
         return newlist
     # a is a list, b is a list:
