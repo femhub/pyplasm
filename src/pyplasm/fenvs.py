@@ -9639,16 +9639,17 @@ def NCLabTurtleBoxPoints3D(l, subdiv, layer=0):
     w3 = l.w3
     width = l.linewidth
     da = 2 * pi / subdiv
+    da0 = da / 2
     points = []
     for i in range(subdiv):
-        p = [sx - layer * u1 - (width/2 + layer) * v1 * cos(i * da) - (width/2 + layer) * w1 * sin(i * da), 
-             sy - layer * u2 - (width/2 + layer) * v2 * cos(i * da) - (width/2 + layer) * w2 * sin(i * da), 
-             sz - layer * u3 - (width/2 + layer) * v3 * cos(i * da) - (width/2 + layer) * w3 * sin(i * da)]
+        p = [sx - layer * u1 - (width/2 + layer) * v1 * cos(da0 + i * da) - (width/2 + layer) * w1 * sin(da0 + i * da), 
+             sy - layer * u2 - (width/2 + layer) * v2 * cos(da0 + i * da) - (width/2 + layer) * w2 * sin(da0 + i * da), 
+             sz - layer * u3 - (width/2 + layer) * v3 * cos(da0 + i * da) - (width/2 + layer) * w3 * sin(da0 + i * da)]
         points.append(p)
     for i in range(subdiv):
-        p = [sx + (l.dist + 2*layer) * u1 - (width/2 + layer) * v1 * cos(i * da) - (width/2 + layer) * w1 * sin(i * da), 
-             sy + (l.dist + 2*layer) * u2 - (width/2 + layer) * v2 * cos(i * da) - (width/2 + layer) * w2 * sin(i * da), 
-             sz + (l.dist + 2*layer) * u3 - (width/2 + layer) * v3 * cos(i * da) - (width/2 + layer) * w3 * sin(i * da)]
+        p = [sx + (l.dist + 2*layer) * u1 - (width/2 + layer) * v1 * cos(da0 + i * da) - (width/2 + layer) * w1 * sin(da0 + i * da), 
+             sy + (l.dist + 2*layer) * u2 - (width/2 + layer) * v2 * cos(da0 + i * da) - (width/2 + layer) * w2 * sin(da0 + i * da), 
+             sz + (l.dist + 2*layer) * u3 - (width/2 + layer) * v3 * cos(da0 + i * da) - (width/2 + layer) * w3 * sin(da0 + i * da)]
         points.append(p)
     return points
 
