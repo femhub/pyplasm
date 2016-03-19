@@ -10037,10 +10037,57 @@ class NCLabTurtle3D:
     def bk(self, dist):
         self.back(dist)
 
+    def resetangles(self):
+        self.u1 = 1
+        self.u2 = 0
+        self.u3 = 0
+        self.v1 = 0
+        self.v2 = 1
+        self.v3 = 0
+        self.w1 = 0
+        self.w2 = 0
+        self.w3 = 1
+
+    # After goto(), all angles are reset to zero.
     def goto(self, newx, newy, newz):
+        if self.draw == True:
+            dx = newx - self.posx
+            dy = newy - self.posy
+            dz = newz - self.posz
+            dist = sqrt(dx**2 + dy**2 + dz**2)
+            if dist <= 1e-6:
+                raise ExceptionWT("The distance in the goto() command must be positive!")
+            # Unit U vector
+            u1 = dx / dist
+            u2 = dy / dist
+            u3 = dy / dist
+            # Unit V vector (normal to U, third component zero)
+            v1 = -u2
+            v2 = u1
+            v3 = 0
+            d0 = sqrt(u1**2 + u2**2)     # Make it a unit vector
+            v1 /= d0
+            v2 /= d0
+            # Unit W vector... cross product of U and V
+            w1 = u2 * v3 - u3 * v2
+            w2 = u3 * v1 - u1 * v3
+            w3 = u1 * v2 - u2 * v1
+            d0 = sqrt(w1**2 + w2**2 + w3**2)   # Normalization
+            w1 /= d0
+            w2 /= d0
+            w3 /= d0
+            newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, 
+                                        u1, u2, u3,
+                                        v1, v2, v3,
+                                        w1, w2, w3,
+                                        self.linewidth, self.linecolor)
+            self.lines.append(newline)
+        # Update position:
         self.posx = newx
         self.posy = newy
         self.posz = newz
+        # Reset angles:
+        self.resetangles()
 
     def setpos(self, newx, newy, newz):
         self.goto(newx, newy, newz)
@@ -10058,10 +10105,10 @@ class NCLabTurtle3D:
         self.goto(self.posx, self.posy, newz)
 
     def home(self):
-        self.penup()
-        self.goto(0, 0, 0)
-        self.angles(0, 0)
-        self.pendown()
+        self.posx = 0
+        self.posy = 0
+        self.posz = 0
+        self.resetangles()
 
     def getx(self):
         return self.posx
@@ -10089,12 +10136,6 @@ class NCLabTurtle3D:
 
     def hide(self):
         self.isvisible = False
-
-    def line(self, x1, y1, z1, x2, y2, z2):
-        self.penup()
-        self.goto(x1, y1, z1)
-        self.pendown()
-        self.goto(x2, y2, z2)
 
     def export(self):
         return self.geom
