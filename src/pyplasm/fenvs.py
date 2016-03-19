@@ -9686,15 +9686,22 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
     if n == 0:
         return out
     # If dots == True, add connector at the beginning of the first line
-
+    if dots == True:
+        s = SPHERE(width/2 + layer, 8)
+        l = turtle.lines[i]
+        COLOR(s, l.linecolor)
+        MOVE(s, l.startx, l.starty, l.startz)
     # There is at least one line segment:
     for i in range(n):
         l = turtle.lines[i]
         # Add rectangle corresponding to the line:
         rect = NCLabTurtleBox3D(l, turtle.edgenum, layer)
         out.append(rect)
-        # If dots == True, add connector at the end of i-th line
-        
+        # If dots == True, add connector at the end of line
+        if dots == True:
+            s = SPHERE(width/2 + layer, 8)
+            COLOR(s, l.linecolor)
+            MOVE(s, l.startx + l.dist * l.u1, l.starty + l.dist * l.u2, l.startz + l.dist * l.u3)
     return out
 
 # Shape of the turtle:
