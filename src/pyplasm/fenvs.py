@@ -9672,7 +9672,7 @@ def NCLabTurtleUpperBoxPoints3D(l, layer=0):
 
 # Returns the vertices of the upper box (for each Turtle line 
 # there are two boxes in case two different colors are used:
-def NCLabTurtleLowerBoxPoints3D(l, layer=0):
+def NCLabTurtleBoxPoints3D(l, subdiv, layer=0):
     sx = l.startx
     sy = l.starty
     sz = l.startz
@@ -9685,53 +9685,29 @@ def NCLabTurtleLowerBoxPoints3D(l, layer=0):
     w1 = l.w1
     w2 = l.w2
     w3 = l.w3
-    width1 = l.linewidth
-    width2 = l.linewidth2
-    if width2 == None:
-        width2 = l.linewidth
-    # Figure out eight vertices in the local coordinate system:
-    # Lower box:
-    # P1 = S - layer * U - (width1/2 + layer) * V - (width2/2 + layer) * W
-    p1 = [sx - layer * u1 - (width1/2 + layer) * v1 - (width2/2 + layer) * w1, 
-          sy - layer * u2 - (width1/2 + layer) * v2 - (width2/2 + layer) * w2, 
-          sz - layer * u3 - (width1/2 + layer) * v3 - (width2/2 + layer) * w3]
-    # P2 = P1 + (width1 + 2*layer) * V
-    l2 = width1 + 2*layer
-    p2 = [p1[0] + l2 * v1, p1[1] + l2 * v2, p1[2] + l2 * v3]
-    # P3 = P1 + (width2/2 + layer) * W
-    l3 = width2/2 + layer
-    p3 = [p1[0] + l3 * w1, p1[1] + l3 * w2, p1[2] + l3 * w3]
-    # P4 = P3 + (width1 + 2*layer) * V
-    l4 = width1 + 2*layer
-    p4 = [p3[0] + l4 * v1, p3[1] + l4 * v2, p3[2] + l4 * v3]
-    # P5 = P1 + (l.dist + 2*layer) * X
-    l5 = l.dist + 2*layer
-    p5 = [p1[0] + l5 * u1, p1[1] + l5 * u2, p1[2] + l5 * u3]
-    # P6 = P2 + (l.dist + 2*layer) * X
-    l6 = l.dist + 2*layer
-    p6 = [p2[0] + l5 * u1, p2[1] + l5 * u2, p2[2] + l5 * u3]
-    # P7 = P3 + (l.dist + 2*layer) * X
-    l7 = l.dist + 2*layer
-    p7 = [p3[0] + l5 * u1, p3[1] + l5 * u2, p3[2] + l5 * u3]
-    # P8 = P4 + (l.dist + 2*layer) * X
-    l8 = l.dist + 2*layer
-    p8 = [p4[0] + l5 * u1, p4[1] + l5 * u2, p4[2] + l5 * u3]
-    return p1, p2, p3, p4, p5, p6, p7, p8
+    width = l.linewidth
+    da = 360 / subdiv
+    points = []
+    for i in range(subdiv):
+        p = [sx - layer * u1 - (width1/2 + layer) * v1 * cos(i * da) - (width2/2 + layer) * w1 * sin(i * da), 
+             sy - layer * u2 - (width1/2 + layer) * v2 * cos(i * da) - (width2/2 + layer) * w2 * sin(i * da), 
+             sz - layer * u3 - (width1/2 + layer) * v3 * cos(i * da) - (width2/2 + layer) * w3 * sin(i * da)]
+        points.append(p)
+    for i in range(subdiv):
+        p = [sx + (l.dist + 2*layer) * u1 - (width1/2 + layer) * v1 * cos(i * da) - (width2/2 + layer) * w1 * sin(i * da), 
+             sy + (l.dist + 2*layer) * u2 - (width1/2 + layer) * v2 * cos(i * da) - (width2/2 + layer) * w2 * sin(i * da), 
+             sz + (l.dist + 2*layer) * u3 - (width1/2 + layer) * v3 * cos(i * da) - (width2/2 + layer) * w3 * sin(i * da)]
+        points.append(p)
+    return points
 
 
 # 3D Rectangle given via start point, distance, 
 # angle, width and color):
-def NCLabTurtleRectangle3D(l, layer):
-    p1, p2, p3, p4, p5, p6, p7, p8 = NCLabTurtleUpperBoxPoints3D(l, layer)
-    box1 = CHULL(p1, p2, p3, p4, p5, p6, p7, p8)
+def NCLabTurtleBox3D(l, subdiv, layer):
+    points = NCLabTurtleBoxPoints3D(l, subdiv, layer)
+    box1 = CHULL(*points)
     COLOR(box1, l.linecolor)
-    q1, q2, q3, q4, q5, q6, q7, q8 = NCLabTurtleLowerBoxPoints3D(l, layer)
-    box2 = CHULL(q1, q2, q3, q4, q5, q6, q7, q8)
-    if l.linecolor2 == None:
-        COLOR(box2, l.linecolor)
-    else:
-        COLOR(box2, l.linecolor2)
-    return [box1, box2]
+    return box1
 
 
 # This function takes the four end points of the box,
@@ -9779,7 +9755,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
     for i in range(n):
         l = turtle.lines[i]
         # Add rectangle corresponding to the line:
-        rect = NCLabTurtleRectangle3D(l, layer)
+        rect = NCLabTurtleBox3D(l, self.edgenum, layer)
         out.append(rect)
         # If dots == True, add connectors:
         if dots == True:
@@ -9895,6 +9871,7 @@ class NCLabTurtle3D:
         self.canvassize = 100
         self.lines = []
         self.isvisible = True
+        self.edgenum = 8
         self.geom = None
         # These commands can be called only once:
         self.showcalled = False
@@ -9953,6 +9930,11 @@ class NCLabTurtle3D:
                 a2 = -90           # Local X points down
                 a3 = - arctan2(self.w2, self.w1) * 180 / pi
         return a1, a2, a3
+
+    def edges(self, e):
+        if e < 3:
+            raise ExceptionWT("The minimum number of edges is three.")
+        self.edgenum = e
 
     def penup(self):
         self.draw = False
