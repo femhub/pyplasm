@@ -3409,9 +3409,9 @@ def SUBTRACT(a, b, warn=True):
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found.")
-        flata = flatten(a)  # flatten the list as there may be structs
+        #flata = flatten(a)  # THIS CREATED PROBLEMS
         newlist = []
-        for x in flata:
+        for x in a:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found.")
             x.subtract(b)
