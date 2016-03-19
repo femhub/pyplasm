@@ -9843,7 +9843,10 @@ class NCLabTurtle3D:
         self.resetangles()
         self.left(left)
         self.up(up)
-        self.roll(roll, 'l')
+        if roll >= 0:
+            self.roll(roll, 'l')
+        else:
+            self.roll(-roll, 'r')
 
     def getangles(self):
         a1 = 0
