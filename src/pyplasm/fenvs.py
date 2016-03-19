@@ -9687,7 +9687,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
         return out
     # If dots == True, add connector at the beginning of the first line
     if dots == True:
-        s = SPHERE(turtle.width/2 + layer, 8)
+        s = SPHERE(turtle.linewidth/2 + layer, 8)
         l = turtle.lines[i]
         COLOR(s, l.linecolor)
         MOVE(s, l.startx, l.starty, l.startz)
@@ -9699,7 +9699,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
         out.append(rect)
         # If dots == True, add connector at the end of line
         if dots == True:
-            s = SPHERE(turtle.width/2 + layer, 8)
+            s = SPHERE(turtle.linewidth/2 + layer, 8)
             COLOR(s, l.linecolor)
             MOVE(s, l.startx + l.dist * l.u1, l.starty + l.dist * l.u2, l.startz + l.dist * l.u3)
     return out
