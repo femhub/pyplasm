@@ -9623,55 +9623,7 @@ class NCLabTurtle:
 
 ######  NCLAB TURTLE 3D - UTILITIES  ######
 
-# Returns the vertices of the upper box (for each Turtle line 
-# there are two boxes in case two different colors are used:
-def NCLabTurtleUpperBoxPoints3D(l, layer=0):
-    sx = l.startx
-    sy = l.starty
-    sz = l.startz
-    u1 = l.u1
-    u2 = l.u2
-    u3 = l.u3
-    v1 = l.v1
-    v2 = l.v2
-    v3 = l.v3
-    w1 = l.w1
-    w2 = l.w2
-    w3 = l.w3
-    width1 = l.linewidth
-    width2 = l.linewidth2
-    if width2 == None:
-        width2 = l.linewidth
-    # Upper box:
-    # P1 = S - layer * U - (width1/2 + layer) * V
-    p1 = [sx - layer * u1 - (width1/2 + layer) * v1, 
-          sy - layer * u2 - (width1/2 + layer) * v2, 
-          sz - layer * u3 - (width1/2 + layer) * v3]
-    # P2 = P1 + (width1 + 2*layer) * V
-    l2 = width1 + 2*layer
-    p2 = [p1[0] + l2 * v1, p1[1] + l2 * v2, p1[2] + l2 * v3]
-    # P3 = P1 + (width2/2 + layer) * W
-    l3 = width2/2 + layer
-    p3 = [p1[0] + l3 * w1, p1[1] + l3 * w2, p1[2] + l3 * w3]
-    # P4 = P3 + (width1 + 2*layer) * V
-    l4 = width1 + 2*layer
-    p4 = [p3[0] + l4 * v1, p3[1] + l4 * v2, p3[2] + l4 * v3]
-    # P5 = P1 + (l.dist + 2*layer) * X
-    l5 = l.dist + 2*layer
-    p5 = [p1[0] + l5 * u1, p1[1] + l5 * u2, p1[2] + l5 * u3]
-    # P6 = P2 + (l.dist + 2*layer) * X
-    l6 = l.dist + 2*layer
-    p6 = [p2[0] + l5 * u1, p2[1] + l5 * u2, p2[2] + l5 * u3]
-    # P7 = P3 + (l.dist + 2*layer) * X
-    l7 = l.dist + 2*layer
-    p7 = [p3[0] + l5 * u1, p3[1] + l5 * u2, p3[2] + l5 * u3]
-    # P8 = P4 + (l.dist + 2*layer) * X
-    l8 = l.dist + 2*layer
-    p8 = [p4[0] + l5 * u1, p4[1] + l5 * u2, p4[2] + l5 * u3]
-    return p1, p2, p3, p4, p5, p6, p7, p8
-
-# Returns the vertices of the upper box (for each Turtle line 
-# there are two boxes in case two different colors are used:
+# The convex hull of these points will form the wire:
 def NCLabTurtleBoxPoints3D(l, subdiv, layer=0):
     sx = l.startx
     sy = l.starty
@@ -9689,14 +9641,14 @@ def NCLabTurtleBoxPoints3D(l, subdiv, layer=0):
     da = 360 / subdiv
     points = []
     for i in range(subdiv):
-        p = [sx - layer * u1 - (width1/2 + layer) * v1 * cos(i * da) - (width2/2 + layer) * w1 * sin(i * da), 
-             sy - layer * u2 - (width1/2 + layer) * v2 * cos(i * da) - (width2/2 + layer) * w2 * sin(i * da), 
-             sz - layer * u3 - (width1/2 + layer) * v3 * cos(i * da) - (width2/2 + layer) * w3 * sin(i * da)]
+        p = [sx - layer * u1 - (width/2 + layer) * v1 * cos(i * da) - (width/2 + layer) * w1 * sin(i * da), 
+             sy - layer * u2 - (width/2 + layer) * v2 * cos(i * da) - (width/2 + layer) * w2 * sin(i * da), 
+             sz - layer * u3 - (width/2 + layer) * v3 * cos(i * da) - (width/2 + layer) * w3 * sin(i * da)]
         points.append(p)
     for i in range(subdiv):
-        p = [sx + (l.dist + 2*layer) * u1 - (width1/2 + layer) * v1 * cos(i * da) - (width2/2 + layer) * w1 * sin(i * da), 
-             sy + (l.dist + 2*layer) * u2 - (width1/2 + layer) * v2 * cos(i * da) - (width2/2 + layer) * w2 * sin(i * da), 
-             sz + (l.dist + 2*layer) * u3 - (width1/2 + layer) * v3 * cos(i * da) - (width2/2 + layer) * w3 * sin(i * da)]
+        p = [sx + (l.dist + 2*layer) * u1 - (width/2 + layer) * v1 * cos(i * da) - (width/2 + layer) * w1 * sin(i * da), 
+             sy + (l.dist + 2*layer) * u2 - (width/2 + layer) * v2 * cos(i * da) - (width/2 + layer) * w2 * sin(i * da), 
+             sz + (l.dist + 2*layer) * u3 - (width/2 + layer) * v3 * cos(i * da) - (width/2 + layer) * w3 * sin(i * da)]
         points.append(p)
     return points
 
@@ -9755,7 +9707,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
     for i in range(n):
         l = turtle.lines[i]
         # Add rectangle corresponding to the line:
-        rect = NCLabTurtleBox3D(l, self.edgenum, layer)
+        rect = NCLabTurtleBox3D(l, turtle.edgenum, layer)
         out.append(rect)
         # If dots == True, add connectors:
         if dots == True:
@@ -9822,7 +9774,7 @@ def NCLabTurtleShow3D(turtle, layer=0):
 # Class Line3D:
 class NCLabTurtleLine3D:
     def __init__(self, sx, sy, sz, dist, 
-                 u1, u2, u3, v1, v2, v3, w1, w2, w3, width1, width2, c, c2):
+                 u1, u2, u3, v1, v2, v3, w1, w2, w3, width, c):
         self.startx = sx
         self.starty = sy
         self.startz = sz
@@ -9839,10 +9791,8 @@ class NCLabTurtleLine3D:
         self.w1 = w1
         self.w2 = w2
         self.w3 = w3
-        self.linewidth = width1
-        self.linewidth2 = width2
+        self.linewidth = width
         self.linecolor = c
-        self.linecolor2 = c2
 
 # Class Turtle3D:
 class NCLabTurtle3D:
@@ -9864,10 +9814,8 @@ class NCLabTurtle3D:
         self.w3 = 1
         # Line color etc.
         self.linecolor = [0, 0, 255]
-        self.linecolor2 = None
         self.draw = True
         self.linewidth = 1
-        self.linewidth2 = None
         self.canvassize = 100
         self.lines = []
         self.isvisible = True
@@ -9895,18 +9843,12 @@ class NCLabTurtle3D:
                     raise ExceptionWT("Attempt to set invalid optional 2nd color. Have you used three integers between 0 and 255?")
         self.linecolor2 = col2
 
-    def width(self, width1, width2 = None):
-        if width1 < 0.1:
+    def width(self, width):
+        if width < 0.1:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
-        if width1 > 10.0:
+        if width > 10.0:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
-        self.linewidth = width1
-        if width2 != None:
-            if width2 < 0.1:
-                raise ExceptionWT("Line width must be between 0.1 and 10.0.")
-            if width2 > 10.0:
-                raise ExceptionWT("Line width must be between 0.1 and 10.0.")
-        self.linewidth2 = width2
+        self.linewidth = width
  
     def getangles(self):
         a1 = 0
@@ -9994,8 +9936,7 @@ class NCLabTurtle3D:
                                         self.u1, self.u2, self.u3,
                                         self.v1, self.v2, self.v3,
                                         self.w1, self.w2, self.w3,
-                                        self.linewidth, self.linewidth2, 
-                                        self.linecolor, self.linecolor2)
+                                        self.linewidth, self.linecolor)
             self.lines.append(newline)
         # Update position:
         self.posx += dist * self.u1
@@ -10146,7 +10087,7 @@ class NCLabTurtle3D:
         return self.linecolor
 
     def getwidth(self):
-        return self.linewidth, self.linewidth2
+        return self.linewidth
 
     def visible(self):
         self.isvisible = True
@@ -10187,10 +10128,8 @@ class NCLabTurtle3D:
         self.w2 = 0
         self.w3 = 1
         self.linecolor = [0, 0, 255]
-        self.linecolor2 = None
         self.draw = True
         self.linewidth = 1
-        self.linewidth2 = None
         self.canvassize = 100
         self.isvisible = True
         self.geom = None
