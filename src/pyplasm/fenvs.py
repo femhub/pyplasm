@@ -9691,6 +9691,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
         l = turtle.lines[0]
         COLOR(s, l.linecolor)
         MOVE(s, l.startx, l.starty, l.startz)
+        out.append(s)
     # There is at least one line segment:
     for i in range(n):
         l = turtle.lines[i]
@@ -9702,6 +9703,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
             s = SPHERE(turtle.linewidth/2 + layer, 8)
             COLOR(s, l.linecolor)
             MOVE(s, l.startx + l.dist * l.u1, l.starty + l.dist * l.u2, l.startz + l.dist * l.u3)
+            out.append(s)
     return out
 
 # Shape of the turtle:
