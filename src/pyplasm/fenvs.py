@@ -10062,12 +10062,20 @@ class NCLabTurtle3D:
             u2 = dy / dist
             u3 = dz / dist
             # Unit V vector (normal to U, third component zero)
-            v1 = -u2
-            v2 = u1
-            v3 = 0
-            d0 = sqrt(u1**2 + u2**2)     # Make it a unit vector
-            v1 /= d0
-            v2 /= d0
+            d0 = sqrt(u1**2 + u2**2) 
+            if d0 > 1e-4:
+                v1 = -u2
+                v2 = u1
+                v3 = 0
+                v1 /= d0    # Normalization
+                v2 /= d0
+            else:
+                v1 = 0
+                v2 = u3
+                v3 = -u2
+                d0 = sqrt(v2**2 + v3**2) 
+                v2 /= d0    # Normalization
+                v3 /= d0
             # Unit W vector... cross product of U and V
             w1 = u2 * v3 - u3 * v2
             w2 = u3 * v1 - u1 * v3
