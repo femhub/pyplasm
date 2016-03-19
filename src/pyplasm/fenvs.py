@@ -9688,7 +9688,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
     # If dots == True, add connector at the beginning of the first line
     if dots == True:
         s = SPHERE(turtle.linewidth/2 + layer, 8)
-        l = turtle.lines[i]
+        l = turtle.lines[0]
         COLOR(s, l.linecolor)
         MOVE(s, l.startx, l.starty, l.startz)
     # There is at least one line segment:
