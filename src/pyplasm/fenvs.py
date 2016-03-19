@@ -3410,16 +3410,15 @@ def SUBTRACT(a, b, warn=True):
             raise ExceptionWT(
                 "Invalid object found.")
         flata = flatten(a)  # flatten the list as there may be structs
-        for x in flata:
-            if not isinstance(x, BASEOBJ):
-                raise ExceptionWT(
-                    "Invalid object found.")
         newlist = []
         for x in flata:
-            x.subtract(b)
-            if not EMPTYSET(x):
-                newlist.append(COPY(x))
-            if EMPTYSET(x) and warn==True:
+            if not isinstance(x, BASEOBJ):
+                raise ExceptionWT("Invalid object found.")
+            xx = COPY(x)
+            xx.subtract(b)
+            if not EMPTYSET(xx):
+                newlist.append(xx)
+            if EMPTYSET(xx) and warn==True:
                 print("WARNING: Empty object created while subtracting objects.")
         return newlist
     # a is a list, b is a list:
