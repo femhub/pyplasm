@@ -3406,6 +3406,7 @@ def SUBTRACT(a, b, warn=True):
         return COPY(a)
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
+        print("I am here")
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found.")
