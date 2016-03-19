@@ -9638,7 +9638,7 @@ def NCLabTurtleBoxPoints3D(l, subdiv, layer=0):
     w2 = l.w2
     w3 = l.w3
     width = l.linewidth
-    da = 360 / subdiv
+    da = 2 * pi / subdiv
     points = []
     for i in range(subdiv):
         p = [sx - layer * u1 - (width/2 + layer) * v1 * cos(i * da) - (width/2 + layer) * w1 * sin(i * da), 
