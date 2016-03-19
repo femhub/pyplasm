@@ -3414,11 +3414,10 @@ def SUBTRACT(a, b, warn=True):
         for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found.")
-            xx = COPY(x)
-            xx.subtract(b)
-            if not EMPTYSET(xx):
-                newlist.append(xx)
-            if EMPTYSET(xx) and warn==True:
+            x.subtract(b)
+            if not EMPTYSET(x):
+                newlist.append(x)
+            if EMPTYSET(x) and warn==True:
                 print("WARNING: Empty object created while subtracting objects.")
         return newlist
     # a is a list, b is a list:
