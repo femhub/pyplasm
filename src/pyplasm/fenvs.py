@@ -9839,6 +9839,12 @@ class NCLabTurtle3D:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
         self.linewidth = width
  
+    def angles(self, left, up, roll):
+        self.resetangles()
+        self.left(left)
+        self.up(up)
+        self.roll(roll, 'l')
+
     def getangles(self):
         a1 = 0
         a2 = 0
