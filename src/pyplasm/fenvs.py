@@ -9843,10 +9843,7 @@ class NCLabTurtle3D:
         self.resetangles()
         self.left(left)
         self.up(up)
-        if roll >= 0:
-            self.roll(roll, 'l')
-        else:
-            self.roll(-roll, 'r')
+        self.roll(roll, 'l')
 
     def getangles(self):
         a1 = 0
@@ -9999,9 +9996,7 @@ class NCLabTurtle3D:
     def rt(self, da1):
         self.right(da1)
 
-    def roll(self, da, direction='r'):
-        if da <= 0:
-            raise ExceptionWT("The roll angle must be positive!")
+    def roll(self, da, direction='l'):
         if direction == 'r' or direction == 'R' or direction == 'right':
             da *= -1
         # Create new vector Y by rotating (0, 1, 0) by da degrees about the X axis:
