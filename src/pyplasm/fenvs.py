@@ -9663,25 +9663,6 @@ def NCLabTurtleBox3D(l, subdiv, layer):
     return box1
 
 
-# This function takes the four end points of the box,
-# and the first four points of the next one, and returns 
-# a convex hull. This convex hull will be used to optically 
-# connect two pieces of Tina's trace:
-def NCLabTurtleConnect3D(l1, l2):
-    p1, p2, p3, p4, p5, p6, p7, p8 = NCLabTurtleUpperBoxPoints3D(l1)
-    q1, q2, q3, q4, q5, q6, q7, q8 = NCLabTurtleUpperBoxPoints3D(l2)
-    con1 = CHULL(p5, p6, p7, p8, q1, q2, q3, q4)
-    p1, p2, p3, p4, p5, p6, p7, p8 = NCLabTurtleLowerBoxPoints3D(l1)
-    q1, q2, q3, q4, q5, q6, q7, q8 = NCLabTurtleLowerBoxPoints3D(l2)
-    con2 = CHULL(p5, p6, p7, p8, q1, q2, q3, q4)
-    COLOR(con1, l1.linecolor)
-    if l2.linecolor2 == None:
-        COLOR(con2, l2.linecolor)
-    else:
-        COLOR(con2, l2.linecolor2)
-    return con1, con2
-
-
 # Dots to set area size:
 def NCLabTurtleCanvas3D(turtle):
     r = turtle.canvassize
@@ -9704,18 +9685,16 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
     # List of lines is empty - just return:
     if n == 0:
         return out
-    # There is at leats one line segment:
+    # If dots == True, add connector at the beginning of the first line
+
+    # There is at least one line segment:
     for i in range(n):
         l = turtle.lines[i]
         # Add rectangle corresponding to the line:
         rect = NCLabTurtleBox3D(l, turtle.edgenum, layer)
         out.append(rect)
-        # If dots == True, add connectors:
-        if dots == True:
-            if i < n-1:            # Not the last line
-                con1, con2 = NCLabTurtleConnect3D(turtle.lines[i], turtle.lines[i+1])
-                out.append(con1)
-                out.append(con2)
+        # If dots == True, add connector at the end of i-th line
+        
     return out
 
 # Shape of the turtle:
