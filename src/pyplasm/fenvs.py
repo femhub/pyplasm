@@ -10060,7 +10060,7 @@ class NCLabTurtle3D:
             # Unit U vector
             u1 = dx / dist
             u2 = dy / dist
-            u3 = dy / dist
+            u3 = dz / dist
             # Unit V vector (normal to U, third component zero)
             v1 = -u2
             v2 = u1
