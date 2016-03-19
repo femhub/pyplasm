@@ -3411,14 +3411,14 @@ def SUBTRACT(a, b, warn=True):
                 "Invalid object found.")
         #flata = flatten(a)  # THIS CREATED PROBLEMS
         newlist = []
-        n = len(a)
-        for i in range(n):
-            if not isinstance(a[i], BASEOBJ):
+        b2 = COPY(b)   # This is important as 'b' can be changed by the subtraction
+        for x in a:
+            if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found.")
-            a[i].subtract(COPY(b))
-            if not EMPTYSET(a[i]):
-                newlist.append(COPY(a[i]))
-            if EMPTYSET(a[i]) and warn==True:
+            x.subtract(b2)
+            if not EMPTYSET(x):
+                newlist.append(COPY(x))
+            if EMPTYSET(x) and warn==True:
                 print("WARNING: Empty object created while subtracting objects.")
         return newlist
     # a is a list, b is a list:
