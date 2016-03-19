@@ -3419,8 +3419,8 @@ def SUBTRACT(a, b, warn=True):
             x.subtract(b)
             if not EMPTYSET(x):
                 newlist.append(COPY(x))
-        if EMPTYSET(x) and warn==True:
-            print("WARNING: Empty object created while subtracting objects.")
+            if EMPTYSET(x) and warn==True:
+                print("WARNING: Empty object created while subtracting objects.")
         return newlist
     # a is a list, b is a list:
     if isinstance(a, list) and isinstance(b, list):
@@ -3439,8 +3439,8 @@ def SUBTRACT(a, b, warn=True):
             x.subtract(flatb)
             if not EMPTYSET(x):
                 newlist.append(COPY(x))
-        if EMPTYSET(x) and warn==True:
-            print("WARNING: Empty object created while subtracting objects.")
+            if EMPTYSET(x) and warn==True:
+                print("WARNING: Empty object created while subtracting objects.")
         return newlist
 
 # English:
