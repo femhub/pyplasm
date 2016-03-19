@@ -3409,13 +3409,13 @@ def SUBTRACT(a, b, warn=True):
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found.")
-        #flata = flatten(a)  # THIS CREATED PROBLEMS
-        newlist = []
+        flata = flatten(a)  # flatten the list as there may be structs
         b2 = COPY(b)   # This is important as 'b' can be changed by the subtraction
-        for x in a:
+        newlist = []
+        for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found.")
-            x.subtract(b2)
+            x.subtract(b2)      # Important - do not subtract the original item
             if not EMPTYSET(x):
                 newlist.append(COPY(x))
             if EMPTYSET(x) and warn==True:
@@ -3434,8 +3434,11 @@ def SUBTRACT(a, b, warn=True):
                 raise ExceptionWT(
                     "Invalid object found.")
         newlist = []
+        flatbcopy = []
+        for it in flatb:
+            flatbcopy.append(COPY(it))
         for x in flata:
-            x.subtract(flatb)
+            x.subtract(flatbcopy)            # Important - do not subtract the original item
             if not EMPTYSET(x):
                 newlist.append(COPY(x))
             if EMPTYSET(x) and warn==True:
