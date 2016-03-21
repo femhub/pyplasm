@@ -9685,16 +9685,6 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
     # List of lines is empty - just return:
     if n == 0:
         return out
-    # If dots == True, add connector at the beginning of the first line
-    if dots == True:
-        s = SPHERE(turtle.linewidth/2 + layer, turtle.edgenum)
-        ROTATE(s, 90, Y)
-        ERASE(s, X, 0, turtle.linewidth/2 + layer + 1)
-        ROTATE(s, 360 / turtle.edgenum / 2, X)
-        l = turtle.lines[0]
-        COLOR(s, l.linecolor)
-        MOVE(s, l.startx, l.starty, l.startz)
-        out.append(s)
     # There is at least one line segment:
     for i in range(n):
         l = turtle.lines[i]
@@ -9704,12 +9694,16 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
         # If dots == True, add connector at the end of line
         if dots == True:
             s = SPHERE(turtle.linewidth/2 + layer, turtle.edgenum)
-            COLOR(s, l.linecolor)
             ROTATE(s, 90, Y)
-            ERASE(s, X, -turtle.linewidth/2 - layer - 1, 0)
             ROTATE(s, 360 / turtle.edgenum / 2, X)
-            MOVE(s, l.startx + l.dist * l.u1, l.starty + l.dist * l.u2, l.startz + l.dist * l.u3)
-            out.append(s)
+            s1, s2 = SPLIT(s, 0, X)
+            l = turtle.lines[0]
+            COLOR(s1, l.linecolor)
+            COLOR(s2, l.linecolor)
+            MOVE(s1, l.startx, l.starty, l.startz)
+            MOVE(s2, l.startx + l.dist * l.u1, l.starty + l.dist * l.u2, l.startz + l.dist * l.u3)
+            out.append(s1)
+            out.append(s2)
     return out
 
 # Shape of the turtle:
