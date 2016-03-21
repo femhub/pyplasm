@@ -9693,7 +9693,6 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
         out.append(rect)
         # If dots == True, add connector at the end of line
         if dots == True:
-            l = turtle.lines[i]
             s = SPHERE(turtle.linewidth/2 + layer, turtle.edgenum)
             ROTATE(s, 90, Y)
             ROTATE(s, 360 / turtle.edgenum / 2, X)
