@@ -9690,6 +9690,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
         s = SPHERE(turtle.linewidth/2 + layer, turtle.edgenum)
         ROTATE(s, 90, Y)
         ERASE(s, X, 0, turtle.linewidth/2 + layer + 1)
+        ROTATE(s, 360 / turtle.edgenum / 2, X)
         l = turtle.lines[0]
         COLOR(s, l.linecolor)
         MOVE(s, l.startx, l.starty, l.startz)
@@ -9706,6 +9707,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
             COLOR(s, l.linecolor)
             ROTATE(s, 90, Y)
             ERASE(s, X, -turtle.linewidth/2 - layer - 1, 0)
+            ROTATE(s, 360 / turtle.edgenum / 2, X)
             MOVE(s, l.startx + l.dist * l.u1, l.starty + l.dist * l.u2, l.startz + l.dist * l.u3)
             out.append(s)
     return out
