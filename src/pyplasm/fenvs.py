@@ -4936,7 +4936,7 @@ def SPHERE(radius, divisions=[16, 32]):
         raise ExceptionWT("Radius r in SPHERE(r) must be positive!")
     divisionslist = divisions
     if not isinstance(divisions, list):
-        if divisions <= 4:
+        if divisions < 4:
             raise ExceptionWT("Bad division in the SPHERE command!")
         divisionslist = [int(divisions / 2), divisions]
     # Returning the sphere:
