@@ -4877,6 +4877,8 @@ def SHELL(radius1, radius2, divisions=[16, 32]):
         raise ExceptionWT("Radius r1 in SHELL(r1, r2) must be nonnegative!")
     if radius2 <= 0:
         raise ExceptionWT("Radius r2 in SHELL(r1, r2) must be positive!")
+    if radius2 <= radius1:
+        raise ExceptionWT("Radius r2 must be greater than r1 in SHELL(r1, r2)!")    
     divisionslist = divisions
     if not isinstance(divisions, list):
         if divisions <= 4:
