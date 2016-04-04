@@ -5957,7 +5957,7 @@ if self_test:
 
 
 def RULEDSURFACE(a, b):
-    return BASEOBJ(PLASM_RULEDSURFACE([a, b]))
+    return PLASM_RULEDSURFACE([a, b])
 
 
 RUSURFACE = RULEDSURFACE
