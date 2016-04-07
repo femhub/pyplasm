@@ -9803,7 +9803,7 @@ class NCLabTurtle3D:
         self.w2 = 0
         self.w3 = 1
         # Line color etc.
-        self.linecolor = [0, 0, 255]
+        self.linecolor = YELLOW
         self.draw = True
         self.linewidth = 1
         self.canvassize = 100
@@ -10170,7 +10170,7 @@ class NCLabTurtle3D:
         self.w1 = 0
         self.w2 = 0
         self.w3 = 1
-        self.linecolor = [0, 0, 255]
+        self.linecolor = YELLOW
         self.draw = True
         self.linewidth = 1
         self.canvassize = 100
