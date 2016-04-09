@@ -2731,21 +2731,20 @@ def MIRROR(obj, coord, axis):
             raise ExceptionWT(
                 "In MIRROR(obj, coord, axis), obj must be a 2D or 3D object!")
         if obj.dim == 2:
-            out = MIRROR2D(COPY(obj), coord, axis)
+            MIRROR2D(obj, coord, axis)
         else:
-            out = MIRROR3D(COPY(obj), coord, axis)
+            MIRROR3D(obj, coord, axis)
     else:
         obj = flatten(obj)
-        out = []
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
                     "In MIRROR(obj, coord, axis), obj must be a 2D or 3D object!")
             if oo.dim == 2:
-                out.append(MIRROR2D(COPY(oo), coord, axis))
+                MIRROR2D(oo, coord, axis)
             else:
-                out.append(MIRROR3D(COPY(oo), coord, axis))
-    return out
+                MIRROR3D(oo, coord, axis)
+    return obj
 
 
 def MIRROR2D(obj, coord, axis):
