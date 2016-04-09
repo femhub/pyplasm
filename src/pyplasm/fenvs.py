@@ -2713,10 +2713,10 @@ def mirror(*args):
         "Command mirror() is undefined. Try MIRROR() instead?")
 
 
-def MIRROR(obj, axis, coord):
+def MIRROR(obj, coord, axis):
     if axis != 'x' and axis != 'y' and axis != 'z' and axis != 'X' and axis != 'Y' and axis != 'Z' and axis != 1 and axis != 2 and axis != 3:
         raise ExceptionWT(
-            "In MIRROR(obj, axis, coord), axis must be X, Y or Z!")
+            "In MIRROR(obj, coord, axis), axis must be X, Y or Z!")
     if axis == 'x' or axis == 'X':
         axis = 1
     if axis == 'y' or axis == 'Y':
@@ -2725,32 +2725,32 @@ def MIRROR(obj, axis, coord):
         axis = 3
     if not ISNUMBER(coord):
         raise ExceptionWT(
-            "In MIRROR(obj, axis, coord), coord must be a number!")
+            "In MIRROR(obj, coord, axis), coord must be a number!")
     if not isinstance(obj, list):
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT(
-                "In MIRROR(obj, axis, coord), obj must be a 2D or 3D object!")
+                "In MIRROR(obj, coord, axis), obj must be a 2D or 3D object!")
         if obj.dim == 2:
-            MIRROR2D(obj, axis, coord)
+            MIRROR2D(obj, coord, axis)
         else:
-            MIRROR3D(obj, axis, coord)
+            MIRROR3D(obj, coord, axis)
     else:
         obj = flatten(obj)
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
-                    "In MIRROR(obj, axis, coord), obj must be a 2D or 3D object!")
+                    "In MIRROR(obj, coord, axis), obj must be a 2D or 3D object!")
             if oo.dim == 2:
-                MIRROR2D(oo, axis, coord)
+                MIRROR2D(oo, coord, axis)
             else:
-                MIRROR3D(oo, axis, coord)
+                MIRROR3D(oo, coord, axis)
     return COPY(obj)
 
 
-def MIRROR2D(obj, axis, coord):
+def MIRROR2D(obj, coord, axis):
     if not axis in [X, Y] and not axis in [1, 2]:
         raise ExceptionWT(
-            "The axis in MIRROR2D(obj, axis, coord) must be X or Y.")
+            "The axis in MIRROR2D(obj, coord, axis) must be X or Y.")
     if axis == X or axis == 1:
         MOVE(obj, -coord, 0)
         SCALE(obj, -1, 1)
@@ -2761,10 +2761,10 @@ def MIRROR2D(obj, axis, coord):
         MOVE(obj, 0, coord)
 
 
-def MIRROR3D(obj, axis, coord):
+def MIRROR3D(obj, coord, axis):
     if not axis in [X, Y, Z] and not axis in [1, 2, 3]:
         raise ExceptionWT(
-            "The axis in MIRROR2D(obj, axis, coord) must be X, Y or Z.")
+            "The axis in MIRROR2D(obj, coord, axis) must be X, Y or Z.")
     if axis == X or axis == 1:
         MOVE(obj, -coord, 0, 0)
         SCALE(obj, -1, 1, 1)
