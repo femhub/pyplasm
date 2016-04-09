@@ -2708,11 +2708,15 @@ def flip(*args):
     raise ExceptionWT(
         "Command flip() is undefined. Try FLIP() instead?")
 
+def mirror(*args):
+    raise ExceptionWT(
+        "Command mirror() is undefined. Try MIRROR() instead?")
 
-def FLIP(obj, axis, coord):
+
+def MIRROR(obj, axis, coord):
     if axis != 'x' and axis != 'y' and axis != 'z' and axis != 'X' and axis != 'Y' and axis != 'Z' and axis != 1 and axis != 2 and axis != 3:
         raise ExceptionWT(
-            "In FLIP(obj, axis, coord), axis must be X, Y or Z!")
+            "In MIRROR(obj, axis, coord), axis must be X, Y or Z!")
     if axis == 'x' or axis == 'X':
         axis = 1
     if axis == 'y' or axis == 'Y':
@@ -2721,32 +2725,32 @@ def FLIP(obj, axis, coord):
         axis = 3
     if not ISNUMBER(coord):
         raise ExceptionWT(
-            "In FLIP(obj, axis, coord), coord must be a number!")
+            "In MIRROR(obj, axis, coord), coord must be a number!")
     if not isinstance(obj, list):
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT(
-                "In FLIP(obj, axis, coord), obj must be a 2D or 3D object!")
+                "In MIRROR(obj, axis, coord), obj must be a 2D or 3D object!")
         if obj.dim == 2:
-            FLIP2D(obj, axis, coord)
+            MIRROR2D(obj, axis, coord)
         else:
-            FLIP3D(obj, axis, coord)
+            MIRROR3D(obj, axis, coord)
     else:
         obj = flatten(obj)
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
-                    "In FLIP(obj, axis, coord), obj must be a 2D or 3D object!")
+                    "In MIRROR(obj, axis, coord), obj must be a 2D or 3D object!")
             if oo.dim == 2:
-                FLIP2D(oo, axis, coord)
+                MIRROR2D(oo, axis, coord)
             else:
-                FLIP3D(oo, axis, coord)
+                MIRROR3D(oo, axis, coord)
     return COPY(obj)
 
 
-def FLIP2D(obj, axis, coord):
+def MIRROR2D(obj, axis, coord):
     if not axis in [X, Y] and not axis in [1, 2]:
         raise ExceptionWT(
-            "The axis in FLIP(obj, axis, coord) must be X or Y.")
+            "The axis in MIRROR2D(obj, axis, coord) must be X or Y.")
     if axis == X or axis == 1:
         MOVE(obj, -coord, 0)
         SCALE(obj, -1, 1)
@@ -2757,10 +2761,10 @@ def FLIP2D(obj, axis, coord):
         MOVE(obj, 0, coord)
 
 
-def FLIP3D(obj, axis, coord):
+def MIRROR3D(obj, axis, coord):
     if not axis in [X, Y, Z] and not axis in [1, 2, 3]:
         raise ExceptionWT(
-            "The axis in FLIP(obj, axis, coord) must be X, Y or Z.")
+            "The axis in MIRROR2D(obj, axis, coord) must be X, Y or Z.")
     if axis == X or axis == 1:
         MOVE(obj, -coord, 0, 0)
         SCALE(obj, -1, 1, 1)
@@ -2774,6 +2778,9 @@ def FLIP3D(obj, axis, coord):
         SCALE(obj, 1, 1, -1)
         MOVE(obj, 0, 0, coord)
 
+FLIP2D = MIRROR2D
+FLIP3D = MIRROR3D
+FLIP = MIRROR
 
 # ===================================================
 # ROTATE
@@ -5677,11 +5684,11 @@ def TRIANGLEFAN(points):
 # ===================================================
 
 
-def MIRROR(D):
-    def MIRROR0(pol):
-        return PLASM_STRUCT([PLASM_S(D)(-1)(pol), pol])
-
-    return MIRROR0
+#def MIRROR(D):
+#    def MIRROR0(pol):
+#        return PLASM_STRUCT([PLASM_S(D)(-1)(pol), pol])
+#
+#    return MIRROR0
 
 
 # ===================================================
