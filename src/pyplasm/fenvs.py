@@ -1566,16 +1566,16 @@ def erase(*args):
     raise ExceptionWT("Command erase() is undefined. Try ERASE() instead?")
 
 
-def ERASE(obj, axis, minval, maxval, warn=True):
+def ERASE(obj, minval, maxval, axis, warn=True):
     if axis != 'x' and axis != 'y' and axis != 'z' and axis != 'X' and axis != 'Y' and axis != 'Z' and axis != 1 and axis != 2 and axis != 3:
         raise ExceptionWT(
-            "Use X, Y or Z as axis in ERASE(obj, axis, minval, maxval)!")
+            "Use X, Y or Z as axis in ERASE(obj, minval, maxval, axis)!")
     if not ISNUMBER(minval):
         raise ExceptionWT(
-            "In ERASE(obj, axis, minval, maxval), minval must be a number!")
+            "In ERASE(obj, minval, maxval, axis), minval must be a number!")
     if not ISNUMBER(maxval):
         raise ExceptionWT(
-            "In ERASE(obj, axis, minval, maxval), maxval must be a number!")
+            "In ERASE(obj, minval, maxval, axis), maxval must be a number!")
     if axis == 'x' or axis == 'X':
         axis = 1
     if axis == 'y' or axis == 'Y':
@@ -1584,18 +1584,18 @@ def ERASE(obj, axis, minval, maxval, warn=True):
         axis = 3
     if axis != 1 and axis != 2 and axis != 3:
         raise ExceptionWT(
-            "In ERASE(obj, axis, minval, maxval), axis must be X, Y or Z!")
+            "In ERASE(obj, minval, maxval, axis), axis must be X, Y or Z!")
     if maxval <= minval:
         raise ExceptionWT(
-            "In ERASE(obj, axis, minval, maxval), minval must be less than maxval!")
+            "In ERASE(obj, minval, maxval, axis), minval must be less than maxval!")
 
     if not isinstance(obj, list):
         if EMPTYSET(obj):
             raise ExceptionWT(
-                "In ERASE(obj, axis, minval, maxval), obj is an empty set!")
+                "In ERASE(obj, minval, maxval, axis), obj is an empty set!")
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT(
-                "In ERASE(obj, axis, minval, maxval), obj must be a 2D or 3D object!")
+                "In ERASE(obj, minval, maxval, axis), obj must be a 2D or 3D object!")
         if axis == 1:
             obj.erasex(minval, maxval)
         if axis == 2:
@@ -1606,7 +1606,7 @@ def ERASE(obj, axis, minval, maxval, warn=True):
         if axis == 3:
             if obj.dim == 2:
                 raise ExceptionWT(
-                    "In ERASE(obj, axis, minval, maxval), axis = Z may not be used with 2D objects!")
+                    "In ERASE(obj, minval, maxval, axis), axis = Z may not be used with 2D objects!")
             obj.rotate(90, 2)
             obj.erasex(minval, maxval)
             if not EMPTYSET(obj):
@@ -1616,7 +1616,7 @@ def ERASE(obj, axis, minval, maxval, warn=True):
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
-                    "In ERASE(obj, axis, minval, maxval), obj must be a 2D or 3D object!")
+                    "In ERASE(obj, minval, maxval, axis), obj must be a 2D or 3D object!")
             if not EMPTYSET(oo):
                 if axis == 1:
                     oo.erasex(minval, maxval)
@@ -1628,7 +1628,7 @@ def ERASE(obj, axis, minval, maxval, warn=True):
                 if axis == 3:
                     if oo.dim == 2:
                         raise ExceptionWT(
-                            "In ERASE(obj, axis, minval, maxval), axis = Z may not be used with 2D objects!")
+                            "In ERASE(obj, minval, maxval, axis), axis = Z may not be used with 2D objects!")
                     oo.rotate(90, 2)
                     oo.erasex(minval, maxval)
                     if not EMPTYSET(oo):
@@ -2052,9 +2052,9 @@ def BRICK(a, b, c, r=0):
             o3 = []
         c1 = SPHERE(r)
         c5 = COPY(c1)
-        ERASE(c1, Z, -2 * r, 0)
-        ERASE(c1, Y, -2 * r, 0)
-        ERASE(c1, X, -2 * r, 0)
+        ERASE(c1, -2 * r, 0, Z)
+        ERASE(c1, -2 * r, 0, Y)
+        ERASE(c1, -2 * r, 0, X)
         c2 = COPY(c1)
         MOVE(c1, a - r, b - r, c - r)
         ROTATE(c2, 90, Z)
@@ -2066,9 +2066,9 @@ def BRICK(a, b, c, r=0):
         ROTATE(c4, 90, Z)
         MOVE(c4, a - r, r, c - r)
         ROTATE(c5, 90, Y)
-        ERASE(c5, Z, 0, 2 * r)
-        ERASE(c5, Y, -2 * r, 0)
-        ERASE(c5, X, -2 * r, 0)
+        ERASE(c5, 0, 2 * r, Z)
+        ERASE(c5, -2 * r, 0, Y)
+        ERASE(c5, -2 * r, 0, X)
         c6 = COPY(c5)
         MOVE(c5, a - r, b - r, r)
         ROTATE(c6, 90, Z)
@@ -9742,7 +9742,7 @@ def NCLabTurtleImage3D(turtle):
     t8 = PRISM(t, 1)
     t9 = SPHERE(5.5, 10)
     ROTATE(t9, 90, X)
-    ERASE(t9, Z, -10, 0)
+    ERASE(t9, -10, 0, Z)
     SCALE(t9, 0.75, X)
     SCALE(t9, 0.75, Z)
     MOVE(t9, -0.01, Z)
