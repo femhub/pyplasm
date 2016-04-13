@@ -1557,7 +1557,7 @@ def SIZEZ(obj):
 
 
 # ===========================================================
-# ERASE(obj, axis, min, max) - ERASE PART OF OBJECT THAT LIES
+# ERASE(obj, min, max, axis) - ERASE PART OF OBJECT THAT LIES
 # BETWEEN MIN AND MAX in AXIAL DIRECTION "axis"
 # ===========================================================
 
