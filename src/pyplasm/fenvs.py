@@ -1639,7 +1639,7 @@ def ERASE(obj, minval, maxval, axis, warn=True):
 
 
 # ============================================================
-# SPLIT(obj, axis, coord) - SPLIT AN OBJECT IN AXIAL DIRECTION
+# SPLIT(obj, coord, axis) - SPLIT AN OBJECT IN AXIAL DIRECTION
 # "axis" INTO TWO PARTS SEPARATED AT COORDINATE "coord"
 # ============================================================
 
@@ -1648,12 +1648,12 @@ def split(*args):
     raise ExceptionWT("Command split() is undefined. Try SPLIT() instead?")
 
 
-def SPLIT(obj, axis, coord, warn=True):
+def SPLIT(obj, coord, axis, warn=True):
     if axis != 'x' and axis != 'y' and axis != 'z' and axis != 'X' and axis != 'Y' and axis != 'Z' and axis != 1 and axis != 2 and axis != 3:
-        raise ExceptionWT("Use X, Y or Z as axis in SPLIT(obj, axis, coord)!")
+        raise ExceptionWT("Use X, Y or Z as axis in SPLIT(obj, coord, axis)!")
     if not ISNUMBER(coord):
         raise ExceptionWT(
-            "In SPLIT(obj, axis, coord), coord must be a number!")
+            "In SPLIT(obj, coord, axis), coord must be a number!")
     if axis == 'x' or axis == 'X':
         axis = 1
     if axis == 'y' or axis == 'Y':
@@ -1662,15 +1662,15 @@ def SPLIT(obj, axis, coord, warn=True):
         axis = 3
     if axis != 1 and axis != 2 and axis != 3:
         raise ExceptionWT(
-            "In SPLIT(obj, axis, coord), axis must be X, Y or Z!")
+            "In SPLIT(obj, coord, axis), axis must be X, Y or Z!")
 
     if not isinstance(obj, list):
         if EMPTYSET(obj):
             raise ExceptionWT(
-                "In SPLIT(obj, axis, coord), obj is an empty set!")
+                "In SPLIT(obj, coord, axis), obj is an empty set!")
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT(
-                "In SPLIT(obj, axis, coord), obj must be a 2D or 3D object!")
+                "In SPLIT(obj, coord, axis), obj must be a 2D or 3D object!")
         if axis == 1:
             obj1, obj2 = obj.splitx(coord)
         if axis == 2:
@@ -1687,7 +1687,7 @@ def SPLIT(obj, axis, coord, warn=True):
         if axis == 3:
             if obj.dim == 2:
                 raise ExceptionWT(
-                    "In SPLIT(obj, axis, coord), axis = Z may not be used with 2D objects!")
+                    "In SPLIT(obj, coord, axis), axis = Z may not be used with 2D objects!")
             obj.rotate(90, 2)
             obj1, obj2 = obj.splitx(coord)
             if not EMPTYSET(obj1):
@@ -1705,7 +1705,7 @@ def SPLIT(obj, axis, coord, warn=True):
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
-                    "In SPLIT(obj, axis, coord), obj must be a 2D or 3D object!")
+                    "In SPLIT(obj, coord, axis), obj must be a 2D or 3D object!")
             if not EMPTYSET(oo):
                 if axis == 1:
                     oo1, oo2 = oo.splitx(coord)
@@ -1725,7 +1725,7 @@ def SPLIT(obj, axis, coord, warn=True):
                 if axis == 3:
                     if oo.dim == 2:
                         raise ExceptionWT(
-                            "In SPLIT(obj, axis, coord), axis = Z may not be used with 2D objects!")
+                            "In SPLIT(obj, coord, axis), axis = Z may not be used with 2D objects!")
                     oo.rotate(90, 2)
                     oo1, oo2 = oo.splitx(coord)
                     if not EMPTYSET(oo1):
@@ -9705,7 +9705,7 @@ def NCLabTurtleTrace3D(turtle, layer=0, dots=True):
             s = SPHERE(turtle.linewidth/2 + layer, turtle.edgenum)
             ROTATE(s, 90, Y)
             ROTATE(s, 360 / turtle.edgenum / 2, X)
-            s1, s2 = SPLIT(s, X, 0)
+            s1, s2 = SPLIT(s, 0, X)
             COLOR(s1, l.linecolor)
             COLOR(s2, l.linecolor)
             MOVE(s1, l.startx, l.starty, l.startz)
