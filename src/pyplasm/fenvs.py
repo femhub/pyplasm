@@ -8458,6 +8458,14 @@ def IS3D(tested):
         return result
 
 
+# Define an empty list:
+EMPTY = []
+EMPTYLIST = []
+
+# Define list append:
+def APPEND(l, item):
+    l.append(item)
+    
 # Is a set an empty set?
 
 
