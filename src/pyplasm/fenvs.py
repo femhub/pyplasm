@@ -10236,7 +10236,7 @@ def SHOW2D(o, zlift, color=[]):
     MOVE(o, zlift, Z)
     SHOW(o)
   
-def BBTEST(lab, obj, minx, maxx, miny, maxy, 
+def BBTEST(lab, obj, objdim, minx, maxx, miny, maxy, 
            minz, maxz, digits, tol, verbose):
     success = True
     if objdim == 2:
@@ -10291,7 +10291,7 @@ def MAINTEST(lab, obj, objdim, objname, objminx, objmaxx,
     ##### BB TEST #####
 
     if success:
-        if not BBTEST(lab, obj, objminx, objmaxx, objminy, objmaxy, objminz, objmaxz, objdim, tol, verbose):
+        if not BBTEST(lab, obj, objdim, objminx, objmaxx, objminy, objmaxy, objminz, objmaxz, digits, tol, verbose):
             success = False
 
     ##### SHAPE TEST #####
