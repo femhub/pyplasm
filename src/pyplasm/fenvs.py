@@ -10288,8 +10288,8 @@ def MAINTEST(lab, testobj, extremes, tol, digits, testfns,
              colors, doshapetest, showsol, verbose):
 
     obj = testobj[0]
-    objdim = testobj[1]
-    objname = testobj[2]
+    objname = testobj[1]
+    objdim = testobj[2]
     
     insfn = testfns[0]
     ctestfn = testfns[1]
