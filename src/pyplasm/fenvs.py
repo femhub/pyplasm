@@ -10236,8 +10236,16 @@ def SHOW2D(o, zlift, color=[]):
     MOVE(o, zlift, Z)
     SHOW(o)
   
-def BBTEST(lab, obj, objdim, minx, maxx, miny, maxy, 
-           minz, maxz, digits, tol, verbose):
+def BBTEST(lab, obj, objdim, extremes, digits, tol, verbose):
+    minx = extremes[0]
+    maxx = extremes[1]
+    miny = extremes[2]
+    maxy = extremes[3]
+    minz = 0
+    maxz = 0
+    if objdim == 3:
+        minz = extremes[4]
+        maxz = extremes[5]
     success = True
     if objdim == 2:
         success = BBTEST2D(obj, minx, maxx, miny, maxy, tol)
@@ -10276,13 +10284,19 @@ def SHAPETEST(lab, obj, ins, ctest, verbose):
         lab.grade(True, "Shape test passed.")
     return True
 
-def MAINTEST(lab, obj, objdim, objname, objminx, objmaxx, 
-             objminy, objmaxy, objminz, objmaxz, 
-             tol, digits, insfn, ctestfn, solfn,
-             errcol, errcolname, solcol, 
-             solcolname, doshapetest, showsol, 
-             verbose):
-  
+def MAINTEST(lab, obj, objdim, objname, extremes, 
+             tol, digits, testfns, colors,
+             doshapetest, showsol, verbose):
+
+    insfn = testfns[0]
+    ctestfn = testfns[1]
+    solfn = testfns[2]
+
+    errcol = colors[0]
+    errcolname = colors[1]
+    solcol = colors[2]
+    solcolname = colors[3]
+
     ##### SANITY TEST #####
     success, errmsg = VALIDATE(obj, objname, objdim)
     if success == False:
@@ -10291,7 +10305,7 @@ def MAINTEST(lab, obj, objdim, objname, objminx, objmaxx,
     ##### BB TEST #####
 
     if success:
-        if not BBTEST(lab, obj, objdim, objminx, objmaxx, objminy, objmaxy, objminz, objmaxz, digits, tol, verbose):
+        if not BBTEST(lab, obj, objdim, extremes, digits, tol, verbose):
             success = False
 
     ##### SHAPE TEST #####
