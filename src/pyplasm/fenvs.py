@@ -10284,10 +10284,13 @@ def SHAPETEST(lab, obj, ins, ctest, verbose):
         lab.grade(True, "Shape test passed.")
     return True
 
-def MAINTEST(lab, obj, objdim, objname, extremes, 
-             tol, digits, testfns, colors,
-             doshapetest, showsol, verbose):
+def MAINTEST(lab, testobj, extremes, tol, digits, testfns,
+             colors, doshapetest, showsol, verbose):
 
+    obj = testobj[0]
+    objdim = testobj[1]
+    objname = testobj[2]
+    
     insfn = testfns[0]
     ctestfn = testfns[1]
     solfn = testfns[2]
