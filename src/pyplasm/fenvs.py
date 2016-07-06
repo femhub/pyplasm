@@ -10237,6 +10237,8 @@ def SHOW2D(o, zlift, color=[]):
     SHOW(o)
   
 def BBTEST(lab, obj, objdim, extremes, digits, tol, verbose):
+    if verbose:
+        lab.grade(True, "Checking bounding box...")
     minx = extremes[0]
     maxx = extremes[1]
     miny = extremes[2]
@@ -10274,6 +10276,8 @@ def BBTEST(lab, obj, objdim, extremes, digits, tol, verbose):
         return True
   
 def SHAPETEST(lab, obj, ins, ctest, verbose):
+    if verbose:
+        lab.grade(True, "Checking shape...")
     if not SUBSET(ins, obj):
         lab.grade(False, "Shape test failed.")
         return False
@@ -10299,6 +10303,8 @@ def MAINTEST(lab, testobj, extremes, tol, digits, testfns,
     errcolname = colors[1]
     solcol = colors[2]
     solcolname = colors[3]
+
+    lab.grade(True, "Checking object '" + objname + "'...") 
 
     ##### SANITY TEST #####
     success, errmsg = VALIDATE(obj, objname, objdim)
