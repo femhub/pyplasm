@@ -10339,6 +10339,7 @@ def MAINTEST(lab, testobj, extremes, tol, digits, testfns,
             # HIDE ORIGINAL SOLUTION, SHOW ONE IN errcol COLOR
             #COLOR(err, errcol)
             #SHOW(err)
+            pass
         if showsol:
             sol = solfn()
             if objdim == 2:
