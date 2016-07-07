@@ -10335,16 +10335,22 @@ def MAINTEST(lab, testobj, extremes, tol, digits, testfns,
         if objdim == 2:
             SHOW2D(err, 0.0004, errcol)
         else:
-            COLOR(err, errcol)
-            SHOW(err)
+            # THIS NEEDS REVISITING WHEN HIDE() IS AVAILABLE:
+            # HIDE ORIGINAL SOLUTION, SHOW ONE IN errcol COLOR
+            #COLOR(err, errcol)
+            #SHOW(err)
         if showsol:
             sol = solfn()
             if objdim == 2:
                 SHOW2D(sol, 0.0006, solcol)
             else:
+                # THIS SOLUTION IS FOR DISPLAY ONLY. IT SHOULD BE
+                # A BIT BIGGER THAN THE CORRECT SOLUTION
                 COLOR(sol, solcol)
                 SHOW(sol)
-        lab.grade(False, "Your object '" + objname + "' is shown in " + errcolname + ".")
-        lab.grade(False, "It may be hidden under the correct solution.")
+        # THIS NEEDS TO BE ENABLED FOR 3D OBJECTS TOO!
+        if objdim == 2:
+            lab.grade(False, "Your object '" + objname + "' is shown in " + errcolname + ".")
+            lab.grade(False, "It may be hidden inside of the correct solution.")
         lab.grade(False, "Correct object '" + objname + "' is shown in " + solcolname + ".")
         return False
