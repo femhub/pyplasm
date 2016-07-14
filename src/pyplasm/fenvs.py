@@ -9146,7 +9146,7 @@ def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
             if turtle.is2D:   # Command height() was not used
                 out.append(PRISM(cir, height))
             else:
-                out.append(PRISM(cir. l.lineheight))
+                out.append(PRISM(cir, l.lineheight))
     return out
 
 
