@@ -9112,7 +9112,7 @@ def NCLabTurtleCanvas(turtle):
 
 
 # Return trace as list of PLaSM objects:
-def NCLabTurtleTrace(turtle, layer=0, dots=True):
+def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
     out = []
     n = len(turtle.lines)
     # List of lines is empty - just return:
@@ -9131,7 +9131,10 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
             cir = CIRCLE(radius, 8)
             MOVE(cir, l.startx, l.starty)
             COLOR(cir, l.linecolor)
-            out.append(cir)
+            if self.is2D:   # Command height() was not used
+                out.append(PRISM(cir, height))
+            else:
+                out.append(PRISM(cir, l.lineheight))
             # If this is the last line, add 
             # circle at end point and return:
             if i == n - 1:
@@ -9139,7 +9142,10 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 cir = CIRCLE(radius, 8)
                 MOVE(cir, l.endx, l.endy)
                 COLOR(cir, l.linecolor)
-                out.append(cir)
+                if self.is2D:   # Command height() was not used
+                    out.append(PRISM(cir, height))
+                else:
+                    out.append(PRISM(cir. l.lineheight))
                 return out
             # Add circle if next line is not connected 
             # (we know this is not the last line):
@@ -9150,7 +9156,10 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 cir = CIRCLE(radius, 8)
                 MOVE(cir, l.endx, l.endy)
                 COLOR(cir, l.linecolor)
-                out.append(cir)
+                if self.is2D:   # Command height() was not used
+                    out.append(PRISM(cir, height))
+                else:
+                    out.append(PRISM(cir. l.lineheight))
     return out
 
 
@@ -9195,7 +9204,7 @@ def NCLabTurtleImage(turtle):
 
 # Goes through the turtle trace and looks 
 # for a pair of adjacent segments with the 
-# same angle, width and color. If found, 
+# same angle, width, height and color. If found, 
 # returns index of the first. If not found, 
 # returns -1:
 def NCLabTurtleFindPair(turtle):
@@ -9222,16 +9231,18 @@ def NCLabTurtleFindPair(turtle):
             if l1.linecolor[i] != l2.linecolor[i]:
                 f4 = False
                 break
-        # Width:
+        # Line width:
         f5 = (l1.linewidth - l2.linewidth) < 0.000001
-        if f1 and f2 and f3 and f4 and f5:
+        # Line height:
+        f6 = (l1.lineheight - l2.lineheight) < 0.000001
+        if f1 and f2 and f3 and f4 and f5 and f6:
             return i
     return -1
 
 
 # Merges adjacent segments that lie
 # on the same line, and have the same 
-# width and color:
+# width, height and color:
 def NCLabTurtleCleanTrace(turtle):
     index = NCLabFindPair(turtle)
     while index != -1:
@@ -9250,15 +9261,12 @@ NCLAB_TURTLE_IMAGE_H = 0.0008
 NCLAB_TURTLE_EPS = 0.0001
 
 def NCLabTurtleShow(turtle, layer=0, dots=True):
-    h_image = NCLAB_TURTLE_IMAGE_H
-    h_trace = NCLAB_TURTLE_TRACE_H
     image = NCLabTurtleImage(turtle)
     canvas = NCLabTurtleCanvas(turtle)
-    trace = NCLabTurtleTrace(turtle, layer, dots)
-    # Make the trace 3D:
-    image = PRISM(image, h_image)
-    canvas = PRISM(canvas, h_trace)
-    trace = PRISM(trace, h_trace)
+    trace = NCLabTurtleTrace(turtle, NCLAB_TURTLE_TRACE_H, layer, dots)
+    # Make the image and canvas 3D:
+    image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
+    canvas = PRISM(canvas, NCLAB_TURTLE_TRACE_H)
     if turtle.isvisible:
         SHOW(image, canvas, trace)
     else:
@@ -9268,12 +9276,13 @@ def NCLabTurtleShow(turtle, layer=0, dots=True):
 
 # Class Line:
 class NCLabTurtleLine:
-    def __init__(self, sx, sy, ex, ey, w, c):
+    def __init__(self, sx, sy, ex, ey, w, h, c):
         self.startx = sx
         self.starty = sy
         self.endx = ex
         self.endy = ey
         self.linewidth = w
+        self.lineheight = h
         self.linecolor = c
 
 # Class Turtle:
@@ -9285,9 +9294,11 @@ class NCLabTurtle:
         self.linecolor = [0, 0, 255]
         self.draw = True
         self.linewidth = 1
-        self.height = 0
+        self.lineheight = 0
         self.canvassize = 100
         self.lines = []
+        self.is2D = True       # If any line height is set
+                               # to nonzero, this will be False
         self.isvisible = True
         self.isextruded = False
         self.isspiral = False
@@ -9323,6 +9334,12 @@ class NCLabTurtle:
         if w > 10.0:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
         self.linewidth = w
+
+    def height(self, h):
+        if h <= 0:
+            raise ExceptionWT("All line heights must be greater all equal to zero.")
+        self.lineheight = h
+        self.is2D = False
 
     def penup(self):
         self.draw = False
@@ -9439,7 +9456,7 @@ class NCLabTurtle:
         return self.linewidth
 
     def getheight(self):
-        return self.height
+        return self.lineheight
 
     def visible(self):
         self.isvisible = True
@@ -9459,13 +9476,17 @@ class NCLabTurtle:
         self.pendown()
         self.goto(x2, y2)
 
+    # If called, the extrude command will override individual
+    # heights of line segments.
     def extrude(self, height = 1):
+        if self.is2D == False:
+            raise ExceptionWT("Once you use the height() command, extrude() cannot be used!")
         if self.extrudecalled == True:
             raise ExceptionWT("Command extrude() can be only called once!")
         self.extrudecalled = True
         if height <= 0.000001:
             raise ExceptionWT("Height 'h' in extrude(h) must be positive!")
-        self.height = height
+        self.lineheight = height
         self.isextruded = True
         self.isspiral = False
         self.isrosol = False
@@ -9473,18 +9494,19 @@ class NCLabTurtle:
         self.isroshell = False
         layer = 0
         dots = True
-        base = NCLabTurtleTrace(self, layer, dots)
-        self.geom = PRISM(base, self.height)
+        self.geom = NCLabTurtleTrace(self, self.lineheight, layer, dots)
 
     def export(self):
-        is3d = self.isrosol or self.isrosurf or self.isroshell or self.isspiral or self.isextruded 
-        if not is3d:                        # Trace is 2D:
-            return NCLabTurtleTrace(self)
+        is3D = self.isrosol or self.isrosurf or self.isroshell or self.isspiral or self.isextruded 
+        if (not is3D) and self.is2D:                        # Trace is 2D:
+            return NCLabTurtleTrace(self, 0)
         else:                               # Trace is 3D:
             return self.geom
 
     # Revolves complete trace including width
     def revolve(self, angle=360, div=32):   
+        if self.is2D == False:
+            raise ExceptionWT("Once you use the height() command, revolve() cannot be used!")
         if self.revolvecalled == True:
             raise ExceptionWT("Command revolve() can be only called once!")
         self.revolvecalled = True
@@ -9502,6 +9524,8 @@ class NCLabTurtle:
 
     # Another name for revolve()
     def roshell(self, angle=360, div=32):
+        if self.is2D == False:
+            raise ExceptionWT("Once you use the height() command, roshell() cannot be used!")
         if self.roshellcalled == True:
             raise ExceptionWT("Command roshell() can be only called once!")
         self.roshellcalled = True
@@ -9511,6 +9535,8 @@ class NCLabTurtle:
 
     # Spiral
     def spiral(self, angle, elevation, div=48):
+        if self.is2D == False:
+            raise ExceptionWT("Once you use the height() command, spiral() cannot be used!")
         if self.spiralcalled == True:
             raise ExceptionWT("Command spiral() can be only called once!")
         self.spiralcalled = True
@@ -9528,6 +9554,8 @@ class NCLabTurtle:
 
     # Rotational solid
     def rosol(self, angle=360, div=32):     
+        if self.is2D == False:
+            raise ExceptionWT("Once you use the height() command, rosol() cannot be used!")
         if self.rosolcalled == True:
             raise ExceptionWT("Command rosol() can be only called once!")
         self.rosolcalled = True
@@ -9554,6 +9582,8 @@ class NCLabTurtle:
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
+        if self.is2D == False:
+            raise ExceptionWT("Once you use the height() command, rosurf() cannot be used!")
         if self.rosurfcalled == True:
             raise ExceptionWT("Command rosurf() can be only called once!")
         self.rosurfcalled = True
@@ -9585,7 +9615,7 @@ class NCLabTurtle:
         self.linecolor = [0, 0, 255]
         self.draw = True
         self.linewidth = 1
-        self.height = 0
+        self.lineheight = 0
         self.canvassize = 100
         self.isvisible = True
         self.isextruded = False
