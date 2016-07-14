@@ -9324,8 +9324,8 @@ class NCLabTurtle:
         self.linewidth = w
 
     def height(self, h):
-        if h < 0:
-            raise ExceptionWT("The heights of all line segments must be greater or equal to zero.")
+        if h <= 0:
+            raise ExceptionWT("In height(h), h must be greater than zero!")
         self.lineheight = h
         self.is2D = False
 
