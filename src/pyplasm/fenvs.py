@@ -9364,6 +9364,7 @@ class NCLabTurtle:
     def printlines(self):
         for line in self.lines:
             print("Start:", line.startx, line.starty, "End:", line.endx, line.endy)
+            print("Width:", line.linewidth, "Height:", line.lineheight, "Color:", line.linecolor)
 
     def forward(self, dist):
         self.go(dist)
