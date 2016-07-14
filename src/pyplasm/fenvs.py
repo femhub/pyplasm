@@ -9111,20 +9111,21 @@ def NCLabTurtleCanvas(turtle):
     return [dot1, dot2, dot3, dot4]
 
 
-# Return trace as list of PLaSM objects:
-def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
+# Return trace as list of PLaSM objects. Assumes that
+# every line segment has a height:
+def NCLabTurtleTrace(turtle, layer=0, dots=True):
     out = []
     n = len(turtle.lines)
     # List of lines is empty - just return:
     if n == 0:
         return out
-    # There is at leats one line segment:
+    # There is at least one line segment:
     for i in range(n):
         l = turtle.lines[i]
         # Add rectangle corresponding to the line:
         rect = NCLabTurtleRectangle(l, layer)
-        if turtle.is2D:   # Command height() was not used
-            out.append(PRISM(rect, height))
+        if l.lineheight == 0:
+            out.append(rect)
         else:
             out.append(PRISM(rect, l.lineheight))
         # If dots == True, add circles:
@@ -9134,8 +9135,8 @@ def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
             cir = CIRCLE(radius, 8)
             MOVE(cir, l.startx, l.starty)
             COLOR(cir, l.linecolor)
-            if turtle.is2D:   # Command height() was not used
-                out.append(PRISM(cir, height))
+            if l.lineheight == 0:
+                out.append(cir)
             else:
                 out.append(PRISM(cir, l.lineheight))
             # Add circle at end point:
@@ -9143,8 +9144,8 @@ def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
             cir = CIRCLE(radius, 8)
             MOVE(cir, l.endx, l.endy)
             COLOR(cir, l.linecolor)
-            if turtle.is2D:   # Command height() was not used
-                out.append(PRISM(cir, height))
+            if l.lineheight == 0:
+                out.append(cir)
             else:
                 out.append(PRISM(cir, l.lineheight))
     return out
@@ -9250,7 +9251,7 @@ NCLAB_TURTLE_EPS = 0.0001
 def NCLabTurtleShow(turtle, layer=0, dots=True):
     image = NCLabTurtleImage(turtle)
     canvas = NCLabTurtleCanvas(turtle)
-    trace = NCLabTurtleTrace(turtle, NCLAB_TURTLE_TRACE_H, layer, dots)
+    trace = NCLabTurtleTrace(turtle, layer, dots)
     # Make the image and canvas 3D:
     image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
     canvas = PRISM(canvas, NCLAB_TURTLE_TRACE_H)
@@ -9481,14 +9482,19 @@ class NCLabTurtle:
         self.isrosol = False
         self.isrosurf = False
         self.isroshell = False
+        for l in self.lines:
+            l.lineheight = height
+        self.is2D = False
         layer = 0
         dots = True
-        self.geom = NCLabTurtleTrace(self, self.lineheight, layer, dots)
+        self.geom = NCLabTurtleTrace(self, layer, dots)
 
     def export(self):
         is3D = self.isrosol or self.isrosurf or self.isroshell or self.isspiral or self.isextruded 
         if (not is3D) and self.is2D:                        # Trace is 2D:
-            return NCLabTurtleTrace(self, 0)
+            for l in self.lines:
+                l.lineheight = NCLAB_TURTLE_TRACE_H
+            return NCLabTurtleTrace(self)
         else:                               # Trace is 3D:
             return self.geom
 
