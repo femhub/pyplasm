@@ -9256,8 +9256,7 @@ def NCLabTurtleShow(turtle, layer=0, dots=True):
     image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
     canvas = PRISM(canvas, NCLAB_TURTLE_TRACE_H)
     if turtle.isvisible:
-        if turtle.is2D:
-            SHOW(image, canvas, trace)
+        SHOW(image, canvas, trace)
     else:
         SHOW(canvas, trace)
 
