@@ -9469,8 +9469,6 @@ class NCLabTurtle:
     # If called, the extrude command will override individual
     # heights of line segments.
     def extrude(self, height = 1):
-        if self.is2D == False:
-            raise ExceptionWT("Once you use the height() command, extrude() cannot be used!")
         if self.extrudecalled == True:
             raise ExceptionWT("Command extrude() can be only called once!")
         self.extrudecalled = True
