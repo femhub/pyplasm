@@ -9123,7 +9123,10 @@ def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
         l = turtle.lines[i]
         # Add rectangle corresponding to the line:
         rect = NCLabTurtleRectangle(l, layer)
-        out.append(rect)
+        if turtle.is2D:   # Command height() was not used
+            out.append(PRISM(rect, height))
+        else:
+            out.append(PRISM(rect, l.lineheight))
         # If dots == True, add circles:
         if dots == True:
             # Add circle to start point:
