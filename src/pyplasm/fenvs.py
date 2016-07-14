@@ -9131,7 +9131,7 @@ def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
             cir = CIRCLE(radius, 8)
             MOVE(cir, l.startx, l.starty)
             COLOR(cir, l.linecolor)
-            if self.is2D:   # Command height() was not used
+            if turtle.is2D:   # Command height() was not used
                 out.append(PRISM(cir, height))
             else:
                 out.append(PRISM(cir, l.lineheight))
@@ -9140,7 +9140,7 @@ def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
             cir = CIRCLE(radius, 8)
             MOVE(cir, l.endx, l.endy)
             COLOR(cir, l.linecolor)
-            if self.is2D:   # Command height() was not used
+            if turtle.is2D:   # Command height() was not used
                 out.append(PRISM(cir, height))
             else:
                 out.append(PRISM(cir. l.lineheight))
