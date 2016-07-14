@@ -9352,7 +9352,7 @@ class NCLabTurtle:
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
-            newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.linecolor)
+            newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.lineheight, self.linecolor)
             self.lines.append(newline)
         self.posx = newx
         self.posy = newy
@@ -9400,7 +9400,7 @@ class NCLabTurtle:
         dx = newx - self.posx
         dy = newy - self.posy
         if self.draw == True:
-            newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.linecolor)
+            newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.lineheight, self.linecolor)
             self.lines.append(newline)
         self.turtleangle = arctan2(dy, dx) * 180 / pi
         self.posx = newx
