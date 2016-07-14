@@ -9135,31 +9135,15 @@ def NCLabTurtleTrace(turtle, height, layer=0, dots=True):
                 out.append(PRISM(cir, height))
             else:
                 out.append(PRISM(cir, l.lineheight))
-            # If this is the last line, add 
-            # circle at end point and return:
-            if i == n - 1:
-                radius = 0.5 * l.linewidth + layer
-                cir = CIRCLE(radius, 8)
-                MOVE(cir, l.endx, l.endy)
-                COLOR(cir, l.linecolor)
-                if self.is2D:   # Command height() was not used
-                    out.append(PRISM(cir, height))
-                else:
-                    out.append(PRISM(cir. l.lineheight))
-                return out
-            # Add circle if next line is not connected 
-            # (we know this is not the last line):
-            dx = turtle.lines[i + 1].startx - l.endx
-            dy = turtle.lines[i + 1].starty - l.endy
-            if abs(dx) > 0.000001 or abs(dy) > 0.000001:
-                radius = 0.5 * l.linewidth + layer
-                cir = CIRCLE(radius, 8)
-                MOVE(cir, l.endx, l.endy)
-                COLOR(cir, l.linecolor)
-                if self.is2D:   # Command height() was not used
-                    out.append(PRISM(cir, height))
-                else:
-                    out.append(PRISM(cir. l.lineheight))
+            # Add circle at end point:
+            radius = 0.5 * l.linewidth + layer
+            cir = CIRCLE(radius, 8)
+            MOVE(cir, l.endx, l.endy)
+            COLOR(cir, l.linecolor)
+            if self.is2D:   # Command height() was not used
+                out.append(PRISM(cir, height))
+            else:
+                out.append(PRISM(cir. l.lineheight))
     return out
 
 
