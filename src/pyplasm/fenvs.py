@@ -9652,9 +9652,10 @@ class NCLabTurtle:
         self.showcalled = True
         # If geom is not None, show geometry, else show trace:
         if self.geom != None:
+            print("I am here 1!")
             SHOW(self.geom)
-            print("I am here!")
         else:
+            print("I am here 2!")
             NCLabTurtleShow(self, layer, dots)
 
 
