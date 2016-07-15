@@ -10294,12 +10294,15 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
     ##### GEOMETRY TEST #####
  
     if not SUBSET(subset, trace) or not SUBSET(trace, superset):
-        # Show wrong solution in red:
-        turtle.extrude(errheight)
+        # Show wrong solution in 'errcol' color:
+        if extrusionflag:
+            turtle.extrude(extrusionheight + errheight)
+        else:
+            turtle.extrude(errheight)
         err = turtle.geometry()
         COLOR(err, errcol)
         SHOW(err)
-        # Show correct solution in pink:
+        # Show correct solution in 'solcol' color:
         tsol.extrude(solheight)
         sol = tsol.geometry()    
         COLOR(sol, solcol)
