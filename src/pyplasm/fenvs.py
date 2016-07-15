@@ -9241,10 +9241,12 @@ def NCLabTurtleCleanTrace(turtle):
         del turtle.lines[index + 1]
         index = NCLabFindPair(turtle)
 
-# Extrusion heights for the turtle trace, the red 
+# Extrusion heights for the turtle trace, the red (sol) 
 # (correct solution) trace and the turtle itself:
 NCLAB_TURTLE_TRACE_H = 0.0005
+NCLAB_TURTLE_ERR_H = 0.0006
 NCLAB_TURTLE_RED_H = 0.0007
+NCLAB_TURTLE_SOL_H = NCLAB_TURTLE_RED_H
 NCLAB_TURTLE_IMAGE_H = 0.0008
 NCLAB_TURTLE_EPS = 0.0001
 
