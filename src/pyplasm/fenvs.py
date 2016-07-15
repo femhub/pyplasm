@@ -10257,7 +10257,7 @@ class NCLabTurtle3D:
 
 def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcolname, errheight):
   
-    if not isinstance(tina, NCLabTurtle):
+    if not isinstance(turtle, NCLabTurtle):
         lab.grade(False, "Object 'tina' is not an NCLabTurtle!")
         lab.grade(False, "Please do not redefine 'tina'!")
         return False
