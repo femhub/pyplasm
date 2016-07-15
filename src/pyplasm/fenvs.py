@@ -10255,13 +10255,27 @@ class NCLabTurtle3D:
 #                                                           #
 #############################################################
 
-def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcolname, errheight):
+def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcolname, errheight, colortest, testcol, testcolname, extrusionflag, extrusionheight):
   
     if not isinstance(turtle, NCLabTurtle):
         lab.grade(False, "Object 'tina' is not an NCLabTurtle!")
         lab.grade(False, "Please do not redefine 'tina'!")
         return False
-  
+
+    ##### COLOR TEST #####
+
+    if colortest:
+        if turtle.getcolor() != testcol:
+            lab.grade(False, "Please use " + testcolname + " color!")
+            return False
+
+    ##### EXTRUSION TEST #####
+
+    if extrusionflag:
+        if not turtle.isextruded or turtle.lineheight != extrusionheight:
+            lab.grade(False, "Please use extrusion height " + str(extrusionheight) + "!")
+            return False
+    
     ##### PREPARE TESTING DATA #####
   
     # Students trace without the circles:
