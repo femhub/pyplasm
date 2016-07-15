@@ -10249,11 +10249,61 @@ class NCLabTurtle3D:
         self.showcalled = True
         NCLabTurtleShow3D(self)
 
-#######################################################
-#                                                     #
-#    TEMPORARY FUNCTIONALITY FOR GRADING 3D COURSE    #
-#                                                     #
-#######################################################
+#############################################################
+#                                                           #
+#    TEMPORARY FUNCTIONALITY FOR GRADING OF TURTLE COURSE   #
+#                                                           #
+#############################################################
+
+def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcolname, errheight):
+  
+    if not isinstance(tina, NCLabTurtle):
+        lab.grade(False, "Object 'tina' is not an NCLabTurtle!")
+        lab.grade(False, "Please do not redefine 'tina'!")
+        return False
+  
+    ##### PREPARE TESTING DATA #####
+  
+    # Students trace without the circles:
+    trace = NCLabTurtleTrace(turtle, 0, False)
+
+    # EMPTYSET?
+    if EMPTYSET(trace):
+        lab.grade(False, "Tina did not draw any lines.")
+        return False
+
+    # Subset and superset:
+    eps = NCLAB_TURTLE_EPS
+    subset = NCLabTurtleTrace(tsol, -eps, False)
+    superset = NCLabTurtleTrace(tsol, eps, False)
+  
+    ##### GEOMETRY TEST #####
+ 
+    if not SUBSET(subset, trace) or not SUBSET(trace, superset):
+        # Show wrong solution in red:
+        turtle.extrude(errheight)
+        err = turtle.geometry()
+        COLOR(err, errcol)
+        SHOW(err)
+        # Show correct solution in pink:
+        tsol.extrude(solheight)
+        sol = tsol.geometry()    
+        COLOR(sol, solcol)
+        SHOW(sol)
+        lab.grade(False, "Tina's trace is not correct.")
+        lab.grade(False, "The correct trace is shown in " + solcolname + ".")
+        lab.grade(False, "Your solution is shown in " + errcolname + ".")
+        lab.grade(False, "It may be hidden inside of the correct solution.")
+        return False
+  
+    ##### ALL TESTS PASSED #####
+    return True
+
+#########################################################
+#                                                       #
+#    TEMPORARY FUNCTIONALITY FOR GRADING OF 3D COURSE   #
+#                                                       #
+#########################################################
     
 def SHOW2D(o, zlift, color=[]):
     if color != []:
