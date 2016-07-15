@@ -10296,7 +10296,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
     if not SUBSET(subset, trace) or not SUBSET(trace, superset):
         # Show wrong solution in 'errcol' color:
         if extrusionflag:
-            turtle.extrude(extrusionheight + 0.002)
+            turtle.extrude(extrusionheight + 0.005)
         else:
             turtle.extrude(errheight)
         err = turtle.geometry()
