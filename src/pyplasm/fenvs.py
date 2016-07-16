@@ -10258,7 +10258,7 @@ class NCLabTurtle3D:
 #                                                           #
 #############################################################
 
-def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcolname, errheight, colortest, testcol, testcolname, extrusionflag, extrusionheight):
+def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcolname, errheight, incltest, comptest, colortest, testcol, testcolname, extrusionflag, extrusionheight):
   
     if not isinstance(turtle, NCLabTurtle):
         lab.grade(False, "Object 'tina' is not an NCLabTurtle!")
@@ -10295,8 +10295,16 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
     superset = NCLabTurtleTrace(tsol, eps, False)
   
     ##### GEOMETRY TEST #####
- 
-    if not SUBSET(subset, trace) or not SUBSET(trace, superset):
+
+    succ1 = True
+    if incltest:
+        succ1 = SUBSET(subset, trace)
+
+    succ2 = True
+    if comptest:
+        succ2 = SUBSET(trace, superset)
+
+    if not succ1 or not succ2:
         # Show wrong solution in 'errcol' color:
         if extrusionflag:
             turtle.extrude(extrusionheight + 0.01)
