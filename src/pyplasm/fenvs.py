@@ -10310,13 +10310,13 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
             turtle.extrude(extrusionheight + 0.01)
             err = turtle.geometry()
         else:
-            if not turtle.heightused:
+            if turtle.heightused:  # There are different heights:
+                layer = 0
+                dots = True
+                err = NCLabTurtleTrace(turtle, layer, dots)            
+            else:  # Genuinely 2D
                 turtle.extrude(errheight)
                 err = turtle.geometry()
-            else:   # There are different heights:
-                layer = NCLAB_TURTLE_EPS
-                dots = True
-                err = NCLabTurtleTrace(turtle, layer, dots)
         COLOR(err, errcol)
         SHOW(err)
         # Show correct solution in 'solcol' color:
@@ -10325,13 +10325,13 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
             tsol.extrude(extrusionheight + 0.02)
             sol = tsol.geometry()    
         else:
-            if not turtle.heightused:
-                tsol.extrude(solheight)
-                sol = tsol.geometry()    
-            else:   # There are different heights:
+            if turtle.heightused:   # There are different heights:
                 layer = NCLAB_TURTLE_EPS
                 dots = True
-                sol = NCLabTurtleTrace(turtle, layer, dots)
+                sol = NCLabTurtleTrace(turtle, layer, dots)            
+            else:    # Genuinely 2D
+                tsol.extrude(solheight)
+                sol = tsol.geometry()
         COLOR(sol, solcol)
         SHOW(sol)
         lab.grade(False, "Tina's trace is not correct.")
