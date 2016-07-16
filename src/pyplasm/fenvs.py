@@ -9261,7 +9261,7 @@ def NCLabTurtleShow(turtle, layer=0, dots=True):
     image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
     canvas = PRISM(canvas, NCLAB_TURTLE_TRACE_H)
     if turtle.isvisible:
-        if turtle.is2D:
+        if not turtle.heightused:
             SHOW(image, canvas, trace)
         else:
             SHOW(canvas, trace)
@@ -9293,8 +9293,8 @@ class NCLabTurtle:
         self.lineheight = 0
         self.canvassize = 100
         self.lines = []
-        self.is2D = True       # If any line height is set
-                               # to nonzero, this will be False
+        self.heightused = False       # If any line height is set
+                                      # to nonzero, this will be True
         self.isvisible = True
         self.isextruded = False
         self.isspiral = False
@@ -9335,7 +9335,7 @@ class NCLabTurtle:
         if h <= 0:
             raise ExceptionWT("In height(h), h must be greater than zero!")
         self.lineheight = h
-        self.is2D = False
+        self.heightused = True
 
     def penup(self):
         self.draw = False
@@ -9487,14 +9487,13 @@ class NCLabTurtle:
         self.isroshell = False
         for l in self.lines:
             l.lineheight = height
-        self.is2D = False
         layer = 0
         dots = True
         self.geom = NCLabTurtleTrace(self, layer, dots)
 
     def export(self):
         is3D = self.isrosol or self.isrosurf or self.isroshell or self.isspiral or self.isextruded 
-        if (not is3D) and self.is2D:                        # Trace is 2D:
+        if (not is3D) and (not self.heightused):    # Trace is 2D:
             for l in self.lines:
                 l.lineheight = NCLAB_TURTLE_TRACE_H
             return NCLabTurtleTrace(self)
@@ -9503,7 +9502,7 @@ class NCLabTurtle:
 
     # Revolves complete trace including width
     def revolve(self, angle=360, div=32):   
-        if self.is2D == False:
+        if self.heightused:
             raise ExceptionWT("Once you use the height() command, revolve() cannot be used!")
         if self.revolvecalled == True:
             raise ExceptionWT("Command revolve() can be only called once!")
@@ -9522,7 +9521,7 @@ class NCLabTurtle:
 
     # Another name for revolve()
     def roshell(self, angle=360, div=32):
-        if self.is2D == False:
+        if self.heightused:
             raise ExceptionWT("Once you use the height() command, roshell() cannot be used!")
         if self.roshellcalled == True:
             raise ExceptionWT("Command roshell() can be only called once!")
@@ -9533,7 +9532,7 @@ class NCLabTurtle:
 
     # Spiral
     def spiral(self, angle, elevation, div=48):
-        if self.is2D == False:
+        if self.heightused:
             raise ExceptionWT("Once you use the height() command, spiral() cannot be used!")
         if self.spiralcalled == True:
             raise ExceptionWT("Command spiral() can be only called once!")
@@ -9552,7 +9551,7 @@ class NCLabTurtle:
 
     # Rotational solid
     def rosol(self, angle=360, div=32):     
-        if self.is2D == False:
+        if self.heightused:
             raise ExceptionWT("Once you use the height() command, rosol() cannot be used!")
         if self.rosolcalled == True:
             raise ExceptionWT("Command rosol() can be only called once!")
@@ -9580,7 +9579,7 @@ class NCLabTurtle:
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
-        if self.is2D == False:
+        if self.heightused:
             raise ExceptionWT("Once you use the height() command, rosurf() cannot be used!")
         if self.rosurfcalled == True:
             raise ExceptionWT("Command rosurf() can be only called once!")
@@ -10306,25 +10305,33 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
 
     if not succ1 or not succ2:
         # Show wrong solution in 'errcol' color:
+        err = None
         if turtle.isextruded:
             turtle.extrude(extrusionheight + 0.01)
+            err = turtle.geometry()
         else:
-            if turtle.is2D:
+            if not turtle.heightused:
                 turtle.extrude(errheight)
+                err = turtle.geometry()
             else:   # There are different heights:
-                pass
-        err = turtle.geometry()
+                layer = NCLAB_TURTLE_EPS
+                dots = True
+                err = NCLabTurtleTrace(turtle, layer, dots)
         COLOR(err, errcol)
         SHOW(err)
         # Show correct solution in 'solcol' color:
+        sol = None
         if turtle.isextruded:
             tsol.extrude(extrusionheight + 0.02)
+            sol = tsol.geometry()    
         else:
-            if turtle.is2D:
+            if not turtle.heightused:
                 tsol.extrude(solheight)
+                sol = tsol.geometry()    
             else:   # There are different heights:
-                pass
-        sol = tsol.geometry()    
+                layer = NCLAB_TURTLE_EPS
+                dots = True
+                sol = NCLabTurtleTrace(turtle, layer, dots)
         COLOR(sol, solcol)
         SHOW(sol)
         lab.grade(False, "Tina's trace is not correct.")
