@@ -10328,7 +10328,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
             if turtle.heightused:   # There are different heights:
                 layer = NCLAB_TURTLE_EPS
                 dots = True
-                sol = NCLabTurtleTrace(turtle, layer, dots)            
+                sol = NCLabTurtleTrace(tsol, layer, dots)            
             else:    # Genuinely 2D
                 tsol.extrude(solheight)
                 sol = tsol.geometry()
