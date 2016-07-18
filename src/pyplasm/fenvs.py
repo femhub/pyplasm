@@ -10306,7 +10306,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
     if not succ1 or not succ2:
         # Show wrong solution in 'errcol' color:
         err = None
-        if turtle.isextruded:
+        if extrusionflag and turtle.isextruded:
             turtle.extrude(extrusionheight + 0.01)
             err = turtle.geometry()
         else:
@@ -10321,7 +10321,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
         SHOW(err)
         # Show correct solution in 'solcol' color:
         sol = None
-        if turtle.isextruded:
+        if extrusionflag and turtle.isextruded:
             tsol.extrude(extrusionheight + 0.02)
             sol = tsol.geometry()    
         else:
