@@ -9140,7 +9140,8 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
             if i == 0:
                 addcircle = True
             else:
-                addcircle = (turtle.lines[i-1]).continued
+                lprev = turtle.lines[i-1]
+                addcircle = (lprev.continued == False)
             if addcircle:
                 radius = 0.5 * l.linewidth + layer
                 cir = CIRCLE(radius, 8)
@@ -9152,7 +9153,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                     out.append(PRISM(cir, l.lineheight))
             # Add circle to end point, but only if
             # the line does not have 'continued==True':
-            addcircle = l.continued
+            addcircle = (l.continued == False)
             if addcircle:
                 radius = 0.5 * l.linewidth + layer
                 cir = CIRCLE(radius, 8)
