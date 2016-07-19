@@ -9135,28 +9135,28 @@ def NCLabTurtleWedge(l1, l2):
         nux = uy / usize
         nuy = -ux / usize
         # second point for the triangle:
-        p2x = l1.endx + nux * l1.width/2
-        p2y = l1.endy + nuy * l1.width/2
+        p2x = l1.endx + nux * l1.linewidth/2
+        p2y = l1.endy + nuy * l1.linewidth/2
         # unit normal vector to l2, pointing right
         nvx = vy / vsize
         nvy = -vx / vsize
         # third point for the triangle:
-        p3x = l2.startx + nvx * l2.width/2
-        p3y = l2.starty + nvy * l2.width/2
+        p3x = l2.startx + nvx * l2.linewidth/2
+        p3y = l2.starty + nvy * l2.linewidth/2
         return TRIANGLE(POINT(p1x, p1y), POINT(p2x, p2y), POINT(p3x, p3y))
     else: # right turn
         # unit normal vector to l1, pointing right
         nux = -uy / usize
         nuy = ux / usize
         # second point for the triangle:
-        p2x = l1.endx + nux * l1.width/2
-        p2y = l1.endy + nuy * l1.width/2
+        p2x = l1.endx + nux * l1.linewidth/2
+        p2y = l1.endy + nuy * l1.linewidth/2
         # unit normal vector to l2, pointing right
         nvx = -vy / vsize
         nvy = vx / vsize
         # third point for the triangle:
-        p3x = l2.startx + nvx * l2.width/2
-        p3y = l2.starty + nvy * l2.width/2
+        p3x = l2.startx + nvx * l2.linewidth/2
+        p3y = l2.starty + nvy * l2.linewidth/2
         return TRIANGLE(POINT(p1x, p1y), POINT(p2x, p2y), POINT(p3x, p3y))        
 
     
