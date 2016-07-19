@@ -9114,6 +9114,52 @@ def NCLabTurtleCanvas(turtle):
     return [dot1, dot2, dot3, dot4]
 
 
+def NCLabTurtleWedge(l1, l2):
+    ux = l1.endx - l1.startx
+    uy = l1.endy - l1.starty
+    usize = sqrt(ux**2 + uy**2)
+    vx = l2.endx - l2.startx
+    vy = l2.endy - l2.starty
+    vsize = sqrt(vx**2 + vy**2)
+    # Points for the triangle:
+    p1x = l1.endx
+    p1y = l1.endy
+    p2x = None
+    p2y = None
+    p3x = None
+    p3y = None
+    # Decide if left turn or right turn using vector product:
+    val = ux * vy - uy * vx
+    if val > 0: # left turn
+        # unit normal vector to l1, pointing right
+        nux = uy / usize
+        nuy = -ux / usize
+        # second point for the triangle:
+        p2x = l1.endx + nux * l1.width/2
+        p2y = l1.endy + nuy * l1.width/2
+        # unit normal vector to l2, pointing right
+        nvx = vy / vsize
+        nvy = -vx / vsize
+        # third point for the triangle:
+        p3x = l2.startx + nvx * l2.width/2
+        p3y = l2.starty + nvy * l2.width/2
+        return TRIANGLE(POINT(p1x, p1y), POINT(p2x, p2y), POINT(p3x, p3y))
+    else: # right turn
+        # unit normal vector to l1, pointing right
+        nux = -uy / usize
+        nuy = ux / usize
+        # second point for the triangle:
+        p2x = l1.endx + nux * l1.width/2
+        p2y = l1.endy + nuy * l1.width/2
+        # unit normal vector to l2, pointing right
+        nvx = -vy / vsize
+        nvy = vx / vsize
+        # third point for the triangle:
+        p3x = l2.startx + nvx * l2.width/2
+        p3y = l2.starty + nvy * l2.width/2
+        return TRIANGLE(POINT(p1x, p1y), POINT(p2x, p2y), POINT(p3x, p3y))        
+
+    
 # Return trace as list of PLaSM objects. Assumes that
 # every line segment has a height:
 def NCLabTurtleTrace(turtle, layer=0, dots=True):
@@ -9163,6 +9209,14 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                     out.append(cir)
                 else:
                     out.append(PRISM(cir, l.lineheight))
+            else:  # we will be adding a wedge to the end of current line
+                lnext = turtle.lines[i+1]
+                wedge = NCLabTurtleWedge(l, lnext)
+                COLOR(wedge, l.linecolor)
+                if l.lineheight == 0:
+                    out.append(wedge)
+                else:
+                    out.append(PRISM(wedge, l.lineheight))
     return out
 
 
@@ -9388,7 +9442,8 @@ class NCLabTurtle:
     def printlines(self):
         for line in self.lines:
             print("---")
-            print("Start:", line.startx, line.starty, "End:", line.endx, line.endy)
+            print("Start:", line.startx, line.starty)
+            print("End:", line.endx, line.endy)
             print("Width:", line.linewidth, "Height:", line.lineheight, "Color:", line.linecolor)
             print("Angle:", line.angle, "Continued:", line.continued)
 
