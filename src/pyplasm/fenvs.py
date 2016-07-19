@@ -9272,7 +9272,7 @@ def NCLabTurtleShow(turtle, layer=0, dots=True):
 
 # Class Line:
 class NCLabTurtleLine:
-    def __init__(self, sx, sy, ex, ey, w, h, c):
+    def __init__(self, sx, sy, ex, ey, w, h, c, angle, continued=False):
         self.startx = sx
         self.starty = sy
         self.endx = ex
@@ -9280,6 +9280,8 @@ class NCLabTurtleLine:
         self.linewidth = w
         self.lineheight = h
         self.linecolor = c
+        self.angle = angle
+        self.continued = continued
 
 # Class Turtle:
 class NCLabTurtle:
@@ -9358,21 +9360,25 @@ class NCLabTurtle:
     def down(self):
         raise ExceptionWT("Command down() is reserved for spatial drawing with NCLabTurtle3D. Please use pendown() or pd().")
 
-    def go(self, dist):
+    # 'continued' will be True for arcs, False for regular lines
+    # will be used to simplify geometric connectivity for edges in arcs
+    def go(self, dist, continued=False):
         if dist <= 0:
             raise ExceptionWT("The distance d in go(d) must be positive!")
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
-            newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.lineheight, self.linecolor)
+            newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.lineheight, self.linecolor, self.turtleangle, continued)
             self.lines.append(newline)
         self.posx = newx
         self.posy = newy
 
     def printlines(self):
         for line in self.lines:
+            print("---")
             print("Start:", line.startx, line.starty, "End:", line.endx, line.endy)
             print("Width:", line.linewidth, "Height:", line.lineheight, "Color:", line.linecolor)
+            print("Angle:", line.angle, "Continued:", line.continued)
 
     def forward(self, dist):
         self.go(dist)
@@ -9409,13 +9415,13 @@ class NCLabTurtle:
     def bk(self, dist):
         self.back(dist)
 
-    def goto(self, newx, newy):
+    def goto(self, newx, newy, continued=False):
         dx = newx - self.posx
         dy = newy - self.posy
-        if self.draw == True:
-            newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.lineheight, self.linecolor)
-            self.lines.append(newline)
         self.turtleangle = arctan2(dy, dx) * 180 / pi
+        if self.draw == True:
+            newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.lineheight, self.linecolor, self.turtleangle, continued)
+            self.lines.append(newline)
         self.posx = newx
         self.posy = newy
 
@@ -9638,18 +9644,18 @@ class NCLabTurtle:
         n = (angle / 180) * 18
         n = round(n)
         step = 0.174977327052 * radius
-        self.go(0.5*step)
+        self.go(0.5*step, continued=True)
         if direction == 'r' or direction == 'R' or direction == 'right':
             self.right(10)
         else:
             self.left(10)
         for j in range(n-1):
-            self.go(step)
+            self.go(step, continued=True)
             if direction == 'r' or direction == 'R' or direction == 'right':
                 self.right(10)
             else:
                 self.left(10)
-        self.go(0.5*step)
+        self.go(0.5*step, continued=False)
 
     def geometry(self):
         return self.geom
