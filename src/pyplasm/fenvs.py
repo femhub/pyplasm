@@ -9122,7 +9122,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
     # List of lines is empty - just return:
     if n == 0:
         return out
-    # There is at least one line segment:
+    # Now we know that there is at least one line segment:
     for i in range(n):
         l = turtle.lines[i]
         # Add rectangle corresponding to the line:
@@ -9131,26 +9131,37 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
             out.append(rect)
         else:
             out.append(PRISM(rect, l.lineheight))
-        # If dots == True, add circles:
+        # If dots == True (we will be adding circles
+        # to line end points):
         if dots == True:
-            # Add circle to start point:
-            radius = 0.5 * l.linewidth + layer
-            cir = CIRCLE(radius, 8)
-            MOVE(cir, l.startx, l.starty)
-            COLOR(cir, l.linecolor)
-            if l.lineheight == 0:
-                out.append(cir)
+            # Add circle to start point, but only if
+            # the previous line does not have 'continued==True':
+            addcircle = True 
+            if i == 0:
+                addcircle = True
             else:
-                out.append(PRISM(cir, l.lineheight))
-            # Add circle at end point:
-            radius = 0.5 * l.linewidth + layer
-            cir = CIRCLE(radius, 8)
-            MOVE(cir, l.endx, l.endy)
-            COLOR(cir, l.linecolor)
-            if l.lineheight == 0:
-                out.append(cir)
-            else:
-                out.append(PRISM(cir, l.lineheight))
+                addcircle = (turtle.lines[i-1]).continued
+            if addcircle:
+                radius = 0.5 * l.linewidth + layer
+                cir = CIRCLE(radius, 8)
+                MOVE(cir, l.startx, l.starty)
+                COLOR(cir, l.linecolor)
+                if l.lineheight == 0:
+                    out.append(cir)
+                else:
+                    out.append(PRISM(cir, l.lineheight))
+            # Add circle to end point, but only if
+            # the line does not have 'continued==True':
+            addcircle = l.continued
+            if addcircle:
+                radius = 0.5 * l.linewidth + layer
+                cir = CIRCLE(radius, 8)
+                MOVE(cir, l.endx, l.endy)
+                COLOR(cir, l.linecolor)
+                if l.lineheight == 0:
+                    out.append(cir)
+                else:
+                    out.append(PRISM(cir, l.lineheight))
     return out
 
 
