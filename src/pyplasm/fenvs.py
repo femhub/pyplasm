@@ -9725,12 +9725,12 @@ class NCLabTurtle:
             leftarc = True
             wx = -vy
             wy = vx
-            centerx = self.getx() + radius * wx
-            centery = self.gety() + radius * wy
-            Wx = -radius * wx
-            Wy = -radius * wy
-            ainit = arctan2(Wy, Wx)
-            da = angle / n * pi/180
+        centerx = self.getx() + radius * wx
+        centery = self.gety() + radius * wy
+        Wx = -radius * wx
+        Wy = -radius * wy
+        ainit = arctan2(Wy, Wx)
+        da = angle / n * pi/180
         for i in range(n):
             if leftarc:
                 xnext = centerx + radius * cos(ainit + (i+1) * da)
@@ -9743,7 +9743,7 @@ class NCLabTurtle:
             else:
                 self.goto(xnext, ynext, continued=False)
                 # Correct final position:
-        from numpy import sin, cos, pi
+        #from numpy import sin, cos, pi
         if leftarc:
             afinal = angle*pi/180. + ainit
         else:
