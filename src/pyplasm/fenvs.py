@@ -9706,56 +9706,56 @@ class NCLabTurtle:
         self.extrudecalled = False
         self.showcalled = False
 
-def arc(self, angle, radius, direction='r'):
-    if angle < 0.001:
-        raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
-    if radius < 0.001:
-        raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
-    n = (angle / 180) * 18
-    n = round(n)
-    # Calculate center of arc:
-    from numpy import cos, sin, pi
-    vx = cos(self.turtleangle*pi/180)
-    vy = sin(self.turtleangle*pi/180)
-    leftarc = False
-    if direction == 'r' or direction == 'R' or direction == 'right':
-        wx = vy
-        wy = -vx
-    else:
-        leftarc = True
-        wx = -vy
-        wy = vx
-    centerx = self.getx() + radius * wx
-    centery = self.gety() + radius * wy
-    Wx = -radius * wx
-    Wy = -radius * wy
-    ainit = arctan2(Wy, Wx)
-    da = angle / n * pi/180
-    for i in range(n):
+    def arc(self, angle, radius, direction='r'):
+        if angle < 0.001:
+            raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
+        if radius < 0.001:
+            raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
+        n = (angle / 180) * 18
+        n = round(n)
+        # Calculate center of arc:
+        from numpy import cos, sin, pi
+        vx = cos(self.turtleangle*pi/180)
+        vy = sin(self.turtleangle*pi/180)
+        leftarc = False
+        if direction == 'r' or direction == 'R' or direction == 'right':
+            wx = vy
+            wy = -vx
+        else:
+            leftarc = True
+            wx = -vy
+            wy = vx
+            centerx = self.getx() + radius * wx
+            centery = self.gety() + radius * wy
+            Wx = -radius * wx
+            Wy = -radius * wy
+            ainit = arctan2(Wy, Wx)
+            da = angle / n * pi/180
+        for i in range(n):
+            if leftarc:
+                xnext = centerx + radius * cos(ainit + (i+1) * da)
+                ynext = centery + radius * sin(ainit + (i+1) * da)
+            else:
+                xnext = centerx + radius * cos(-ainit + (i+1) * da)
+                ynext = centery - radius * sin(-ainit + (i+1) * da)
+            if i < n-1: 
+                self.goto(xnext, ynext, continued=True)
+            else:
+                self.goto(xnext, ynext, continued=False)
+                # Correct final position:
+        from numpy import sin, cos, pi
         if leftarc:
-            xnext = centerx + radius * cos(ainit + (i+1) * da)
-            ynext = centery + radius * sin(ainit + (i+1) * da)
+            afinal = angle*pi/180. + ainit
         else:
-            xnext = centerx + radius * cos(-ainit + (i+1) * da)
-            ynext = centery - radius * sin(-ainit + (i+1) * da)
-        if i < n-1: 
-            self.goto(xnext, ynext, continued=True)
+            afinal = ainit - angle*pi/180.
+            xfinal = centerx + radius * cos(afinal)
+            yfinal = centery + radius * sin(afinal)
+            # Last: set correct angle based
+            # on the true circle:
+        if leftarc:
+            self.angle(afinal*180/pi + 90)
         else:
-            self.goto(xnext, ynext, continued=False)
-    # Correct final position:
-    from numpy import sin, cos, pi
-    if leftarc:
-        afinal = angle*pi/180. + ainit
-    else:
-        afinal = ainit - angle*pi/180.
-    xfinal = centerx + radius * cos(afinal)
-    yfinal = centery + radius * sin(afinal)
-    # Last: set correct angle based
-    # on the true circle:
-    if leftarc:
-        self.angle(afinal*180/pi + 90)
-    else:
-        self.angle(afinal*180/pi - 90)
+            self.angle(afinal*180/pi - 90)
 
     def geometry(self):
         return self.geom
