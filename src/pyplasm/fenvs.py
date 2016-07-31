@@ -9048,6 +9048,8 @@ def VALIDATE(obj, name, dim):
         return False, "'" + name + "' is a text string while it should be a " + str(dim) + "D object."
     if isinstance(obj, bool):
         return False, "'" + name + "' is a True/False value while it should be a " + str(dim) + "D object."
+    if hasattr(obj, '__call__'):
+        return False, "'" + name + "' is a callable function while it should be a " + str(dim) + "D object."
 
     if isinstance(obj, tuple):
         m = len(obj)
