@@ -9574,6 +9574,10 @@ class NCLabTurtle:
                 l.lineheight = NCLAB_TURTLE_TRACE_H
             return NCLabTurtleTrace(self)
         else:                               # Trace is 3D:
+            if self.heightused:
+                layer = 0
+                dots = True
+                self.geom = NCLabTurtleTrace(self, layer, dots)
             return self.geom
 
     # Revolves complete trace including width
