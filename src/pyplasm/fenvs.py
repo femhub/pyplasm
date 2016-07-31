@@ -1188,7 +1188,7 @@ class BASEOBJ:
         if not isinstance(obj, list):
             if not isinstance(obj, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found while subtracting objects.")
+                    "Invalid object found (subtract - a).")
             if self.dim != obj.dim:
                 raise ExceptionWT(
                     "Cannot subtract objects of different dimensions.")
@@ -1197,7 +1197,7 @@ class BASEOBJ:
             for x in obj:
                 if not isinstance(x, BASEOBJ):
                     raise ExceptionWT(
-                        "Invalid object found while subtracting objects.")
+                        "Invalid object found (subtract - b).")
                 if self.dim != x.dim:
                     raise ExceptionWT(
                         "Cannot subtract objects of different dimensions.")
@@ -1214,7 +1214,7 @@ class BASEOBJ:
         if not isinstance(obj, list):
             if not isinstance(obj, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found while subtracting objects!")
+                    "Invalid object found (diff - a).")
             if self.dim != obj.dim:
                 raise ExceptionWT(
                     "Trying to subtract objects of different dimensions?")
@@ -1223,7 +1223,7 @@ class BASEOBJ:
             for x in obj:
                 if not isinstance(x, BASEOBJ):
                     raise ExceptionWT(
-                        "Invalid object found while subtracting objects!")
+                        "Invalid object found (diff - b).")
                 if self.dim != x.dim:
                     raise ExceptionWT(
                         "Trying to subtract objects of different dimensions?")
@@ -1751,14 +1751,14 @@ def SPLIT(obj, coord, axis, warn=True):
 def COPY(obj):
     if not isinstance(obj, list):
         if not isinstance(obj, BASEOBJ):
-            raise ExceptionWT("Invalid object found in the COPY command.")
+            raise ExceptionWT("Invalid object found (copy - 1).")
         return copy.copy(obj)
     else:
         obj1 = flatten(obj)  # flatten the rest as there may be structs
         newlist = []
         for x in obj1:
             if not isinstance(x, BASEOBJ):
-                raise ExceptionWT("Invalid object found in the COPY command.")
+                raise ExceptionWT("Invalid object found (copy - 2).")
             newlist.append(copy.copy(x))
         return newlist
 
@@ -3389,10 +3389,10 @@ def SUBTRACT(a, b, warn=True):
     if not isinstance(a, list) and not isinstance(b, list):
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object found.")
+                "Invalid object found (subtract - 1).")
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object found.")
+                "Invalid object found (subtract - 2).")
         a.subtract(b)
         if EMPTYSET(a) and warn==True:
             print("WARNING: Empty object created while subtracting objects.")
@@ -3403,10 +3403,10 @@ def SUBTRACT(a, b, warn=True):
         for x in flatb:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found.")
+                    "Invalid object found (subtract - 3).")
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object found.")
+                "Invalid object found (subtract - 4).")
         a.subtract(flatb)
         if EMPTYSET(a) and warn==True:
             print("WARNING: Empty object created while subtracting objects.")
@@ -3415,13 +3415,13 @@ def SUBTRACT(a, b, warn=True):
     if isinstance(a, list) and not isinstance(b, list):
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object found.")
+                "Invalid object found (subtract - 5).")
         flata = flatten(a)  # flatten the list as there may be structs
         b2 = COPY(b)   # This is important as 'b' can be changed by the subtraction
         newlist = []
         for x in flata:
             if not isinstance(x, BASEOBJ):
-                raise ExceptionWT("Invalid object found.")
+                raise ExceptionWT("Invalid object found (subtract - 6).")
             x.subtract(b2)      # Important - do not subtract the original item
             if not EMPTYSET(x):
                 newlist.append(COPY(x))
@@ -3434,12 +3434,12 @@ def SUBTRACT(a, b, warn=True):
         for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found.")
+                    "Invalid object found (subtract - 7).")
         flatb = flatten(b)  # flatten the list as there may be structs
         for x in flatb:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found.")
+                    "Invalid object found (subtract - 8).")
         newlist = []
         flatbcopy = []
         for it in flatb:
@@ -3499,10 +3499,10 @@ def DIFFERENCE(a, b, warn=True):
     if not isinstance(a, list) and not isinstance(b, list):
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object found.")
+                "Invalid object found (diff - 1).")
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object found.")
+                "Invalid object found (diff - 2).")
         out = a.diff(b)
         if EMPTYSET(out) and warn == True:
             print("WARNING: Empty set created while subtracting objects.")
@@ -3513,10 +3513,10 @@ def DIFFERENCE(a, b, warn=True):
         for x in flatb:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found.")
+                    "Invalid object found (diff - 3).")
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object found.")
+                "Invalid object found (diff - 4).")
         out = a.diff(flatb)
         if EMPTYSET(out) and warn == True:
             print("WARNING: Empty set created while subtracting objects.")
@@ -3527,10 +3527,10 @@ def DIFFERENCE(a, b, warn=True):
         for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found.")
+                    "Invalid object found (diff - 5).")
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
-                "Invalid object found.")
+                "Invalid object found (diff - 6).")
         newlist = []
         for x in flata:
             out = x.diff(b)
@@ -3545,12 +3545,12 @@ def DIFFERENCE(a, b, warn=True):
         for x in flata:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found.")
+                    "Invalid object found (diff - 7).")
         flatb = flatten(b)  # flatten the list as there may be structs
         for x in flatb:
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found.")
+                    "Invalid object found (diff - 8).")
         newlist = []
         for x in flata:
             out = x.diff(flatb)
@@ -7900,7 +7900,7 @@ def COLOR(obj, col=None):
         obj = flatten(obj)
         for x in obj:
             if not isinstance(x, BASEOBJ):
-                raise ExceptionWT("Invalid object found in the COLOR command.")
+                raise ExceptionWT("Invalid object found (color - 1).")
             x.setcolor(col)
     return COPY(obj)
 
@@ -8486,10 +8486,10 @@ def EMPTYSET(obj):
         for oo in obj:
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found.")
+                    "Invalid object found (emptyset - 1).")
     else:
         if not isinstance(obj, BASEOBJ):
-            raise ExceptionWT("Invalid object found.")
+            raise ExceptionWT("Invalid object found (emptyset - 2).")
     # Emptyset test:
     l = 0
     if isinstance(obj, list):
