@@ -9525,10 +9525,7 @@ class NCLabTurtle:
         return self.turtleangle
 
     def getcolor(self):
-        r = round(self.linecolor[0] * 255)
-        g = round(self.linecolor[1] * 255)
-        b = round(self.linecolor[2] * 255)
-        return [r, g, b]
+        return self.linecolor
 
     def getwidth(self):
         return self.linewidth
