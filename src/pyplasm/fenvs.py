@@ -10537,7 +10537,7 @@ def MAINTEST(lab, testobj, extremes, tol, digits, testfns,
     solcol = colors[2]
     solcolname = colors[3]
 
-    lab.grade(True, "Checking object '" + objname + "'...") 
+    lab.gradeInfo("Checking object '" + objname + "'...") 
 
     ##### SANITY TEST #####
     success, errmsg = VALIDATE(obj, objname, objdim)
