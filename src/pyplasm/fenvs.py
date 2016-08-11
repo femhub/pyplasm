@@ -10564,27 +10564,23 @@ def MAINTEST(lab, testobj, extremes, tol, digits, testfns,
     if success:
         return True
     else:
+        # Here obj is the incorrect student's solution:
         err = COPY(obj)
         if objdim == 2:
             SHOW2D(err, 0.0004, errcol)
         else:
-            # THIS NEEDS REVISITING WHEN HIDE() IS AVAILABLE:
-            # HIDE ORIGINAL SOLUTION, SHOW ONE IN errcol COLOR
-            #COLOR(err, errcol)
-            #SHOW(err)
-            pass
+            COLOR(err, errcol)
+            SHOW(err)
+        # Here sol is the correct master solution:
         if showsol:
             sol = solfn()
             if objdim == 2:
                 SHOW2D(sol, 0.0006, solcol)
             else:
-                # THIS SOLUTION IS FOR DISPLAY ONLY. IT SHOULD BE
-                # A BIT BIGGER THAN THE CORRECT SOLUTION
                 COLOR(sol, solcol)
                 SHOW(sol)
-        # THIS NEEDS TO BE ENABLED FOR 3D OBJECTS TOO!
-        if objdim == 2:
-            lab.grade(False, "Your object '" + objname + "' is shown in " + errcolname + ".")
-            lab.grade(False, "It may be hidden inside of the correct solution.")
+        # Written message:
+        lab.grade(False, "Your object '" + objname + "' is shown in " + errcolname + ".")
+        lab.grade(False, "It may be hidden inside of the correct solution.")
         lab.grade(False, "Correct object '" + objname + "' is shown in " + solcolname + ".")
         return False
