@@ -7586,22 +7586,12 @@ def RATIONALPLASM_BEZIER(controlpoints_fn):
 # //////////////////////////////////////////////////////////////////
 
 
-def ELLIPSE(args):
-    Ael, Bel = args
-
-    def ELLIPSE0(N):
-        Cel = 0.5 * math.sqrt(2)
-        mapping = RATIONALPLASM_BEZIER(
-            [[Ael, 0, 1], [Ael * Cel, Bel * Cel, Cel], [0, Bel, 1]])
-        quarter = PLASM_MAP(mapping)((PLASM_INTERVALS(1.0)(N)))
-        half = PLASM_STRUCT([quarter, PLASM_S(2)(-1)(quarter)])
-        return PLASM_STRUCT([half, PLASM_S(1)(-1)(half)])
-
-    return ELLIPSE0
-
-
-if self_test:
-    PLASM_VIEW(ELLIPSE([1, 2])(8))
+def ELLIPSE(a, b):
+    if a <= 0 or b <= 0:
+        raise ExceptionWT("In ELLIPSE(a, b), both a and b must be positive!")
+    c = CIRCLE(a)
+    SCALE(c, b/a, Y)
+    return c
 
 # //////////////////////////////////////////////////////////////////
 # NORM2 (==normal of a curve)
