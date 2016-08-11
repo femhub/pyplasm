@@ -1,3 +1,6 @@
+
+
+
 # coding=UTF-8
 
 from numpy import reshape
@@ -7586,10 +7589,12 @@ def RATIONALPLASM_BEZIER(controlpoints_fn):
 # //////////////////////////////////////////////////////////////////
 
 
-def ELLIPSE(a, b):
+def ELLIPSE(a, b, n=64):
     if a <= 0 or b <= 0:
         raise ExceptionWT("In ELLIPSE(a, b), both a and b must be positive!")
-    c = CIRCLE(a)
+    if n < 3:
+        raise ExceptionWT("Number of edges n in ELLIPSE(a, b, n) must be at least 3!")
+    c = CIRCLE(a, n)
     SCALE(c, b/a, Y)
     return c
 
