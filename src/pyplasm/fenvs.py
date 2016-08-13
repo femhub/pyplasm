@@ -10486,17 +10486,20 @@ def BBTEST(lab, obj, objdim, extremes, digits, tol, verbose):
         lab.grade(False, "Bounding box test failed.")
         bminx = round(MINX(obj), digits)
         bmaxx = round(MAXX(obj), digits)
-        msg1 = "X-interval should be (" + str(minx) + ", " + str(maxx) + ") ... it is (" + str(bminx) + ", " + str(bmaxx) + ")"
-        lab.grade(False, msg1)
+        if abs(minx - bminx) > 1e-6 or abs(maxx - bmaxx) > 1e-6:
+            msg1 = "X-interval should be (" + str(minx) + ", " + str(maxx) + ") ... it is (" + str(bminx) + ", " + str(bmaxx) + ")"
+            lab.grade(False, msg1)
         bminy = round(MINY(obj), digits)
         bmaxy = round(MAXY(obj), digits)
-        msg2 = "Y-interval should be (" + str(miny) + ", " + str(maxy) + ") ... it is (" + str(bminy) + ", " + str(bmaxy) + ")"
-        lab.grade(False, msg2)
+        if abs(miny - bminy) > 1e-6 or abs(maxy - bmaxy) > 1e-6:
+            msg2 = "Y-interval should be (" + str(miny) + ", " + str(maxy) + ") ... it is (" + str(bminy) + ", " + str(bmaxy) + ")"
+            lab.grade(False, msg2)
         if objdim == 3:
             bminz = round(MINZ(obj), digits)
             bmaxz = round(MAXZ(obj), digits)
-            msg3 = "Z-interval should be (" + str(minz) + ", " + str(maxz) + ") ... it is (" + str(bminz) + ", " + str(bmaxz) + ")"
-            lab.grade(False, msg3)
+            if abs(minz - bminz) > 1e-6 or abs(maxz - bmaxz) > 1e-6:
+                msg3 = "Z-interval should be (" + str(minz) + ", " + str(maxz) + ") ... it is (" + str(bminz) + ", " + str(bmaxz) + ")"
+                lab.grade(False, msg3)
         return False
     else:
         if verbose:
