@@ -9446,8 +9446,8 @@ class NCLabTurtle:
         self.posx = newx
         self.posy = newy
     # Spanish:
-    def avanza(self, dist):
-        self.go(dist)
+    def avanza(self, dist, continued=False):
+        self.go(dist, continued)
 
     def printlines(self):
         for line in self.lines:
@@ -9811,7 +9811,8 @@ class NCLabTurtle:
         self.show(layer, dots)
 
 # Spanish:
-TortugaNCLab = NCLabTurtle
+class TortugaNCLab(NCLabTurtle):
+    pass
 
 ######  NCLAB TURTLE 3D - UTILITIES  ######
 
