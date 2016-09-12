@@ -35,7 +35,6 @@ self_test = False
 
 from pyplasm.xge import *
 
-
 def ISNUMBER(x):
     if not isinstance(x, int) and not isinstance(x, int) and not isinstance(x, float):
         return False
@@ -9382,6 +9381,7 @@ class NCLabTurtle:
 
     def angle(self, a):
         self.turtleangle = a
+
     # Spanish:
     def angulo(self, a):
         self.angle(a)
@@ -9402,6 +9402,7 @@ class NCLabTurtle:
         if w > 10.0:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
         self.linewidth = w
+
     # Spanish:
     def anchura(self, w):
         self.width(w)
@@ -9445,6 +9446,7 @@ class NCLabTurtle:
             self.lines.append(newline)
         self.posx = newx
         self.posy = newy
+
     # Spanish:
     def avanza(self, dist, continued=False):
         self.go(dist, continued)
@@ -9465,6 +9467,7 @@ class NCLabTurtle:
 
     def left(self, da):
         self.turtleangle += da
+
     # Spanish:
     def izquierda(self, da):
         self.left(da)
@@ -9474,6 +9477,7 @@ class NCLabTurtle:
 
     def right(self, da):
         self.turtleangle -= da
+
     # Spanish:
     def derecha(self, da):
         self.right(da)
@@ -9491,6 +9495,7 @@ class NCLabTurtle:
         self.right(180)
         if draw == True:
             self.pendown()
+
     # Spanish:
     def regresa(self, dist):
         self.back(dist)
@@ -9528,6 +9533,7 @@ class NCLabTurtle:
         self.goto(0, 0)
         self.angle(0)
         self.pendown()
+
     # Spanish:
     def casa(self):
         self.home()
@@ -9561,6 +9567,7 @@ class NCLabTurtle:
 
     def hide(self):
        self.isvisible = False
+
     # Spanish:
     def escondete(self):
         self.hide()
@@ -9570,6 +9577,7 @@ class NCLabTurtle:
         self.goto(x1, y1)
         self.pendown()
         self.goto(x2, y2)
+
     # Spanish:
     def linea(self, x1, y1, x2, y2):
         self.line(x1, y1, x2, y2)
@@ -9785,14 +9793,14 @@ class NCLabTurtle:
             self.angle(afinal*180/pi + 90)
         else:
             self.angle(afinal*180/pi - 90)
+
     # Spanish:
     def arco(self, angle, radius, direction='d'):
         if direction == 'd' or direction == 'D':
-            direction = 'r'
+            direc = 'r'
         else:
-            direction = 'l'
-        self.arc(angle, radius, direction)
-
+            direc = 'l'
+        self.arc(angle, radius, direc)
 
     def geometry(self):
         return self.geom
@@ -9806,13 +9814,14 @@ class NCLabTurtle:
             SHOW(self.geom)
         else:
             NCLabTurtleShow(self, layer, dots)
+
     # Spanish:
     def muestra(self, layer=0, dots=True):
         self.show(layer, dots)
 
 # Spanish:
-class TortugaNCLab(NCLabTurtle):
-    pass
+#class TortugaNCLab(NCLabTurtle):
+#    pass
 
 ######  NCLAB TURTLE 3D - UTILITIES  ######
 
