@@ -9382,6 +9382,9 @@ class NCLabTurtle:
 
     def angle(self, a):
         self.turtleangle = a
+    # Spanish:
+    def angulo(self, a):
+        self.angle(a)
 
     def color(self, col):
         if not isinstance(col, list):
@@ -9399,6 +9402,9 @@ class NCLabTurtle:
         if w > 10.0:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
         self.linewidth = w
+    # Spanish:
+    def anchura(self, w):
+        self.width(w)
 
     def height(self, h):
         if h <= 0:
@@ -9439,6 +9445,9 @@ class NCLabTurtle:
             self.lines.append(newline)
         self.posx = newx
         self.posy = newy
+    # Spanish:
+    def avanza(self, dist):
+        self.go(dist)
 
     def printlines(self):
         for line in self.lines:
@@ -9456,13 +9465,19 @@ class NCLabTurtle:
 
     def left(self, da):
         self.turtleangle += da
+    # Spanish:
+    def izquierda(self, da):
+        self.left(da)
 
     def lt(self, da):
         self.left(da)
 
     def right(self, da):
         self.turtleangle -= da
-
+    # Spanish:
+    def derecha(self, da):
+        self.right(da)
+    
     def rt(self, da):
         self.right(da)
 
@@ -9476,6 +9491,9 @@ class NCLabTurtle:
         self.right(180)
         if draw == True:
             self.pendown()
+    # Spanish:
+    def regresa(self, dist):
+        self.back(dist)
 
     def backward(self, dist):
         self.back(dist)
@@ -9510,6 +9528,9 @@ class NCLabTurtle:
         self.goto(0, 0)
         self.angle(0)
         self.pendown()
+    # Spanish:
+    def casa(self):
+        self.home()
 
     def getx(self):
         return self.posx
@@ -9540,12 +9561,18 @@ class NCLabTurtle:
 
     def hide(self):
        self.isvisible = False
+    # Spanish:
+    def escondete(self):
+        self.hide()
 
     def line(self, x1, y1, x2, y2):
         self.penup()
         self.goto(x1, y1)
         self.pendown()
         self.goto(x2, y2)
+    # Spanish:
+    def linea(self, x1, y1, x2, y2):
+        self.line(x1, y1, x2, y2)
 
     # If called, the extrude command will override individual
     # heights of line segments.
@@ -9758,6 +9785,14 @@ class NCLabTurtle:
             self.angle(afinal*180/pi + 90)
         else:
             self.angle(afinal*180/pi - 90)
+    # Spanish:
+    def arco(self, angle, radius, direction='d'):
+        if direction == 'd' or direction == 'D':
+            direction = 'r'
+        else:
+            direction = 'l'
+        self.arc(angle, radius, direction)
+
 
     def geometry(self):
         return self.geom
@@ -9771,7 +9806,12 @@ class NCLabTurtle:
             SHOW(self.geom)
         else:
             NCLabTurtleShow(self, layer, dots)
+    # Spanish:
+    def muestra(self, layer=0, dots=True):
+        self.show(layer, dots)
 
+# Spanish:
+TortugaNCLab = NCLabTurtle
 
 ######  NCLAB TURTLE 3D - UTILITIES  ######
 
