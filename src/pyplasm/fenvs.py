@@ -9404,7 +9404,7 @@ class NCLabTurtle:
         self.linewidth = w
 
     # Spanish:
-    def anchura(self, w):
+    def ancho(self, w):
         self.width(w)
 
     def height(self, h):
@@ -9413,8 +9413,16 @@ class NCLabTurtle:
         self.lineheight = h
         self.heightused = True
 
+    # Spanish:
+    def altura(self, w):
+        self.height(w)
+
     def penup(self):
         self.draw = False
+
+    # Spanish:
+    def levantar(self):
+        self.penup()
 
     def pu(self):
         self.draw = False
@@ -9448,7 +9456,7 @@ class NCLabTurtle:
         self.posy = newy
 
     # Spanish:
-    def avanza(self, dist, continued=False):
+    def avanzar(self, dist, continued=False):
         self.go(dist, continued)
 
     def printlines(self):
@@ -9497,7 +9505,7 @@ class NCLabTurtle:
             self.pendown()
 
     # Spanish:
-    def regresa(self, dist):
+    def regresar(self, dist):
         self.back(dist)
 
     def backward(self, dist):
@@ -9569,7 +9577,7 @@ class NCLabTurtle:
        self.isvisible = False
 
     # Spanish:
-    def escondete(self):
+    def esconder(self):
         self.hide()
 
     def line(self, x1, y1, x2, y2):
@@ -9577,7 +9585,7 @@ class NCLabTurtle:
         self.goto(x1, y1)
         self.pendown()
         self.goto(x2, y2)
-
+        
     # Spanish:
     def linea(self, x1, y1, x2, y2):
         self.line(x1, y1, x2, y2)
@@ -9816,12 +9824,12 @@ class NCLabTurtle:
             NCLabTurtleShow(self, layer, dots)
 
     # Spanish:
-    def muestra(self, layer=0, dots=True):
+    def mostrar(self, layer=0, dots=True):
         self.show(layer, dots)
 
 # Spanish:
-#class TortugaNCLab(NCLabTurtle):
-#    pass
+class TortugaNCLab(NCLabTurtle):
+    pass
 
 ######  NCLAB TURTLE 3D - UTILITIES  ######
 
@@ -10077,12 +10085,16 @@ class NCLabTurtle3D:
 
     def penup(self):
         self.draw = False
-
+    
     def pu(self):
         self.draw = False
 
     def pendown(self):
         self.draw = True
+
+    # Spanish:
+    def bajar(self):
+        self.pendown()
 
     def pd(self):
         self.draw = True
