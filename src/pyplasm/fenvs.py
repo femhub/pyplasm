@@ -9420,18 +9420,26 @@ class NCLabTurtle:
     def penup(self):
         self.draw = False
 
-    # Spanish:
-    def levantar(self):
-        self.penup()
-
     def pu(self):
         self.draw = False
+
+    # Spanish:
+    def levantarpluma(self):
+        self.penup()
+    def lp(self):
+        self.penup()
 
     def pendown(self):
         self.draw = True
 
     def pd(self):
         self.draw = True
+
+    # Spanish:
+    def bajarpluma(self):
+        self.pendown()
+    def bp(self):
+        self.pendown()
 
     def isdown(self):
         return self.draw
@@ -10091,10 +10099,6 @@ class NCLabTurtle3D:
 
     def pendown(self):
         self.draw = True
-
-    # Spanish:
-    def bajar(self):
-        self.pendown()
 
     def pd(self):
         self.draw = True
