@@ -4814,8 +4814,8 @@ def cylinder(*args):
         "Command cylinder() is undefined. Try CYLINDER() instead?")
 
 
-def cyl(*args):
-    raise ExceptionWT("Command cyl() is undefined. Try CYL() instead?")
+#def cyl(*args):
+#    raise ExceptionWT("Command cyl() is undefined. Try CYL() instead?")
 
 
 def CYLINDER(r, h, division=48):
