@@ -1081,12 +1081,12 @@ def show(*args):
 def SHOW(*args):
     sequence = flatten(*args)
     if sequence == []:
-        print("WARNING: The SHOW command received an empty set.")
+        print("WARNING: The SHOW command received no objects.")
         return
     # Check if they are valid objects or empty lists:
     for obj in sequence:
         if not isinstance(obj, BASEOBJ) and obj != []:
-            raise ExceptionWT("Attempt to display an invalid object.")
+            raise ExceptionWT("The SHOW command received an invalid object.")
     # Remove empty lists and empty sets:
     newseq = []
     for obj in sequence:
@@ -1096,11 +1096,10 @@ def SHOW(*args):
     #    if SIZEX(obj) == 0 and SIZEY(obj) == 0 and SIZEZ(obj) == 0:
     #        raise ExceptionWT("One of the objects that you are trying to display is empty!")
     if len(newseq) == 0:
-        raise ExceptionWT(
-            "The SHOW(...) command must contain at least one object!")
+        raise ExceptionWT("The SHOW command received an empty set.")
     for obj in newseq:
         if not isinstance(obj, BASEOBJ):
-            raise ExceptionWT("The arguments of SHOW(...) must be 2D or 3D objects!")
+            raise ExceptionWT("The SHOW command received an invalid object.")
     VIEWBASE(sequence)
 
 # Czech:
