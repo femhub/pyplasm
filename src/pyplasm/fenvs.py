@@ -9412,7 +9412,10 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm, linewidth=-1):
         else:
             lw = linewidth * scaling
         # Open the polyline:
-        out += "<polyline stroke-linejoin=\"round\" fill=\"none\" stroke=\"black\" stroke-width=\"" + str(lw) + "\" points=\""
+        cr = int(round(l.linecolor[0]*255))
+        cg = int(round(l.linecolor[1]*255))
+        cb = int(round(l.linecolor[2]*255))
+        out += "<polyline stroke-linejoin=\"round\" fill=\"none\" stroke=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\" stroke-width=\"" + str(lw) + "\" points=\""
         newstartx, newstarty = NCLabTurtleSVGTrans(l.startx, l.starty, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
         newendx, newendy = NCLabTurtleSVGTrans(l.endx, l.endy, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
         out += str(newstartx) + "," + str(newstarty) + " " + str(newendx) + "," + str(newendy)
