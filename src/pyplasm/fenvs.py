@@ -9363,7 +9363,7 @@ def NCLabTurtleExtremes(turtle):
     return minx, maxx, miny, maxy
 
 # Return maximum line width:
-def NCLabTurtleExtremes(turtle):
+def NCLabTurtleMaxLineWidth(turtle):
     n = len(turtle.lines)
     if n == 0:
         return 0
