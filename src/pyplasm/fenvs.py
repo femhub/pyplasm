@@ -9396,20 +9396,20 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm, linewidth=-1):
     # PREPARE DATA FOR TRANSFORMATION:
     minx, maxx, miny, maxy = NCLabTurtleExtremes(turtle)
     maxlinewidth = NCLabTurtleMaxLineWidth(turtle)
-    worig = maxx - minx + maxlinewidth
-    horig = maxy - miny + maxlinewidth
+    worig = maxx - minx
+    horig = maxy - miny
     cxorig = 0.5 * (minx + maxx)
     cyorig = 0.5 * (miny + maxy)
     # CALCULATE SCALING COEFF:
     if maxx - minx < 0.0001 and maxy - miny < 0.0001:
         scaling = 1.0
     elif maxx - minx < 0.0001:
-        scaling = hincm * 100 / (maxy - miny)
+        scaling = hincm * 100 / (maxy - miny + maxlinewidth)
     elif maxy - miny < 0.0001:
-        scaling = wincm * 100 / (maxx - minx)
+        scaling = wincm * 100 / (maxx - minx + maxlinewidth)
     else: 
-        sx = wincm * 100 / (maxx - minx)
-        sy = hincm * 100 / (maxy - miny)
+        sx = wincm * 100 / (maxx - minx + maxlinewidth)
+        sy = hincm * 100 / (maxy - miny + maxlinewidth)
         scaling = min(sx, sy)
     # WRITE TURTLE TRACE:
     n = len(turtle.lines)
