@@ -9408,9 +9408,13 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm, linewidth=-1):
         l = turtle.lines[i]
         lw = 0
         if linewidth == -1:
-            lw = l.linewidth * scaling
+            lw = int(round(l.linewidth * scaling))
+            if lw <= 0:
+                lw = 1
         else:
-            lw = linewidth * scaling
+            lw = int(round(linewidth * scaling))
+            if lw <= 0:
+                lw = 1
         # Open the polyline:
         cr = int(round(l.linecolor[0]*255))
         cg = int(round(l.linecolor[1]*255))
