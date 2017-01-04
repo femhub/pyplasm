@@ -9425,6 +9425,9 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm, linewidth=-1):
         out += str(newstartx) + "," + str(newstarty) + " " + str(newendx) + "," + str(newendy)
         # Close the polyline
         out += "\" />\n"
+        # Add circles to both ends:
+        out += "<circle cx=\"" + str(newstartx) + "\" cy=\"" + str(newstarty) + "\" r=\"" + str(0.5*lw) + "\"/>\n"
+        out += "<circle cx=\"" + str(newendx) + "\" cy=\"" + str(newendy) + "\" r=\"" + str(0.5*lw) + "\"/>\n"
     # Close the SVG file:
     out += "</svg>\n"
     return out
