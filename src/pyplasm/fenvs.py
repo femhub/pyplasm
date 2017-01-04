@@ -1,6 +1,3 @@
-
-
-
 # coding=UTF-8
 
 from numpy import reshape
@@ -9411,9 +9408,9 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm, linewidth=-1):
         l = turtle.lines[i]
         lw = 0
         if linewidth == -1:
-            lw = l.linewidth
+            lw = l.linewidth * scaling
         else:
-            lw = linewidth
+            lw = linewidth * scaling
         # Open the polyline:
         out += "<polyline stroke-linejoin=\"round\" fill=\"none\" stroke=\"black\" stroke-width=\"" + str(lw) + "\" points=\""
         newstartx, newstarty = NCLabTurtleSVGTrans(l.startx, l.starty, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
