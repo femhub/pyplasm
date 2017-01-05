@@ -9387,7 +9387,7 @@ def NCLabTurtleSVGTrans(x, y, worig, horig, cxorig, cyorig, wincm, hincm, scalin
 # In this version, the color is black and line width is 1
 # because we have a laser cutter in mind. Both can be 
 # adjusted:
-def NCLabTurtleWriteSVG(turtle, wincm, hincm, linewidth=-1):
+def NCLabTurtleWriteSVG(turtle, wincm, hincm, cutting=False):
     # PREAMBLE:
     out = ""
     out += "<svg width=\"" + str(wincm) + "cm\" height=\"" + str(hincm) + "cm\" viewBox=\"0 0 " + str(wincm*100) + " " +  str(hincm * 100) + "\"\n"
@@ -9421,15 +9421,9 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm, linewidth=-1):
     # Now we know that there is at least one line segment.
     for i in range(n):
         l = turtle.lines[i]
-        lw = 0
-        if linewidth == -1:
-            lw = int(round(l.linewidth * scaling))
-            if lw <= 0:
-                lw = 1
-        else:
-            lw = int(round(linewidth * scaling))
-            if lw <= 0:
-                lw = 1
+        lw = int(round(l.linewidth * scaling))
+        if lw <= 0:
+            lw = 1
         # Open the polyline:
         cr = int(round(l.linecolor[0]*255))
         cg = int(round(l.linecolor[1]*255))
@@ -9441,8 +9435,9 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm, linewidth=-1):
         # Close the polyline
         out += "\" />\n"
         # Add circles to both ends:
-        out += "<circle cx=\"" + str(newstartx) + "\" cy=\"" + str(newstarty) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
-        out += "<circle cx=\"" + str(newendx) + "\" cy=\"" + str(newendy) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
+        if not cutting:
+            out += "<circle cx=\"" + str(newstartx) + "\" cy=\"" + str(newstarty) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
+            out += "<circle cx=\"" + str(newendx) + "\" cy=\"" + str(newendy) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
     # Close the SVG file:
     out += "</svg>\n"
     return out
