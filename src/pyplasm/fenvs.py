@@ -9183,7 +9183,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 addcircle = True
             else:
                 lprev = turtle.lines[i-1]
-                addcircle = !lprev.continued
+                addcircle = not lprev.continued
                 # also check if angle difference is greater than 45 degrees:
                 lcurr = turtle.lines[i]
                 if abs(lprev.angle - lcurr.angle) >= 45:
