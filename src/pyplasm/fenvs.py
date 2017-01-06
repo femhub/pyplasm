@@ -9571,13 +9571,9 @@ class NCLabTurtle:
             if len(self.lines) != 0:
                 lastline = self.lines[-1]
                 gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
-                print("gap =", gap)
                 if gap < 0.0001:   # line uninterrupted
-                    print("colors:", lastline.linecolor, self.linecolor)
                     if lastline.linecolor == self.linecolor:
-                        print("widths:", lastline.linewidth, self.linewidth)
                         if abs(lastline.linewidth - self.linewidth) < 0.0001:
-                            print("heights:", lastline.lineheight, self.lineheight)
                             if abs(lastline.lineheight - self.lineheight) < 0.0001:
                                 lastline.continued = True
             
