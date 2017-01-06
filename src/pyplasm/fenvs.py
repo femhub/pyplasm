@@ -9158,6 +9158,7 @@ def NCLabTurtleWedge(l1, l2):
 # Return trace as list of PLaSM objects. Assumes that
 # every line segment has a height:
 def NCLabTurtleTrace(turtle, layer=0, dots=True):
+    print("Calling NCLabTurtleTrace")
     out = []
     n = len(turtle.lines)
     # List of lines is empty - just return:
