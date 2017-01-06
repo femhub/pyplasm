@@ -9557,7 +9557,7 @@ class NCLabTurtle:
     def down(self):
         raise ExceptionWT("Command down() is reserved for spatial drawing with NCLabTurtle3D. Please use pendown() or pd().")
 
-    # Every new line will get continued = False by default. But we look at the
+    # Every new line will get continued = False by default. Then we look at the
     # last one before it. If its ending position is the same as the starting
     # position of the new line, and if the width / height / color match, we
     # will change its 'continued' flag to True:
@@ -9585,8 +9585,8 @@ class NCLabTurtle:
         self.posy = newy
 
     # Spanish:
-    def avanzar(self, dist, continued=False):
-        self.go(dist, continued)
+    def avanzar(self, dist):
+        self.go(dist)
 
     def printlines(self):
         for line in self.lines:
@@ -9643,11 +9643,21 @@ class NCLabTurtle:
     def bk(self, dist):
         self.back(dist)
 
-    def goto(self, newx, newy, continued=False):
+    def goto(self, newx, newy):
         dx = newx - self.posx
         dy = newy - self.posy
         self.turtleangle = arctan2(dy, dx) * 180 / pi
         if self.draw == True:
+            # Is it a continuation (posx, posy = last point, same width/height/color) ?
+            if len(self.lines) != 0:
+                lastline = self.lines[-1]
+                gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
+                if gap < 0.0001:   # line uninterrupted
+                    if lastline.linecolor == self.linecolor:
+                        if abs(lastline.linewidth - self.linewidth) < 0.0001:
+                            if abs(lastline.lineheight - self.lineheight) < 0.0001:
+                                lastline.continued = True
+            continued = False  # the last line always has that
             newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.lineheight, self.linecolor, self.turtleangle, continued)
             self.lines.append(newline)
         self.posx = newx
@@ -9885,6 +9895,16 @@ class NCLabTurtle:
             raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
         if radius < 0.001:
             raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
+        # Is it a continuation (posx, posy = last point, same width/height/color) ?
+        if len(self.lines) != 0:
+            lastline = self.lines[-1]
+            gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
+            if gap < 0.0001:   # line uninterrupted
+                if lastline.linecolor == self.linecolor:
+                    if abs(lastline.linewidth - self.linewidth) < 0.0001:
+                        if abs(lastline.lineheight - self.lineheight) < 0.0001:
+                            lastline.continued = True
+        # The arc:
         n = (angle / 180) * 18
         n = round(n)
         # Calculate center of arc:
@@ -9913,9 +9933,9 @@ class NCLabTurtle:
                 xnext = centerx + radius * cos(-ainit + (i+1) * da)
                 ynext = centery - radius * sin(-ainit + (i+1) * da)
             if i < n-1: 
-                self.goto(xnext, ynext, continued=True)
+                self.goto(xnext, ynext)
             else:
-                self.goto(xnext, ynext, continued=False)
+                self.goto(xnext, ynext)
                 # Correct final position:
         #from numpy import sin, cos, pi
         if leftarc:
