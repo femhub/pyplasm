@@ -9387,7 +9387,7 @@ def NCLabTurtleSVGTrans(x, y, worig, horig, cxorig, cyorig, wincm, hincm, scalin
 # In this version, the color is black and line width is 1
 # because we have a laser cutter in mind. Both can be 
 # adjusted:
-def NCLabTurtleWriteSVG(turtle, wincm, hincm, cutting=False):
+def NCLabTurtleWriteSVG(turtle, wincm, hincm):
     # PREAMBLE:
     out = ""
     out += "<svg width=\"" + str(wincm) + "cm\" height=\"" + str(hincm) + "cm\" viewBox=\"0 0 " + str(wincm*100) + " " +  str(hincm * 100) + "\"\n"
@@ -9435,9 +9435,8 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm, cutting=False):
         # Close the polyline
         out += "\" />\n"
         # Add circles to both ends:
-        if not cutting:
-            out += "<circle cx=\"" + str(newstartx) + "\" cy=\"" + str(newstarty) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
-            out += "<circle cx=\"" + str(newendx) + "\" cy=\"" + str(newendy) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
+        out += "<circle cx=\"" + str(newstartx) + "\" cy=\"" + str(newstarty) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
+        out += "<circle cx=\"" + str(newendx) + "\" cy=\"" + str(newendy) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
     # Close the SVG file:
     out += "</svg>\n"
     return out
