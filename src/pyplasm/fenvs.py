@@ -9434,12 +9434,13 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm):
         cr = int(round(l.linecolor[0]*255))
         cg = int(round(l.linecolor[1]*255))
         cb = int(round(l.linecolor[2]*255))
-        out += "<polyline stroke-linejoin=\"round\" fill=\"none\" stroke=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\" stroke-width=\"" + str(lw) + "\" points=\""
         newstartx, newstarty = NCLabTurtleSVGTrans(l.startx, l.starty, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
         newendx, newendy = NCLabTurtleSVGTrans(l.endx, l.endy, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
-        out += str(newstartx) + "," + str(newstarty) + " " + str(newendx) + "," + str(newendy)
         # Add a circle to the beginning:
         out += "<circle cx=\"" + str(newstartx) + "\" cy=\"" + str(newstarty) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
+        # Start polyline:
+        out += "<polyline stroke-linejoin=\"round\" fill=\"none\" stroke=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\" stroke-width=\"" + str(lw) + "\" points=\""
+        out += str(newstartx) + "," + str(newstarty) + " " + str(newendx) + "," + str(newendy)
         while l.continued:
             out += " "
             counter += 1
@@ -9447,7 +9448,7 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm):
             newstartx, newstarty = NCLabTurtleSVGTrans(l.startx, l.starty, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
             newendx, newendy = NCLabTurtleSVGTrans(l.endx, l.endy, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
             out += str(newstartx) + "," + str(newstarty) + " " + str(newendx) + "," + str(newendy)
-        # Close the polyline
+        # Close the polyline:
         out += "\" />\n"
         # Add a circle to the end:
         out += "<circle cx=\"" + str(newendx) + "\" cy=\"" + str(newendy) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
