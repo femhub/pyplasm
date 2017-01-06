@@ -9207,7 +9207,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                     out.append(PRISM(wedge, lprev.lineheight))
             # Add circle to end point, but only if
             # 'continued==False':
-            if (l.continued == False:
+            if (l.continued == False):
                 radius = 0.5 * l.linewidth + layer
                 cir = CIRCLE(radius, 8)
                 MOVE(cir, l.endx, l.endy)
