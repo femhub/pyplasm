@@ -9169,7 +9169,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
         # Add rectangle corresponding to the line:
         rect = NCLabTurtleRectangle(l, layer)
         if abs(l.lineheight) < 0.000001:
+            print("Rectangle AA")
             out.append(rect)
+            print("Rectangle AA")
         else:
             print("Rectangle A")
             out.append(PRISM(rect, l.lineheight))
@@ -9196,7 +9198,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 MOVE(cir, l.startx, l.starty)
                 COLOR(cir, l.linecolor)
                 if abs(l.lineheight) < 0.000001:
+                    print("Circle BB")
                     out.append(cir)
+                    print("Circle BB")
                 else:
                     print("Circle B")
                     out.append(PRISM(cir, l.lineheight))
@@ -9210,7 +9214,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 MOVE(cir, l.endx, l.endy)
                 COLOR(cir, l.linecolor)
                 if abs(l.lineheight) < 0.000001:
+                    print("Circle CC")
                     out.append(cir)
+                    print("Circle CC")
                 else:
                     print("Circle C")
                     out.append(PRISM(cir, l.lineheight))
@@ -9220,7 +9226,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 wedge = NCLabTurtleWedge(l, lnext)
                 COLOR(wedge, l.linecolor)
                 if abs(l.lineheight) < 0.000001:
+                    print("Wedge DD")
                     out.append(wedge)
+                    print("Wedge DD")
                 else:
                     print("Wedge D")
                     out.append(PRISM(wedge, l.lineheight))
