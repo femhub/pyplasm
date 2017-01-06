@@ -9557,14 +9557,28 @@ class NCLabTurtle:
     def down(self):
         raise ExceptionWT("Command down() is reserved for spatial drawing with NCLabTurtle3D. Please use pendown() or pd().")
 
-    # 'continued' will be True for arcs, False for regular lines
-    # will be used to simplify geometric connectivity for edges in arcs
-    def go(self, dist, continued=False):
+    # Every new line will get continued = False by default. But we look at the
+    # last one before it. If its ending position is the same as the starting
+    # position of the new line, and if the width / height / color match, we
+    # will change its 'continued' flag to True:
+    def go(self, dist):
         if dist <= 0:
             raise ExceptionWT("The distance d in go(d) must be positive!")
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
+            # Is it a continuation (posx, posy = last point, same width/height/color) ?
+            if len(self.lines) != 0:
+                lastline = self.lines[-1]
+                gap = sqrt((newx - lastline.endx)**2 + (newy - lastline.endy)**2)
+                if gap < 0.0001:   # line uninterrupted
+                    if lastline.linecolor == self.color:
+                        if lastline.linewidth == self.linewidth:
+                            if lastline.lineheight == self.lineheight:
+                                lastline.continued = True
+            
+            # Create and append the new line:
+            continued = False
             newline = NCLabTurtleLine(self.posx, self.posy, newx, newy, self.linewidth, self.lineheight, self.linecolor, self.turtleangle, continued)
             self.lines.append(newline)
         self.posx = newx
