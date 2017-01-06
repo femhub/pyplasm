@@ -9912,7 +9912,8 @@ class NCLabTurtle:
             raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
         if radius < 0.001:
             raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
-        # Is it a continuation (posx, posy = last point, same width/height/color) ?
+        # CONTINUATION IS NOW SOLVED ON THE LEVEL OF THE GOTO() COMMAND
+        #Is it a continuation (posx, posy = last point, same width/height/color) ?
         #if len(self.lines) != 0:
         #    lastline = self.lines[-1]
         #    gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
@@ -9949,12 +9950,7 @@ class NCLabTurtle:
             else:
                 xnext = centerx + radius * cos(-ainit + (i+1) * da)
                 ynext = centery - radius * sin(-ainit + (i+1) * da)
-            if i < n-1: 
-                self.goto(xnext, ynext)
-            else:
-                self.goto(xnext, ynext)
-                # Correct final position:
-        #from numpy import sin, cos, pi
+            self.goto(xnext, ynext)
         if leftarc:
             afinal = angle*pi/180. + ainit
         else:
