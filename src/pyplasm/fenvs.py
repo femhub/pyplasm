@@ -9570,7 +9570,7 @@ class NCLabTurtle:
             # Is it a continuation (posx, posy = last point, same width/height/color) ?
             if len(self.lines) != 0:
                 lastline = self.lines[-1]
-                gap = sqrt((newx - lastline.endx)**2 + (newy - lastline.endy)**2)
+                gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
                 if gap < 0.0001:   # line uninterrupted
                     if lastline.linecolor == self.color:
                         if lastline.linewidth == self.linewidth:
