@@ -9424,8 +9424,9 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm):
         out += "</svg>\n"
         return out
     # Now we know that there is at least one line segment.
-    for i in range(n):
-        l = turtle.lines[i]
+    counter = 0
+    while counter != n:
+        l = turtle.lines[counter]
         lw = int(round(l.linewidth * scaling))
         if lw <= 0:
             lw = 1
@@ -9437,11 +9438,21 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm):
         newstartx, newstarty = NCLabTurtleSVGTrans(l.startx, l.starty, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
         newendx, newendy = NCLabTurtleSVGTrans(l.endx, l.endy, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
         out += str(newstartx) + "," + str(newstarty) + " " + str(newendx) + "," + str(newendy)
+        # Add a circle to the beginning:
+        out += "<circle cx=\"" + str(newstartx) + "\" cy=\"" + str(newstarty) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
+        while l.continued:
+            out += " "
+            counter += 1
+            l = turtle.lines[counter]
+            newstartx, newstarty = NCLabTurtleSVGTrans(l.startx, l.starty, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
+            newendx, newendy = NCLabTurtleSVGTrans(l.endx, l.endy, worig, horig, cxorig, cyorig, wincm, hincm, scaling)
+            out += str(newstartx) + "," + str(newstarty) + " " + str(newendx) + "," + str(newendy)
         # Close the polyline
         out += "\" />\n"
-        # Add circles to both ends:
-        out += "<circle cx=\"" + str(newstartx) + "\" cy=\"" + str(newstarty) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
+        # Add a circle to the end:
         out += "<circle cx=\"" + str(newendx) + "\" cy=\"" + str(newendy) + "\" r=\"" + str(0.5*lw) + "\" fill=\"rgb(" + str(cr) + "," + str(cg) + "," + str(cb) +  ")\"/>\n"
+        # update counter:
+        counter += 1
     # Close the SVG file:
     out += "</svg>\n"
     return out
