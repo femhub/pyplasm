@@ -9913,14 +9913,14 @@ class NCLabTurtle:
         if radius < 0.001:
             raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
         # Is it a continuation (posx, posy = last point, same width/height/color) ?
-        if len(self.lines) != 0:
-            lastline = self.lines[-1]
-            gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
-            if gap < 0.0001:   # line uninterrupted
-                if lastline.linecolor == self.linecolor:
-                    if abs(lastline.linewidth - self.linewidth) < 0.0001:
-                        if abs(lastline.lineheight - self.lineheight) < 0.0001:
-                            lastline.continued = True
+        #if len(self.lines) != 0:
+        #    lastline = self.lines[-1]
+        #    gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
+        #    if gap < 0.0001:   # line uninterrupted
+        #        if lastline.linecolor == self.linecolor:
+        #            if abs(lastline.linewidth - self.linewidth) < 0.0001:
+        #                if abs(lastline.lineheight - self.lineheight) < 0.0001:
+        #                    lastline.continued = True
         # The arc:
         n = (angle / 180) * 18
         n = round(n)
