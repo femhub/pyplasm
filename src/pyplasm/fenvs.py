@@ -9187,7 +9187,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 addcircle = True
             else:
                 lprev = turtle.lines[i-1]
-                addcircle = not lprev.continued
+                addcircle = (lprev.continued == False)
                 # also check if angle difference is greater than 45 degrees:
                 lcurr = turtle.lines[i]
                 if abs(lprev.angle - lcurr.angle) >= 45:
@@ -9207,7 +9207,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                     print("Circle B")
             # Add circle to end point, but only if
             # the line does not have 'continued==True':
-            addcircle = not l.continued
+            addcircle = (l.continued == False)
             if addcircle:
                 radius = 0.5 * l.linewidth + layer
                 cir = CIRCLE(radius, 8)
