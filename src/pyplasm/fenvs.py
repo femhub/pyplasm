@@ -9161,6 +9161,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
     print("Calling NCLabTurtleTrace")
     out = []
     n = len(turtle.lines)
+    print("n =", n)
     # List of lines is empty - just return:
     if n == 0:
         return out
