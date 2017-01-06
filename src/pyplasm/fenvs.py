@@ -9171,9 +9171,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
         if abs(l.lineheight) < 0.000001:
             out.append(rect)
         else:
-            print("Rectangle A")
             out.append(PRISM(rect, l.lineheight))
-            print("Rectangle A")
         # If dots == True (we will be adding circles
         # to line end points):
         if dots == True:
@@ -9198,9 +9196,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 if abs(l.lineheight) < 0.000001:
                     out.append(cir)
                 else:
-                    print("Circle Start")
                     out.append(PRISM(cir, l.lineheight))
-                    print("Circle Start")
             else:  # we will be adding a wedge to the beginning of current line
                 lprev = turtle.lines[i-1]
                 wedge = NCLabTurtleWedge(lprev, l)
@@ -9208,13 +9204,10 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 if abs(lprev.lineheight) < 0.000001:
                     out.append(wedge)
                 else:
-                    print("Wedge D")
                     out.append(PRISM(wedge, lprev.lineheight))
-                    print("Wedge D")
             # Add circle to end point, but only if
             # 'continued==False':
-            addcircle = (l.continued == False)
-            if addcircle:
+            if (l.continued == False:
                 radius = 0.5 * l.linewidth + layer
                 cir = CIRCLE(radius, 8)
                 MOVE(cir, l.endx, l.endy)
@@ -9222,9 +9215,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 if abs(l.lineheight) < 0.000001:
                     out.append(cir)
                 else:
-                    print("Circle End")
-                    out.append(PRISM(cir, l.lineheight))
-                    print("Circle End")       
+                    out.append(PRISM(cir, l.lineheight))  
     return out
 
 
