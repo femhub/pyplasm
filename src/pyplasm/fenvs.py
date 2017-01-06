@@ -9204,9 +9204,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                     out.append(cir)
                     print("Circle BB")
                 else:
-                    print("Circle B")
+                    print("Circle Start")
                     out.append(PRISM(cir, l.lineheight))
-                    print("Circle B")
+                    print("Circle Start")
             # Add circle to end point, but only if
             # the line does not have 'continued==True':
             addcircle = (l.continued == False)
@@ -9220,9 +9220,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                     out.append(cir)
                     print("Circle CC")
                 else:
-                    print("Circle C")
+                    print("Circle End")
                     out.append(PRISM(cir, l.lineheight))
-                    print("Circle C")
+                    print("Circle End")
             else:  # we will be adding a wedge to the end of current line
                 lnext = turtle.lines[i+1]
                 wedge = NCLabTurtleWedge(l, lnext)
