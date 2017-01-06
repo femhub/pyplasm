@@ -9171,9 +9171,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
         if abs(l.lineheight) < 0.000001:
             out.append(rect)
         else:
-            print("Case A")
+            print("Rectangle A")
             out.append(PRISM(rect, l.lineheight))
-            print("Case A")
+            print("Rectangle A")
         # If dots == True (we will be adding circles
         # to line end points):
         if dots == True:
@@ -9198,9 +9198,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 if abs(l.lineheight) < 0.000001:
                     out.append(cir)
                 else:
-                    print("Case B")
+                    print("Circle B")
                     out.append(PRISM(cir, l.lineheight))
-                    print("Case B")
+                    print("Circle B")
             # Add circle to end point, but only if
             # the line does not have 'continued==True':
             addcircle = not l.continued
@@ -9212,9 +9212,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 if abs(l.lineheight) < 0.000001:
                     out.append(cir)
                 else:
-                    print("Case C")
+                    print("Circle C")
                     out.append(PRISM(cir, l.lineheight))
-                    print("Case C")
+                    print("Circle C")
             else:  # we will be adding a wedge to the end of current line
                 lnext = turtle.lines[i+1]
                 wedge = NCLabTurtleWedge(l, lnext)
@@ -9222,9 +9222,9 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 if abs(l.lineheight) < 0.000001:
                     out.append(wedge)
                 else:
-                    print("Case D")
+                    print("Wedge D")
                     out.append(PRISM(wedge, l.lineheight))
-                    print("Case D")
+                    print("Wedge D")
     return out
 
 
