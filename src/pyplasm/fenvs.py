@@ -9578,8 +9578,9 @@ class NCLabTurtle:
     # position of the new line, and if the width / height / color match, we
     # will change its 'continued' flag to True:
     def go(self, dist):
-        if dist <= 0:
-            raise ExceptionWT("The distance d in go(d) must be positive!")
+        # If Tina has not moved, just return:
+        if dist < 0.000001:
+            return
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
@@ -9662,6 +9663,9 @@ class NCLabTurtle:
     def goto(self, newx, newy):
         dx = newx - self.posx
         dy = newy - self.posy
+        # If Tina has not moved, just return:
+        if abs(self.posx - newx) < 0.000001 and abs(self.posy - newy) < 0.000001:
+            return
         self.turtleangle = arctan2(dy, dx) * 180 / pi
         if self.draw == True:
             # Is it a continuation (posx, posy = last point, same width/height/color) ?
