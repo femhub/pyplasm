@@ -9199,12 +9199,13 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                     out.append(PRISM(cir, l.lineheight))
             else:  # we will be adding a wedge to the beginning of current line
                 lprev = turtle.lines[i-1]
-                wedge = NCLabTurtleWedge(lprev, l)
-                COLOR(wedge, lprev.linecolor)
-                if abs(lprev.lineheight) < 0.000001:
-                    out.append(wedge)
-                else:
-                    out.append(PRISM(wedge, lprev.lineheight))
+                if abs(lprev.angle - l.angle) > 0.001:
+                    wedge = NCLabTurtleWedge(lprev, l)
+                    COLOR(wedge, lprev.linecolor)
+                    if abs(lprev.lineheight) < 0.000001:
+                        out.append(wedge)
+                    else:
+                        out.append(PRISM(wedge, lprev.lineheight))
             # Add circle to end point, but only if
             # 'continued==False':
             if (l.continued == False):
