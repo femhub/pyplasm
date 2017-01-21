@@ -9989,9 +9989,39 @@ class NCLabTurtle:
         else:
             NCLabTurtleShow(self, layer, dots)
 
+        self._plot_turtle_trace()
+
     # Spanish:
     def mostrar(self, layer=0, dots=True):
         self.show(layer, dots)
+
+    def _plot_turtle_trace(self):
+        """
+        Plot turtle "lines" property as pickled object, to be saved
+        as binary file. Later it can be loaded and used to plot SVG.
+        """
+        import pickle, base64
+
+        try:
+            # Create a turtle instance and copy just enough data to be
+            # able to create SVG plots.
+            turtle = NCLabTurtle()
+            turtle.lines = list(self.lines)
+
+            plot = {
+                'type': 'binary',
+                'data': base64.b64encode(pickle.dumps(turtle)).decode('utf-8'),
+                'dtype': 'application/octet-stream:turtle',
+                'encoding': 'base64',
+                'output': 'none',
+                'name': 'turtle_pickle'
+            }
+            nclabinst._pipe_plot(plot)
+        except:
+            # Fail quitely so the turtle show-ing is not interrupted.
+            return False
+        else:
+            return True
 
 # Spanish:
 class TortugaNCLab(NCLabTurtle):
