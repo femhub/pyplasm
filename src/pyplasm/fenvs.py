@@ -3160,6 +3160,10 @@ def UNION(*args):
     list1 = flatten(list1)  # flatten the rest as there may be structs
     if len(list1) < 2:
         raise ExceptionWT("UNION() must be applied to at least two objects!")
+    for o in list1:
+        if not isinstance(o, BASEOBJ):
+            raise ExceptionWT(
+                "Invalid object found in UNION().")
     return list1
 
 # English:
