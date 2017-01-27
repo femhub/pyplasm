@@ -4766,18 +4766,17 @@ def arc3d(*args):
     raise ExceptionWT("Command arc3d() is undefined. Try ARC3D() instead?")
 
 
-def ARC3D(r1, r2, angle, division=[48, 1]):
+def ARC3D(r1, r2, angle, h, division=[48, 1]):
     if r1 < 0:
         raise ExceptionWT(
-            "Radius r1 in ARC3D(r1, r2, angle) must be nonnegative!")
+            "Radius r1 in ARC3D(r1, r2, h, angle) must be nonnegative!")
     if r2 <= r1:
         raise ExceptionWT(
-            "Radiuses r1 and r2 in ARC3D(r1, r2, angle) must satisfy r1 < r2!")
+            "Radiuses r1 and r2 in ARC3D(r1, r2, h, angle) must satisfy r1 < r2!")
     if angle <= 0:
-        raise ExceptionWT("Angle in ARC3D(r1, r2, angle) must be positive!")
-    # height is kept the same for add these thin objects,
-    # so that logical operations with them work:
-    h = 0.001
+        raise ExceptionWT("Angle in ARC3D(r1, r2, h, angle) must be positive!")
+    if h <= 0:
+        raise ExceptionWT("Height 'h' in ARC3D(r1, r2, h, angle) must be positive!")
     if type(division) == list:
         return PRISM(BASEOBJ(PLASM_ARC([r1, r2, angle])(division)), h)
     else:
