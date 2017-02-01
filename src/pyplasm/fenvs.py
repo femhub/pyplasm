@@ -1095,7 +1095,7 @@ def SHOW(*args):
     #    if SIZEX(obj) == 0 and SIZEY(obj) == 0 and SIZEZ(obj) == 0:
     #        raise ExceptionWT("One of the objects that you are trying to display is empty!")
     if len(newseq) == 0:
-        raise ExceptionWT("The SHOW command received an empty set.")
+        raise ExceptionWT("The SHOW command received an empty set.\nHave you subtracted an object from its subset?")
     for obj in newseq:
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("The SHOW command received an invalid object.")
@@ -9051,7 +9051,7 @@ def VALIDATE(obj, name, dim):
         if m == 0:
             return False, "It looks like your object '" + name + "' is empty."
         else:
-            return False, "Please use the UNION() function to glue objects together."
+            return False, "Please use the UNION command to create unions of objects."
 
     if not isinstance(obj, BASEOBJ) and not isinstance(obj, list):
         return False, "Object '" + name + "' is invalid."
