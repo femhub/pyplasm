@@ -1097,6 +1097,8 @@ def SHOW(*args):
     if len(newseq) == 0:
         raise ExceptionWT("The SHOW command received an empty set.\nNote: SUBTRACT(a, b) subtracts object 'b' from object 'a'.")
     for obj in newseq:
+        if isinstance(obj, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("The SHOW command received an invalid object.")
     VIEWBASE(sequence)
@@ -1186,21 +1188,25 @@ class BASEOBJ:
     def subtract(self, obj):
         geoms = [self.geom]
         if not isinstance(obj, list):
+            if isinstance(obj, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(obj, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found (subtract - a).")
+                    "Invalid object found (subtract - 1).")
             if self.dim != obj.dim:
                 raise ExceptionWT(
-                    "Cannot subtract objects of different dimensions.")
+                    "Received a 3D object where a 2D object was expected, or vice versa.")
             geoms.append(obj.geom)
         else:
             for x in obj:
+                if isinstance(x, tuple):
+                    raise ExceptionWT("Use the UNION command to create unions of objects.")        
                 if not isinstance(x, BASEOBJ):
                     raise ExceptionWT(
-                        "Invalid object found (subtract - b).")
+                        "Invalid object found (subtract - 2).")
                 if self.dim != x.dim:
                     raise ExceptionWT(
-                        "Cannot subtract objects of different dimensions.")
+                        "Received a 3D object where a 2D object was expected, or vice versa.")
                 geoms.append(x.geom)
         newgeom = PLASM_DIFF(geoms)
         self.geom = newgeom
@@ -1212,21 +1218,25 @@ class BASEOBJ:
     def diff(self, obj):
         geoms = [self.geom]
         if not isinstance(obj, list):
+            if isinstance(obj, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(obj, BASEOBJ):
                 raise ExceptionWT(
-                    "Invalid object found (diff - a).")
+                    "Invalid object found (diff - 1).")
             if self.dim != obj.dim:
                 raise ExceptionWT(
-                    "Trying to subtract objects of different dimensions?")
+                    "Received a 3D object where a 2D object was expected, or vice versa.")
             geoms.append(obj.geom)
         else:
             for x in obj:
+                if isinstance(obj, tuple):
+                    raise ExceptionWT("Use the UNION command to create unions of objects.")        
                 if not isinstance(x, BASEOBJ):
                     raise ExceptionWT(
-                        "Invalid object found (diff - b).")
+                        "Invalid object found (diff - 2).")
                 if self.dim != x.dim:
                     raise ExceptionWT(
-                        "Trying to subtract objects of different dimensions?")
+                        "Received a 3D object where a 2D object was expected, or vice versa.")
                 geoms.append(x.geom)
         newgeom = PLASM_DIFF(geoms)
         newobj = BASEOBJ(newgeom)
@@ -1502,9 +1512,13 @@ def SIZEX(obj):
     if isinstance(obj, list):
         obj = flatten(obj)
         for oo in obj:
+            if isinstance(oo, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT("Invalid object obj detected in SIZEX(obj)!")
     else:
+        if isinstance(obj, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("Invalid object obj detected in SIZEX(obj)!")
     # Size calculation:
@@ -1523,9 +1537,13 @@ def SIZEY(obj):
     if isinstance(obj, list):
         obj = flatten(obj)
         for oo in obj:
+            if isinstance(oo, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT("Invalid object obj detected in SIZEY(obj)!")
     else:
+        if isinstance(obj, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("Invalid object obj detected in SIZEY(obj)!")
     # Size calculation:
@@ -1544,9 +1562,13 @@ def SIZEZ(obj):
     if isinstance(obj, list):
         obj = flatten(obj)
         for oo in obj:
+            if isinstance(oo, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT("Invalid object obj detected in SIZEZ(obj)!")
     else:
+        if isinstance(obj, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("Invalid object obj detected in SIZEZ(obj)!")
     # Size calculation:
@@ -1750,6 +1772,8 @@ def SPLIT(obj, coord, axis, warn=True):
 
 def COPY(obj):
     if not isinstance(obj, list):
+        if isinstance(obj, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("Invalid object found (copy - 1).")
         return copy.copy(obj)
@@ -1757,6 +1781,8 @@ def COPY(obj):
         obj1 = flatten(obj)  # flatten the rest as there may be structs
         newlist = []
         for x in obj1:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found (copy - 2).")
             newlist.append(copy.copy(x))
@@ -3163,6 +3189,8 @@ def UNION(*args):
     if len(list1) < 2:
         raise ExceptionWT("UNION() must be applied to at least two objects!")
     for o in list1:
+        if isinstance(o, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(o, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found in UNION().")
@@ -3391,9 +3419,13 @@ def SUBTRACT(a, b, warn=True):
                 "Cannot subtract an empty list of objects from an object.")
     # a is single object, b is single object:
     if not isinstance(a, list) and not isinstance(b, list):
+        if isinstance(a, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found (subtract - 1).")
+        if isinstance(b, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found (subtract - 2).")
@@ -3405,9 +3437,13 @@ def SUBTRACT(a, b, warn=True):
     if not isinstance(a, list) and isinstance(b, list):
         flatb = flatten(b)  # flatten the list as there may be structs
         for x in flatb:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
                     "Invalid object found (subtract - 3).")
+        if isinstance(a, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found (subtract - 4).")
@@ -3417,6 +3453,8 @@ def SUBTRACT(a, b, warn=True):
         return COPY(a)
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
+        if isinstance(b, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found (subtract - 5).")
@@ -3424,6 +3462,8 @@ def SUBTRACT(a, b, warn=True):
         b2 = COPY(b)   # This is important as 'b' can be changed by the subtraction
         newlist = []
         for x in flata:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found (subtract - 6).")
             x.subtract(b2)      # Important - do not subtract the original item
@@ -3436,11 +3476,15 @@ def SUBTRACT(a, b, warn=True):
     if isinstance(a, list) and isinstance(b, list):
         flata = flatten(a)  # flatten the list as there may be structs
         for x in flata:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
                     "Invalid object found (subtract - 7).")
         flatb = flatten(b)  # flatten the list as there may be structs
         for x in flatb:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
                     "Invalid object found (subtract - 8).")
@@ -3501,9 +3545,13 @@ def DIFFERENCE(a, b, warn=True):
                 "Cannot subtract an empty list of objects from an object.")
     # a is single object, b is single object:
     if not isinstance(a, list) and not isinstance(b, list):
+        if isinstance(a, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found (diff - 1).")
+        if isinstance(b, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found (diff - 2).")
@@ -3515,9 +3563,13 @@ def DIFFERENCE(a, b, warn=True):
     if not isinstance(a, list) and isinstance(b, list):
         flatb = flatten(b)  # flatten the list as there may be structs
         for x in flatb:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
                     "Invalid object found (diff - 3).")
+        if isinstance(a, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(a, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found (diff - 4).")
@@ -3529,9 +3581,13 @@ def DIFFERENCE(a, b, warn=True):
     if isinstance(a, list) and not isinstance(b, list):
         flata = flatten(a)  # flatten the list as there may be structs
         for x in flata:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
                     "Invalid object found (diff - 5).")
+        if isinstance(b, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(b, BASEOBJ):
             raise ExceptionWT(
                 "Invalid object found (diff - 6).")
@@ -3547,11 +3603,15 @@ def DIFFERENCE(a, b, warn=True):
     if isinstance(a, list) and isinstance(b, list):
         flata = flatten(a)  # flatten the list as there may be structs
         for x in flata:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
                     "Invalid object found (diff - 7).")
         flatb = flatten(b)  # flatten the list as there may be structs
         for x in flatb:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT(
                     "Invalid object found (diff - 8).")
@@ -7894,6 +7954,8 @@ def COLOR(obj, col=None):
     else:
         obj = flatten(obj)
         for x in obj:
+            if isinstance(x, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found (color - 1).")
             x.setcolor(col)
@@ -7933,7 +7995,7 @@ def PLASM_COLOR(Cpl):
             Cpl[2] = Cpl[2] / 255.
         Cpl = Color4f(Cpl[0], Cpl[1], Cpl[2], Cpl[3] if len(Cpl) >= 4 else 1.0)
     else:
-        ExceptionWT("Invalid color!")
+        ExceptionWT("Invalid color detected.")
 
     def PLASM_COLOR0(pol):
         return Plasm.addProperty(pol, "RGBcolor", formatColor(Cpl))
@@ -8479,10 +8541,14 @@ def EMPTYSET(obj):
     if isinstance(obj, list):
         obj = flatten(obj)
         for oo in obj:
+            if isinstance(oo, tuple):
+                raise ExceptionWT("Use the UNION command to create unions of objects.")        
             if not isinstance(oo, BASEOBJ):
                 raise ExceptionWT(
                     "Invalid object found (emptyset - 1).")
     else:
+        if isinstance(obj, tuple):
+            raise ExceptionWT("Use the UNION command to create unions of objects.")        
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("Invalid object found (emptyset - 2).")
     # Emptyset test:
