@@ -9873,6 +9873,8 @@ class NCLabTurtle:
 
     # Another name for revolve()
     def roshell(self, angle=360, div=32):
+        if self.isextruded:
+            raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
             raise ExceptionWT("Once you use the height() command, roshell() cannot be used!")
         if self.roshellcalled == True:
@@ -9903,6 +9905,8 @@ class NCLabTurtle:
 
     # Rotational solid
     def rosol(self, angle=360, div=32):     
+        if self.isextruded:
+            raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
             raise ExceptionWT("Once you use the height() command, rosol() cannot be used!")
         if self.rosolcalled == True:
@@ -9931,6 +9935,8 @@ class NCLabTurtle:
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
+        if self.isextruded:
+            raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
             raise ExceptionWT("Once you use the height() command, rosurf() cannot be used!")
         if self.rosurfcalled == True:
