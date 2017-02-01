@@ -1095,7 +1095,7 @@ def SHOW(*args):
     #    if SIZEX(obj) == 0 and SIZEY(obj) == 0 and SIZEZ(obj) == 0:
     #        raise ExceptionWT("One of the objects that you are trying to display is empty!")
     if len(newseq) == 0:
-        raise ExceptionWT("The SHOW command received an empty set.\nHave you subtracted an object from its subset?")
+        raise ExceptionWT("The SHOW command received an empty set.\nNote: SUBTRACT(a, b) subtracts object 'b' from object 'a'.")
     for obj in newseq:
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("The SHOW command received an invalid object.")
