@@ -1082,6 +1082,8 @@ def SHOW(*args):
         return
     # Check if they are valid objects or empty lists:
     for obj in sequence:
+        if isinstance(obj, tuple):
+            raise ExceptionWT("Please use the UNION command to create unions of objects.")        
         if not isinstance(obj, BASEOBJ) and obj != []:
             raise ExceptionWT("The SHOW command received an invalid object.")
     # Remove empty lists and empty sets:
