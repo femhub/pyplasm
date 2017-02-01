@@ -9556,6 +9556,8 @@ class NCLabTurtle:
         self.lineheight = 0
         self.canvassize = 100
         self.lines = []
+        self.stepcounter = 0          # measures how many steps the Turtle
+                                      # made during her lifetime 
         self.heightused = False       # If any line height is set
                                       # to nonzero, this will be True
         self.isvisible = True
@@ -9653,6 +9655,7 @@ class NCLabTurtle:
         # If Tina has not moved, just return:
         if dist < 0.000001:
             return
+        self.stepcounter += dist
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
@@ -9714,6 +9717,7 @@ class NCLabTurtle:
     def back(self, dist):
         if dist <= 0:
             raise ExceptionWT("The distance d in back(d) must be positive!")
+        self.stepcounter += dist
         draw = self.draw
         self.left(180)
         self.penup()  # do not draw while backing
@@ -9738,6 +9742,10 @@ class NCLabTurtle:
         # If Tina has not moved, just return:
         if abs(self.posx - newx) < 0.000001 and abs(self.posy - newy) < 0.000001:
             return
+        # Increase step counter:
+        dist = sqrt(dx*dx + dy*dy)
+        self.stepcounter += dist
+        # Angle:
         self.turtleangle = arctan2(dy, dx) * 180 / pi
         if self.draw == True:
             # Is it a continuation (posx, posy = last point, same width/height/color) ?
@@ -9969,6 +9977,7 @@ class NCLabTurtle:
         self.turtleangle = 0
         self.linecolor = [0, 0, 255]
         self.draw = True
+        self.stepcounter = 0
         self.linewidth = 1
         self.lineheight = 0
         self.canvassize = 100
