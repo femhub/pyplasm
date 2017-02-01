@@ -9648,7 +9648,7 @@ class NCLabTurtle:
         raise ExceptionWT("Command down() is reserved for spatial drawing with NCLabTurtle3D. Please use pendown() or pd().")
 
     def snapshot(self):
-        return self.stepcounter, self.turtleangle, self.linewidth, self.linecolor 
+        return int(self.stepcounter), int(self.turtleangle), int(self.linewidth), self.linecolor 
     
     # Every new line will get continued = False by default. Then we look at the
     # last one before it. If its ending position is the same as the starting
