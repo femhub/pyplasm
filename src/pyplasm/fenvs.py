@@ -1352,8 +1352,9 @@ class BASEOBJ:
         if self.dim == 3:
             self.geom = PLASM_SCALE([1, 2, 3])([a, b, c])(self.geom)
         else:
-            # NOT SURE IF THIS WILL WORK FOR 2D CURVED SURFACES:
-            self.geom = PLASM_SCALE([1, 2])([a, b])(self.geom)
+            # THIS CAUSED PROBLEMS WITH 2D SURFACES:
+            #self.geom = PLASM_SCALE([1, 2])([a, b])(self.geom)
+            self.geom = PLASM_SCALE([1, 2, 3])([a, b, c])(self.geom)
         self.setcolor(self.color)
 
     def minx(self):
