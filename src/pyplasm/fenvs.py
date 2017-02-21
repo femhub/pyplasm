@@ -9083,6 +9083,49 @@ def TANGRAM7():
     COLOR(tangram7, ORANGE)
     return tangram7
 
+##### CASTLES #####
+
+def CASTLE1():
+    cu = CUBE(1)
+    COLOR(cu, BEIGE)
+    MOVE(cu, 4, 2)
+    return cu
+
+def CASTLE2():
+    co = CONE(0.5, 1)
+    COLOR(co, RED)
+    MOVE(co, 2.5, 1.5)
+    return co
+
+def CASTLE3():
+    cy = CYLINDER(0.5, 1)
+    COLOR(cy, BEIGE)
+    MOVE(cy, 0.5, 2.5)
+    return cy
+    
+def CASTLE4():
+    py = PYRAMID(0.5*1.414214, 1)
+    COLOR(py, RED)
+    ROTATE(py, 45)
+    MOVE(py, 3.5, 1.5)
+    return py
+
+def CASTLE5():
+    hs = SPHERE(0.5)
+    ERASE(hs, -1, 0, Z)
+    COLOR(hs, RED)
+    MOVE(hs, 1.5, 1.5)
+    return hs
+    
+def CASTLE6():
+    wy = BOX(0.25, 0.75, 0, 1, 0, 1)
+    COLOR(wy, BEIGE)
+    return wy
+
+def CASTLE7():
+    wx = BOX(4, 5, 0.25, 0.75, 0, 1)
+    COLOR(wx, BEIGE)
+    return wx
 
 ####    POINT    ####
 
