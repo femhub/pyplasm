@@ -1352,9 +1352,10 @@ class BASEOBJ:
         if self.dim == 3:
             self.geom = PLASM_SCALE([1, 2, 3])([a, b, c])(self.geom)
         else:
-            # THIS CAUSED PROBLEMS WITH 2D SURFACES:
-            #self.geom = PLASM_SCALE([1, 2])([a, b])(self.geom)
-            self.geom = PLASM_SCALE([1, 2, 3])([a, b, c])(self.geom)
+            # Important: When 2D objects such as a circle get scaled in all three
+            # directions, even though c == 1, this caused problems.
+            if abs(c - 1.0) < 0.0001: self.geom = PLASM_SCALE([1, 2])([a, b])(self.geom)
+            else: self.geom = PLASM_SCALE([1, 2, 3])([a, b, c])(self.geom)
         self.setcolor(self.color)
 
     def minx(self):
