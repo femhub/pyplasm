@@ -9338,14 +9338,14 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
 # Shape of the turtle:
 def NCLabTurtleImage(turtle):
     t = []
-    t1 = CIRCLE(5, 10)
+    t1 = CIRCLE(3, 10)
     rt, gt, bt = turtle.linecolor
     COLOR(t1, [rt, gt, bt])
-    SCALE(t1, 0.75, 1)
+    #SCALE(t1, 0.75, 1)
     t.append(t1)
-    t2 = RING(5, 5.5, 10)
+    t2 = RING(3, 3.5, 10)
     COLOR(t2, BLACK)
-    SCALE(t2, 0.75, 1)
+    #SCALE(t2, 0.75, 1)
     t.append(t2)
     t3 = CIRCLE(1.5, 8)
     MOVE(t3, 0, 6.25)
