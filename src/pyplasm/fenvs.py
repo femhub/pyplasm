@@ -9576,6 +9576,24 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm):
         
 ######  NCLAB TURTLE 2D - CLASSES  ######
 
+# Class used for implementing the Singleton design pattern
+# Refer to this thread for more info:
+#    http://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
+# Change
+#   class SomeClass(BaseClass, ...):
+# into
+#   class SomeClass(metaclass=Singleton, BaseClass, ...)
+# and any attempt to create a new instance would return only one
+# unique instance of class SomeClass.
+# This behaviour is a possible solution to let the users to name
+# their turtles whatever name they choose.
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
 # Class Line:
 class NCLabTurtleLine:
     def __init__(self, sx, sy, ex, ey, w, h, c, angle, continued=False):
@@ -9590,7 +9608,7 @@ class NCLabTurtleLine:
         self.continued = continued
 
 # Class Turtle:
-class NCLabTurtle:
+class NCLabTurtle(metaclass=Singleton):
     def __init__(self, px=0, py=0):
         self.posx = px
         self.posy = py
