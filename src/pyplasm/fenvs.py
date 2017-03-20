@@ -9576,24 +9576,6 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm):
         
 ######  NCLAB TURTLE 2D - CLASSES  ######
 
-# Class used for implementing the Singleton design pattern
-# Refer to this thread for more info:
-#    http://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
-# Change
-#   class SomeClass(BaseClass, ...):
-# into
-#   class SomeClass(metaclass=Singleton, BaseClass, ...)
-# and any attempt to create a new instance would return only one
-# unique instance of class SomeClass.
-# This behaviour is a possible solution to let the users to name
-# their turtles whatever name they choose.
-class Singleton(type):
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
 # Class Line:
 class NCLabTurtleLine:
     def __init__(self, sx, sy, ex, ey, w, h, c, angle, continued=False):
@@ -9608,8 +9590,18 @@ class NCLabTurtleLine:
         self.continued = continued
 
 # Class Turtle:
-class NCLabTurtle(metaclass=Singleton):
-    def __init__(self, px=0, py=0):
+class NCLabTurtle():
+    _instances = []
+
+    def __init__(self, px=0, py=0, user_created=True):
+        # Safe a reference to the newly created instance for
+        # autograding. There are turtle instances created internally
+        # so we need an extra information held in user_created
+        # whether this instance should be included into set
+        # of turtles created by user.
+        if user_created:
+            self._instances.append(self)
+
         self.posx = px
         self.posy = py
         self.turtleangle = 0
@@ -9638,6 +9630,14 @@ class NCLabTurtle(metaclass=Singleton):
         self.revolvecalled = False
         self.extrudecalled = False
         self.showcalled = False
+
+    @staticmethod
+    def get_user_instances():
+        """
+        Return instances of all NCLabTurtle objects created
+        in this interpreter session
+        """
+        return NCLabTurtle._instances
 
     def angle(self, a):
         self.turtleangle = a
@@ -10157,7 +10157,7 @@ class NCLabTurtle(metaclass=Singleton):
         try:
             # Create a turtle instance and copy just enough data to be
             # able to create SVG plots.
-            turtle = NCLabTurtle()
+            turtle = NCLabTurtle(user_created=False)
             turtle.lines = list(self.lines)
 
             plot = {
