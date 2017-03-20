@@ -9590,8 +9590,18 @@ class NCLabTurtleLine:
         self.continued = continued
 
 # Class Turtle:
-class NCLabTurtle:
-    def __init__(self, px=0, py=0):
+class NCLabTurtle():
+    _instances = []
+
+    def __init__(self, px=0, py=0, user_created=True):
+        # Safe a reference to the newly created instance for
+        # autograding. There are turtle instances created internally
+        # so we need an extra information held in user_created
+        # whether this instance should be included into set
+        # of turtles created by user.
+        if user_created:
+            self._instances.append(self)
+
         self.posx = px
         self.posy = py
         self.turtleangle = 0
@@ -9620,6 +9630,14 @@ class NCLabTurtle:
         self.revolvecalled = False
         self.extrudecalled = False
         self.showcalled = False
+
+    @staticmethod
+    def get_user_instances():
+        """
+        Return instances of all NCLabTurtle objects created
+        in this interpreter session
+        """
+        return NCLabTurtle._instances
 
     def angle(self, a):
         self.turtleangle = a
@@ -10139,7 +10157,7 @@ class NCLabTurtle:
         try:
             # Create a turtle instance and copy just enough data to be
             # able to create SVG plots.
-            turtle = NCLabTurtle()
+            turtle = NCLabTurtle(user_created=False)
             turtle.lines = list(self.lines)
 
             plot = {
