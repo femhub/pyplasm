@@ -9032,6 +9032,19 @@ def EXTREMA(obj):
 EXTREMS = EXTREMA
 EXTREMES = EXTREMA
 
+##### COLOR BAR #####
+
+def COLORBAR(c1, c2, c3, c4, c5, c6, c7, c8, c9, 10):
+    cols = [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10]
+    base = RECTANGLE(1, 5)
+    bars = []
+    for i in range(10):
+        b = COPY(base)
+        MOVE(b, i, X)
+        COLOR(b, cols[i])
+        bars.append(b)
+    return bars
+
 ##### TANGRAMS #####
 
 
