@@ -9655,6 +9655,9 @@ class NCLabTurtleLine:
         self.angle = angle
         self.continued = continued
 
+# Needed for random walks:
+from random import randint
+        
 # Class Turtle:
 class NCLabTurtle():
     _instances = []
@@ -9894,6 +9897,11 @@ class NCLabTurtle():
             self.lines.append(newline)
         self.posx = newx
         self.posy = newy
+
+    def rgo(self, nsteps, dangle):
+        a = randint(-dangle, dangle)
+        self.turtleangle += a
+        self.go(nsteps)
 
     def setpos(self, newx, newy):
         self.goto(newx, newy)
