@@ -9639,6 +9639,9 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm):
     # Close the SVG file:
     out += "</svg>\n"
     return out
+
+# Global variable for Turtle walls:
+NCLAB_TURTLE_WALLS = []
         
 ######  NCLAB TURTLE 2D - CLASSES  ######
 
@@ -9935,10 +9938,10 @@ class NCLabTurtle():
     def ranback(self, x):
         self.back(random() * x)
 
-    def ranwalk(self, n, steps, angle):
+    def ranwalk(self, n, a, s):
         for i in range(n):
-            self.ranturn(angle)
-            self.go(steps)
+            self.ranturn(a)
+            self.go(s)
 
     def rancolor(self, minim = 100):
         r = randint(minim, 255)
