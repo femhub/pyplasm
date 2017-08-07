@@ -10849,8 +10849,7 @@ class NCLabTurtle3D:
 def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcolname, errheight, incltest, comptest, colortest, testcol, testcolname, extrusionflag, extrusionheight):
   
     if not isinstance(turtle, NCLabTurtle):
-        lab.grade(False, "Object 'tina' is not an NCLabTurtle!")
-        lab.grade(False, "Please do not redefine 'tina'!")
+        lab.grade(False, "The turtle is not an NCLabTurtle!")
         return False
 
     ##### COLOR TEST #####
@@ -10874,7 +10873,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
 
     # EMPTYSET?
     if EMPTYSET(trace):
-        lab.grade(False, "Tina did not draw any lines.")
+        lab.grade(False, "The turtle did not draw any lines.")
         return False
 
     # Subset and superset:
@@ -10923,7 +10922,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
                 sol = tsol.geometry()
         COLOR(sol, solcol)
         SHOW(sol)
-        lab.grade(False, "Tina's trace is not correct.")
+        lab.grade(False, "The trace is not correct.")
         lab.grade(False, "The correct trace is shown in " + solcolname + ".")
         lab.grade(False, "Your solution is shown in " + errcolname + ".")
         lab.grade(False, "It may be hidden inside of the correct solution.")
