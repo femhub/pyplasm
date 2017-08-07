@@ -9680,6 +9680,8 @@ class NCLabTurtle():
         self.lineheight = 0
         self.canvassize = 100
         self.lines = []
+        self.walls = []               # lines, to be imported from another Turtle
+                                      # which will be used to build the wall.
         self.tracelength = 0          # measures how many steps the Turtle
                                       # made during her lifetime 
         self.heightused = False       # If any line height is set
@@ -9700,6 +9702,12 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
+    # Import lines from another Turtle as walls.
+    # Walls can be printed using printwalls().
+    def importwalls(self, T):
+        for line in T.lines:
+            self.walls.append(line)
+        
     @staticmethod
     def get_user_instances():
         """
@@ -9817,6 +9825,14 @@ class NCLabTurtle():
 
     def printlines(self):
         for line in self.lines:
+            print("---")
+            print("Start:", line.startx, line.starty)
+            print("End:", line.endx, line.endy)
+            print("Width:", line.linewidth, "Height:", line.lineheight, "Color:", line.linecolor)
+            print("Angle:", line.angle, "Continued:", line.continued)
+
+    def printwalls(self):
+        for line in self.walls:
             print("---")
             print("Start:", line.startx, line.starty)
             print("End:", line.endx, line.endy)
