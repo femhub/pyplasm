@@ -9656,7 +9656,7 @@ class NCLabTurtleLine:
         self.continued = continued
 
 # Needed for random walks:
-from random import randint
+from random import random, randint
         
 # Class Turtle:
 class NCLabTurtle():
@@ -9680,7 +9680,7 @@ class NCLabTurtle():
         self.lineheight = 0
         self.canvassize = 100
         self.lines = []
-        self.stepcounter = 0          # measures how many steps the Turtle
+        self.tracelength = 0          # measures how many steps the Turtle
                                       # made during her lifetime 
         self.heightused = False       # If any line height is set
                                       # to nonzero, this will be True
@@ -9780,7 +9780,7 @@ class NCLabTurtle():
         raise ExceptionWT("Command down() is reserved for spatial drawing with NCLabTurtle3D. Please use pendown() or pd().")
 
     def snapshot(self):
-        return int(self.stepcounter+0.5), int(self.turtleangle+0.5), int(self.linewidth+0.5), self.linecolor, self.draw
+        return int(self.tracelength+0.5), int(self.turtleangle+0.5), int(self.linewidth+0.5), self.linecolor, self.draw
     
     # Every new line will get continued = False by default. Then we look at the
     # last one before it. If its ending position is the same as the starting
@@ -9790,7 +9790,7 @@ class NCLabTurtle():
         # If Tina has not moved, just return:
         if dist < 0.000001:
             return
-        self.stepcounter += dist
+        self.tracelength += dist
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
@@ -9852,7 +9852,6 @@ class NCLabTurtle():
     def back(self, dist):
         if dist <= 0:
             raise ExceptionWT("The distance d in back(d) must be positive!")
-        self.stepcounter += dist
         draw = self.draw
         self.left(180)
         self.penup()  # do not draw while backing
@@ -9879,7 +9878,7 @@ class NCLabTurtle():
             return
         # Increase step counter:
         dist = sqrt(dx*dx + dy*dy)
-        self.stepcounter += dist
+        self.tracelength += dist
         # Angle:
         self.turtleangle = arctan2(dy, dx) * 180 / pi
         if self.draw == True:
@@ -9898,10 +9897,40 @@ class NCLabTurtle():
         self.posx = newx
         self.posy = newy
 
-    def rgo(self, nsteps, dangle):
-        a = randint(-dangle, dangle)
-        self.turtleangle += a
-        self.go(nsteps)
+    #####  Random versions of some functions  #####
+    def rango(self, x):
+        self.go(random() * x)
+
+    def ranleft(self, x):
+        self.left(random() * x)
+    
+    def ranright(self, x):
+        self.right(random() * x)
+
+    def ranturn(self, x):
+        self.left(random() * 2 * x - x)
+
+    def ranwidth(self, x):
+        self.linewidth(random() * x)
+
+    def ranheight(self, x):
+        self.lineheight(random() * x)
+
+    def ranback(self, x):
+        self.back(random() * x)
+
+    def ranwalk(self, n, steps, angle):
+        for i in range(n):
+            self.ranturn(angle)
+            self.go(steps)
+
+    def rancolor(self, minim = 100):
+        r = randint(minim, 255)
+        g = randint(minim, 255)
+        b = randint(minim, 255)
+        self.color([r, g, b])
+            
+    #####  END OF RANDOM FUNCTIONALITY  #####
 
     def setpos(self, newx, newy):
         self.goto(newx, newy)
@@ -10117,7 +10146,7 @@ class NCLabTurtle():
         self.turtleangle = 0
         self.linecolor = [0, 0, 255]
         self.draw = True
-        self.stepcounter = 0
+        self.tracelength = 0
         self.linewidth = 1
         self.lineheight = 0
         self.canvassize = 100
