@@ -9686,7 +9686,7 @@ class NCLabTurtle():
         self.walls = []               # lines, to be imported from another Turtle
                                       # which will be used to build the wall.
         self.tracelength = 0          # measures how many steps the Turtle
-                                      # made during her lifetime 
+                                      # made during her lifetime, but only when she was drawing
         self.heightused = False       # If any line height is set
                                       # to nonzero, this will be True
         self.isvisible = True
@@ -9801,7 +9801,8 @@ class NCLabTurtle():
         # If Tina has not moved, just return:
         if dist < 0.000001:
             return
-        self.tracelength += dist
+        if self.draw:
+            self.tracelength += dist
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
         newy = self.posy + dist * sin(self.turtleangle * pi / 180)
         if self.draw == True:
@@ -9897,7 +9898,8 @@ class NCLabTurtle():
             return
         # Increase step counter:
         dist = sqrt(dx*dx + dy*dy)
-        self.tracelength += dist
+        if self.draw:
+            self.tracelength += dist
         # Angle:
         self.turtleangle = arctan2(dy, dx) * 180 / pi
         if self.draw == True:
