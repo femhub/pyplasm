@@ -9707,7 +9707,7 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
-    # Import lines from NCLAB_TURTLE_WALLS:
+    # Import walls from NCLAB_TURTLE_WALLS:
     def importwalls(self):
         self.walls = []
         for line in NCLAB_TURTLE_WALLS:
@@ -9716,7 +9716,7 @@ class NCLabTurtle():
     # Export lines into NCLAB_TURTLE_WALLS:
     def exportwalls(self):
         NCLAB_TURTLE_WALLS = []
-        for line in self.walls:
+        for line in self.lines:
             NCLAB_TURTLE_WALLS.append(line)
 
     @staticmethod
