@@ -9717,7 +9717,7 @@ class NCLabTurtle():
     # distance from the Turtle. This is the maxlaserradius.
     def maxlaserradius(self):
         radius = 0
-        for l in self.lines:
+        for l in self.walls:
             r = sqrt((self.posx - l.startx)**2 + (self.posy - l.starty)**2)
             if r > radius:
                 radius = r
