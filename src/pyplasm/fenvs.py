@@ -9715,7 +9715,6 @@ class NCLabTurtle():
         
     # Export lines into NCLAB_TURTLE_WALLS:
     def exportwalls(self):
-        NCLAB_TURTLE_WALLS = []
         for line in self.lines:
             NCLAB_TURTLE_WALLS.append(line)
 
