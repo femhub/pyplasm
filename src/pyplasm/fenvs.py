@@ -9723,12 +9723,12 @@ class NCLabTurtle():
     def oncolor(self, tol = 0.01):
         ax = self.posx
         ay = self.posy
-        sx = l.startx
-        sy = l.start
-        ex = l.endx
-        ey = l.endy
         # Is it one of the line end points?
         for l in self.walls:
+            sx = l.startx
+            sy = l.starty
+            ex = l.endx
+            ey = l.endy
             if distance(ax, ay, sx, sy) < tol:
                 return True
             if l.continued == False:
@@ -9736,6 +9736,10 @@ class NCLabTurtle():
                     return True
         # Is it inside of a line?
         for l in self.walls:
+            sx = l.startx
+            sy = l.starty
+            ex = l.endx
+            ey = l.endy
             ux = l.endx - l.startx
             uy = l.endy - l.starty
             # Length of the line (squared):
