@@ -9738,6 +9738,18 @@ class NCLabTurtle():
         for line in self.lines:
             NCLAB_TURTLE_WALLS.append(line)
 
+    # Draw a da x db rectangle. Lower left corner is at (a, b):
+    def rectangle(self, a, b, da, db):
+        self.pu()
+        self.goto(a, b)
+        self.angle(0)
+        self.pd()
+        for i in range(2):
+            self.go(da)
+            self.left(90)
+            self.go(db)
+            self.left(90)
+            
     @staticmethod
     def get_user_instances():
         """
