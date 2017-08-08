@@ -9683,8 +9683,13 @@ class NCLabTurtle():
         self.lineheight = 0
         self.canvassize = 100
         self.lines = []
-        self.walls = []               # lines, to be imported from another Turtle
-                                      # which will be used to build the wall.
+
+        # Try to import walls from NCLAB_TURTLE_WALLS:
+        self.walls = []               # lines, made by another Turtle, to serve as obstacles
+        if NCLAB_TURTLE_WALLS != []:
+            for d in NCLAB_TURTLE_WALLS:
+                self.walls.append(d)
+
         self.tracelength = 0          # measures how many steps the Turtle
                                       # made during her lifetime, but only when she was drawing
         self.heightused = False       # If any line height is set
