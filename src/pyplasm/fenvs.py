@@ -9713,6 +9713,18 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
+    # Do laser() but then also draw the beam. Return the distance if any.
+    def laserbeam(self, col=ORANGE, w=0.5):
+        d = self.laser()
+        if d != None:
+            self.width(w)
+            self.color(col)  
+            self.go(d)
+            self.back(d)
+            return d
+        else:
+            return None
+        
     # Perform intersection of the laser beam with all walls, one by one. The valid ones
     # put into a list. Select closest point to the Turtle, and return the distance. Or return
     # None if there is no intersection
