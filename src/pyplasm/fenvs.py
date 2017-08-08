@@ -9726,6 +9726,14 @@ class NCLabTurtle():
                 if r > radius:
                     radius = r
         return radius
+
+    # This is the end point of the laser line that will be used to intersect with walls:
+    def maxlaserline(self):
+        r = self.maxlaserradius()
+        r += 10 # make it a bit longer
+        endx = self.posx + r * COS(self.turtleangle * PI / 180)
+        endy = self.posy + r * SIN(self.turtleangle * PI / 180)
+        return endx, endy
         
     # Import walls from NCLAB_TURTLE_WALLS:
     def importwalls(self):
