@@ -9685,10 +9685,7 @@ class NCLabTurtle():
         self.lines = []
 
         # Try to import walls from NCLAB_TURTLE_WALLS:
-        self.walls = []               # lines, made by another Turtle, to serve as obstacles
-        if NCLAB_TURTLE_WALLS != []:
-            for d in NCLAB_TURTLE_WALLS:
-                self.walls.append(d)
+        self.importwalls()            # lines, made by another Turtle, to serve as obstacles
 
         self.tracelength = 0          # measures how many steps the Turtle
                                       # made during her lifetime, but only when she was drawing
@@ -9710,12 +9707,18 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
-    # Import lines from another Turtle as walls.
-    # Walls can be printed using printwalls().
-    def importwalls(self, T):
-        for line in T.lines:
+    # Import lines from NCLAB_TURTLE_WALLS:
+    def importwalls(self):
+        self.walls = []
+        for line in NCLAB_TURTLE_WALLS:
             self.walls.append(line)
         
+    # Export lines into NCLAB_TURTLE_WALLS:
+    def exportwalls(self):
+        NCLAB_TURTLE_WALLS = []
+        for line in self.walls:
+            NCLAB_TURTLE_WALLS.append(line)
+
     @staticmethod
     def get_user_instances():
         """
