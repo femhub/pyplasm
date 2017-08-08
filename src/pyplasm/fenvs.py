@@ -9723,7 +9723,7 @@ class NCLabTurtle():
         mindist = 1e10
         for l in self.walls:
             p = self.intersect(l.startx, l.starty, l.endx, l.endy)
-            if p:    # Point valid, calculate distance
+            if p != None:    # Point valid, calculate distance
                 d = sqrt((p[0] - ax)**2 + (p[1] - ay)**2)
                 if d < mindist:
                     mindist = p
@@ -9731,7 +9731,7 @@ class NCLabTurtle():
         if found:
             return mindist
         else:
-            return False
+            return None
     
     # Calculate intersection of line (ax, ay) <-> (bx, by) with line (cx, cy) <-> (dx, dy)
     # Here (ax, ay) is the Turtle, (bx, by) is the point at the end of maxlaserline,
