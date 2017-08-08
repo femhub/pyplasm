@@ -9731,11 +9731,11 @@ class NCLabTurtle():
             ex = l.endx
             ey = l.endy
             if distance(ax, ay, sx, sy) < tol:
-                if l.linecolor == col:
+                if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
                     return True
             if l.continued == False:
                 if distance(ax, ay, ex, ey) < tol:
-                    if l.linecolor == col: 
+                    if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col: 
                         return True
         # Is it inside of a line?
         for l in self.walls:
@@ -9757,7 +9757,7 @@ class NCLabTurtle():
                     py = sy + z*uy
                     # Is the Turtle less than tol from it?
                     if distance(ax, ay, px, py) <= tol:
-                        if l.linecolor == col:
+                        if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
                             return True
         # Nothing found:
         return False
@@ -9774,10 +9774,10 @@ class NCLabTurtle():
             ex = l.endx
             ey = l.endy
             if distance(ax, ay, sx, sy) < tol:
-                return l.linecolor
+                return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
             if l.continued == False:
                 if distance(ax, ay, ex, ey) < tol:
-                    return l.linecolor
+                    return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
         # Is it inside of a line?
         for l in self.walls:
             sx = l.startx
@@ -9798,7 +9798,7 @@ class NCLabTurtle():
                     py = sy + z*uy
                     # Is the Turtle less than tol from it?
                     if distance(ax, ay, px, py) <= tol:
-                        return l.linecolor
+                        return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
         # Nothing found:
         return False
 
