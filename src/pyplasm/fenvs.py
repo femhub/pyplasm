@@ -9719,7 +9719,8 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
-    # Detects whether the Turtle stands on the wall (for line-following purposes).
+    # Detects whether the Turtle stands on a wall of the given color
+    # (for line-following purposes). Returns either True or False:
     def oncolor(self, col = BLACK, tol = 0.01):
         ax = self.posx
         ay = self.posy
@@ -9760,7 +9761,47 @@ class NCLabTurtle():
                             return True
         # Nothing found:
         return False
-        
+
+    # Detects whether the Turtle stands on a wall.
+    # Returns the color of the wall or False.
+    def colorprobe(self, tol = 0.01):
+        ax = self.posx
+        ay = self.posy
+        # Is it one of the line end points?
+        for l in self.walls:
+            sx = l.startx
+            sy = l.starty
+            ex = l.endx
+            ey = l.endy
+            if distance(ax, ay, sx, sy) < tol:
+                return l.linecolor
+            if l.continued == False:
+                if distance(ax, ay, ex, ey) < tol:
+                    return l.linecolor
+        # Is it inside of a line?
+        for l in self.walls:
+            sx = l.startx
+            sy = l.starty
+            ex = l.endx
+            ey = l.endy
+            ux = ex - sx
+            uy = ey - sy
+            # Length of the line (squared):
+            ulen2 = ux**2 + uy**2
+            if ulen2 > 0.00000001:
+                # Calculate parameter:
+                z = (ax*ux + ay*uy - sx*ux - sy*uy) / ulen2
+                # Is z between 0 and 1?
+                if 0 <= z and z <= 1:
+                    # This is the projection to the line:
+                    px = sx + z*ux
+                    py = sy + z*uy
+                    # Is the Turtle less than tol from it?
+                    if distance(ax, ay, px, py) <= tol:
+                        return l.linecolor
+        # Nothing found:
+        return False
+
     # Do laser() but then also draw the beam. Return the distance if any.
     def laserbeam(self, col=ORANGE, w=0.5):
         d = self.laser()
