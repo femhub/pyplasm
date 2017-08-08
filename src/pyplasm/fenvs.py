@@ -9713,6 +9713,64 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
+    # Calculate intersection of line (ax, ay) <-> (bx, by) with line (cx, cy) <-> (dx, dy)
+    # Here (ax, ay) is the Turtle, (bx, by) is the point at the end of maxlaserline,
+    # (cx, cy) <-> (dx, dy) is a segment of the wall:
+    def intersect(self, cx, cy, dx, dy, eps=0.001):
+        ax = self.posx
+        ay = self.posy
+        bx, by = self.maxlaserline()
+        # First, are C, D on different sides of AB?
+        ux = bx - ax
+        uy = by - ay
+        vx = cx - ax
+        vy = cy - ay
+        vect1 = ux * vy - uy * vx      
+        if abs(vect1) < eps:         # C lies on AB
+            return None
+        vx = dx - ax
+        vy = dy - ay
+        vect2 = ux * vy - uy * vx
+        if abs(vect2) < eps:         # D lies on AB
+            return None
+        if vect1 * vect2 > 0:        # C, D are on the same side AB
+            return None
+        # Second, are A, B on different sides of CD?
+        ux = dx - cx
+        uy = dy - cy
+        vx = bx - cx
+        vy = by - cy
+        vect1 = ux * vy - uy * vx      
+        if abs(vect1) < eps:         # B lies on CD
+            return None
+        vx = ax - cx
+        vy = ay - cy
+        vect2 = ux * vy - uy * vx
+        if abs(vect2) < eps:         # A lies on CD
+            return None
+        if vect1 * vect2 > 0:        # A, B are on the same side of CD
+            return None
+        # Woo-hoo! The two segments intersect:
+        def line(p1, p2):
+            A = (p1[1] - p2[1])
+            B = (p2[0] - p1[0])
+            C = (p1[0]*p2[1] - p2[0]*p1[1])
+            return A, B, -C
+        def intersection(L1, L2):
+            D  = L1[0] * L2[1] - L1[1] * L2[0]
+            Dx = L1[2] * L2[1] - L1[1] * L2[2]
+            Dy = L1[0] * L2[2] - L1[2] * L2[0]
+            if D != 0:
+                x = Dx / D
+                y = Dy / D
+                return x,y
+            else:
+                return None
+        L1 = line([ax,ay], [bx,by])
+        L2 = line([cx,cy], [dx,dy])
+        result = intersection(L1, L2)
+        return result
+    
     # Go through all vertices in the walls, and calculate the maximum
     # distance from the Turtle. This is the maxlaserradius.
     def maxlaserradius(self):
