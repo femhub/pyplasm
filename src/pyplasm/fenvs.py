@@ -8005,6 +8005,8 @@ def PLASM_COLOR(Cpl):
     return PLASM_COLOR0
 
 # English:
+ANY = [-1111, -1111, -1111]
+
 GRAY = [128, 128, 128]
 GREY = [128, 128, 128]
 
@@ -9721,7 +9723,7 @@ class NCLabTurtle():
 
     # Detects whether the Turtle stands on a wall of the given color
     # (for line-following purposes). Returns either True or False:
-    def oncolor(self, col = BLACK, tol = 0.01):
+    def oncolor(self, col = ANY, tol = 0.01):
         ax = self.posx
         ay = self.posy
         # Is it one of the line end points?
@@ -9731,10 +9733,14 @@ class NCLabTurtle():
             ex = l.endx
             ey = l.endy
             if distance(ax, ay, sx, sy) < tol:
+                if col == ANY:
+                    return True
                 if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
                     return True
             if l.continued == False:
                 if distance(ax, ay, ex, ey) < tol:
+                    if col == ANY:
+                        return True
                     if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col: 
                         return True
         # Is it inside of a line?
@@ -9757,6 +9763,8 @@ class NCLabTurtle():
                     py = sy + z*uy
                     # Is the Turtle less than tol from it?
                     if distance(ax, ay, px, py) <= tol:
+                        if col == ANY:
+                            return True
                         if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
                             return True
         # Nothing found:
