@@ -9642,6 +9642,12 @@ def NCLabTurtleWriteSVG(turtle, wincm, hincm):
 
 # Global variable for Turtle walls:
 NCLAB_TURTLE_WALLS = []
+
+# Distance of two points:
+def dist(ax, ay, bx, by):
+    dx = bx - ax
+    dy = by - ay
+    return sqrt(dx**2 + dy**2)
         
 ######  NCLAB TURTLE 2D - CLASSES  ######
 
@@ -9713,6 +9719,37 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
+    # Detects whether the Turtle stands on the wall (for line-following purposes).
+    def oncolor(self, tol = 0.01):
+        ax = self.posx
+        ay = self.posy
+        sx = l.startx
+        sy = l.start
+        ex = l.endx
+        ey = l.endy
+        # Is it one of the line end points?
+        for l in self.walls:
+            if dist(ax, ay, sx, sy) < tol:
+                return True
+            if l.continued == False:
+                if dist(ax, ay, ex, ey) < tol:
+                    return True
+        # Is it inside of a line?
+        for l in self.walls:
+            ux = l.endx - l.startx
+            uy = l.endy - l.starty
+            # Length of the line (squared):
+            ulen2 = ux**2 + uy**2
+            if ulen2 > 0.00000001:
+                # Calculate parameter:
+                z = (ax*ux + ay*uy - sx*ux - sy*uy) / ulen2
+                # Is z between 0 and 1?
+                if 0 <= z and z <= 1:
+                    return True
+        # Nothing found:
+        return False
+        
+        
     # Do laser() but then also draw the beam. Return the distance if any.
     def laserbeam(self, col=ORANGE, w=0.5):
         d = self.laser()
@@ -9736,7 +9773,7 @@ class NCLabTurtle():
         for l in self.walls:
             p = self.intersect(l.startx, l.starty, l.endx, l.endy)
             if p != None:    # Point valid, calculate distance
-                d = sqrt((p[0] - ax)**2 + (p[1] - ay)**2)
+                d = dist(ax, ay, p[0], p[1])
                 if d < mindist:
                     mindist = d
                     found = True
@@ -9808,11 +9845,11 @@ class NCLabTurtle():
     def maxlaserradius(self):
         radius = 0
         for l in self.walls:
-            r = sqrt((self.posx - l.startx)**2 + (self.posy - l.starty)**2)
+            r = dist(l.startx, l.starty, self.posx, self.posy)
             if r > radius:
                 radius = r
             if l.continued == False:
-                r = sqrt((self.posx - l.endx)**2 + (self.posy - l.endy)**2)
+                r = dist(l.endx, l.endy, self.posx, self.posy)
                 if r > radius:
                     radius = r
         return radius
@@ -9946,7 +9983,7 @@ class NCLabTurtle():
             # Is it a continuation (posx, posy = last point, same width/height/color) ?
             if len(self.lines) != 0:
                 lastline = self.lines[-1]
-                gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
+                gap = dist(self.posx, self.posy, lastline.endx, lastline.endy)
                 if gap < 0.0001:   # line uninterrupted
                     if lastline.linecolor == self.linecolor:
                         if abs(lastline.linewidth - self.linewidth) < 0.0001:
@@ -10043,7 +10080,7 @@ class NCLabTurtle():
             # Is it a continuation (posx, posy = last point, same width/height/color) ?
             if len(self.lines) != 0:
                 lastline = self.lines[-1]
-                gap = sqrt((self.posx - lastline.endx)**2 + (self.posy - lastline.endy)**2)
+                gap = dist(self.posx, self.posy, lastline.endx, lastline.endy)
                 if gap < 0.0001:   # line uninterrupted
                     if lastline.linecolor == self.linecolor:
                         if abs(lastline.linewidth - self.linewidth) < 0.0001:
