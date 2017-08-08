@@ -9713,6 +9713,20 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
+    # Go through all vertices in the walls, and calculate the maximum
+    # distance from the Turtle. This is the maxlaserradius.
+    def maxlaserradius(self):
+        radius = 0
+        for l in self.lines:
+            r = sqrt((self.posx - l.startx)**2 + (self.posy - l.starty)**2)
+            if r > radius:
+                radius = r
+            if l.continued == False:
+            r = sqrt((self.posx - l.endx)**2 + (self.posy - l.endy)**2)
+            if r > radius:
+                radius = r
+        return radius
+        
     # Import walls from NCLAB_TURTLE_WALLS:
     def importwalls(self):
         self.walls = []
