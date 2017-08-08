@@ -9720,7 +9720,7 @@ class NCLabTurtle():
         self.showcalled = False
 
     # Detects whether the Turtle stands on the wall (for line-following purposes).
-    def oncolor(self, tol = 0.01):
+    def oncolor(self, col = BLACK, tol = 0.01):
         ax = self.posx
         ay = self.posy
         # Is it one of the line end points?
@@ -9730,10 +9730,12 @@ class NCLabTurtle():
             ex = l.endx
             ey = l.endy
             if distance(ax, ay, sx, sy) < tol:
-                return True
+                if l.linecolor == col:
+                    return True
             if l.continued == False:
                 if distance(ax, ay, ex, ey) < tol:
-                    return True
+                    if l.linecolor == col: 
+                        return True
         # Is it inside of a line?
         for l in self.walls:
             sx = l.startx
@@ -9754,7 +9756,8 @@ class NCLabTurtle():
                     py = sy + z*uy
                     # Is the Turtle less than tol from it?
                     if distance(ax, ay, px, py) <= tol:
-                        return True
+                        if l.linecolor == col:
+                            return True
         # Nothing found:
         return False
         
