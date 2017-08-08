@@ -9960,14 +9960,14 @@ class NCLabTurtle():
         self.angle(a)
 
     def color(self, col):
-        if not isinstance(col, list):
-            raise ExceptionWT("Attempt to set invalid color. Have you forgotten square brackets?")
+        if not isinstance(col, list) and not isinstance(col, tuple):
+            raise ExceptionWT("Attempt to set invalid color. Must be a list or a tuple.")
         if len(col) != 3:
             raise ExceptionWT("Attempt to set invalid color. Have you used three integers between 0 and 255?")
         for i in range(3):
             if col[i] < 0 or col[i] > 255:
                 raise ExceptionWT("Attempt to set invalid color. Have you used three integers between 0 and 255?")
-        self.linecolor = col
+        self.linecolor = col[:]
 
     def width(self, w):
         if w < 0.1:
