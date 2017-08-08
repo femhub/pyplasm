@@ -9721,8 +9721,8 @@ class NCLabTurtle():
         ax = self.posx
         ay = self.posy
         mindist = 1e10
-        for l in tina.walls:
-            p = tina.intersect(l.startx, l.starty, l.endx, l.endy)
+        for l in self.walls:
+            p = self.intersect(l.startx, l.starty, l.endx, l.endy)
             if p:    # Point valid, calculate distance
                 d = sqrt((p[0] - ax)**2 + (p[1] - ay)**2)
                 if d < mindist:
