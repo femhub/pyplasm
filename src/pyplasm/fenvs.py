@@ -9937,6 +9937,13 @@ class NCLabTurtle():
             self.go(db)
             self.left(90)
             
+    # Draw a da x db rectangle. Lower left corner is at (a, b):
+    def line(self, ax, ay, bx, by):
+        self.pu()
+        self.goto(ax, ay)
+        self.pd()
+        self.goto(bx, by)
+
     @staticmethod
     def get_user_instances():
         """
