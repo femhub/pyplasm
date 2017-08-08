@@ -9722,9 +9722,9 @@ class NCLabTurtle():
             if r > radius:
                 radius = r
             if l.continued == False:
-            r = sqrt((self.posx - l.endx)**2 + (self.posy - l.endy)**2)
-            if r > radius:
-                radius = r
+                r = sqrt((self.posx - l.endx)**2 + (self.posy - l.endy)**2)
+                if r > radius:
+                    radius = r
         return radius
         
     # Import walls from NCLAB_TURTLE_WALLS:
