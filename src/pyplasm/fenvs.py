@@ -9691,7 +9691,7 @@ class NCLabTurtle():
         self.wallminy = 0
         self.wallmaxy = 0
         # Calculate the extremes:
-        self.wallminx, self.wallmaxx, self.wallminy, self.wallmaxy = NCLabTurtleExtremes(self.walls):
+        self.wallminx, self.wallmaxx, self.wallminy, self.wallmaxy = NCLabTurtleExtremes(self.walls)
 
         self.tracelength = 0          # measures how many steps the Turtle
                                       # made during her lifetime, but only when she was drawing
