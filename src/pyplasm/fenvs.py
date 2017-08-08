@@ -9752,8 +9752,8 @@ class NCLabTurtle():
                     # This is the projection to the line:
                     px = sx + z*ux
                     py = sy + z*uy
-                    # Is teh Turtle less than tol from it?
-                    if dist(ax, ay, px, py) <= tol:
+                    # Is the Turtle less than tol from it?
+                    if distance(ax, ay, px, py) <= tol:
                         return True
         # Nothing found:
         return False
