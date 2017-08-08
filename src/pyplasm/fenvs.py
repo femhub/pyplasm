@@ -9740,8 +9740,8 @@ class NCLabTurtle():
             sy = l.starty
             ex = l.endx
             ey = l.endy
-            ux = l.endx - l.startx
-            uy = l.endy - l.starty
+            ux = ex - sx
+            uy = ey - sy
             # Length of the line (squared):
             ulen2 = ux**2 + uy**2
             if ulen2 > 0.00000001:
@@ -9749,7 +9749,12 @@ class NCLabTurtle():
                 z = (ax*ux + ay*uy - sx*ux - sy*uy) / ulen2
                 # Is z between 0 and 1?
                 if 0 <= z and z <= 1:
-                    return True
+                    # This is the projection to the line:
+                    px = sx + z*ux
+                    py = sy + z*uy
+                    # Is teh Turtle less than tol from it?
+                    if dist(ax, ay, px, py) <= tol:
+                        return True
         # Nothing found:
         return False
         
