@@ -9713,6 +9713,26 @@ class NCLabTurtle():
         self.extrudecalled = False
         self.showcalled = False
 
+    # Perform intersection of the laser beam with all walls, one by one. The valid ones
+    # put into a list. Select closest point to the Turtle, and return the distance. Or return
+    # None if there is no intersection
+    def laser(self):
+        found = False
+        ax = self.posx
+        ay = self.posy
+        mindist = 1e10
+        for l in tina.walls:
+            p = tina.intersect(l.startx, l.starty, l.endx, l.endy)
+            if p:    # Point valid, calculate distance
+                d = sqrt((p[0] - ax)**2 + (p[1] - ay)**2)
+                if d < mindist:
+                    mindist = p
+                    found = True
+        if found:
+            return mindist
+        else:
+            return False
+    
     # Calculate intersection of line (ax, ay) <-> (bx, by) with line (cx, cy) <-> (dx, dy)
     # Here (ax, ay) is the Turtle, (bx, by) is the point at the end of maxlaserline,
     # (cx, cy) <-> (dx, dy) is a segment of the wall:
