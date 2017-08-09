@@ -9723,7 +9723,7 @@ class NCLabTurtle():
 
     # Detects whether the Turtle stands on a wall of the given color
     # (for line-following purposes). Returns either True or False:
-    def oncolor(self, col = ANY, tol = 0.01):
+    def oncolor(self, col = ANY):
         ax = self.posx
         ay = self.posy
         # Is it one of the line end points?
@@ -9732,17 +9732,11 @@ class NCLabTurtle():
             sy = l.starty
             ex = l.endx
             ey = l.endy
-            if distance(ax, ay, sx, sy) < tol:
+            if distance(ax, ay, sx, sy) < 0.5*l.linewidth or distance(ax, ay, ex, ey) < 0.5*l.linewidth:
                 if col == ANY:
                     return True
                 if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
                     return True
-            if l.continued == False:
-                if distance(ax, ay, ex, ey) < tol:
-                    if col == ANY:
-                        return True
-                    if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col: 
-                        return True
         # Is it inside of a line?
         for l in self.walls:
             sx = l.startx
@@ -9761,8 +9755,8 @@ class NCLabTurtle():
                     # This is the projection to the line:
                     px = sx + z*ux
                     py = sy + z*uy
-                    # Is the Turtle less than tol from it?
-                    if distance(ax, ay, px, py) <= tol:
+                    # Is the Turtle less than 0.5*linewidth from it?
+                    if distance(ax, ay, px, py) <= 0.5*l.linewidth:
                         if col == ANY:
                             return True
                         if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
@@ -9772,7 +9766,7 @@ class NCLabTurtle():
 
     # Detects whether the Turtle stands on a wall.
     # Returns the color of the wall or False.
-    def colorprobe(self, tol = 0.01):
+    def colorprobe(self):
         ax = self.posx
         ay = self.posy
         # Is it one of the line end points?
@@ -9781,11 +9775,8 @@ class NCLabTurtle():
             sy = l.starty
             ex = l.endx
             ey = l.endy
-            if distance(ax, ay, sx, sy) < tol:
+            if distance(ax, ay, sx, sy) < 0.5*l.linewidth or distance(ax, ay, ex, ey) < 0.5*l.linewidth:
                 return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
-            if l.continued == False:
-                if distance(ax, ay, ex, ey) < tol:
-                    return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
         # Is it inside of a line?
         for l in self.walls:
             sx = l.startx
@@ -9804,8 +9795,8 @@ class NCLabTurtle():
                     # This is the projection to the line:
                     px = sx + z*ux
                     py = sy + z*uy
-                    # Is the Turtle less than tol from it?
-                    if distance(ax, ay, px, py) <= tol:
+                    # Is the Turtle less than 0.5*linewidth from it?
+                    if distance(ax, ay, px, py) <= 0.5*l.linewidth:
                         return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
         # Nothing found:
         return False
