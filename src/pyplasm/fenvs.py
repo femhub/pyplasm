@@ -9936,12 +9936,22 @@ class NCLabTurtle():
             self.go(db)
             self.left(90)
             
-    # Draw a da x db rectangle. Lower left corner is at (a, b):
+    # Draw a line from (ax, ay) to (bx, by):
     def line(self, ax, ay, bx, by):
         self.pu()
         self.goto(ax, ay)
         self.pd()
         self.goto(bx, by)
+
+    # Draw a polyline, here L is a list of points:
+    def polyline(self, L):
+        self.pu()
+        p = L[0]
+        self.goto(p[0], p[1])
+        self.pd()
+        del L[0]
+        for p in L:
+            self.goto(p[0], p[1])
 
     @staticmethod
     def get_user_instances():
