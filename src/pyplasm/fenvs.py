@@ -10198,10 +10198,13 @@ class NCLabTurtle():
     def ranback(self, x):
         self.back(random() * x)
 
-    def ranwalk(self, n, a, s):
-        for i in range(n):
+    def ranwalk(self, n, s, a):
+        cycles = n // s
+        rest = n % s 
+        for i in range(cycles):
             self.ranturn(a)
             self.go(s)
+        self.go(rest)
 
     def rancolor(self, minim = 100):
         r = randint(minim, 255)
