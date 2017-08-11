@@ -9956,7 +9956,7 @@ class NCLabTurtle():
             self.goto(p[0], p[1])
 
     # Draw a series of dots, here L is a list of points:
-    def polyline(self, L):
+    def polydots(self, L):
         p = L[0]
         self.pu()
         self.goto(p[0], p[1])
