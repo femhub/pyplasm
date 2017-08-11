@@ -9924,16 +9924,18 @@ class NCLabTurtle():
         for line in self.lines:
             NCLAB_TURTLE_WALLS.append(line)
 
-    # Draw a da x db rectangle. Lower left corner is at (a, b):
-    def rectangle(self, a, b, da, db):
+    # Draw (ax, ay) x (bx, by) rectangle:
+    def rectangle(self, ax, ay, bx, by):
         self.pu()
-        self.goto(a, b)
+        self.goto(ax, bx)
         self.angle(0)
         self.pd()
+        dx = bx - ax
+        dy = by - ay
         for i in range(2):
-            self.go(da)
+            self.go(dx)
             self.left(90)
-            self.go(db)
+            self.go(dy)
             self.left(90)
             
     # Draw a line from (ax, ay) to (bx, by):
