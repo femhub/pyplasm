@@ -9924,14 +9924,14 @@ class NCLabTurtle():
         for line in self.lines:
             NCLAB_TURTLE_WALLS.append(line)
 
-    # Draw (ax, ay) x (bx, by) rectangle:
-    def rectangle(self, ax, ay, bx, by):
+    # Draw (xmin, xmax) x (ymin, ymax) rectangle:
+    def rectangle(self, xmin, xmax, ymin, ymax):
         self.pu()
-        self.goto(ax, bx)
+        self.goto(xmin, ymin)
         self.angle(0)
         self.pd()
-        dx = bx - ax
-        dy = by - ay
+        dx = xmax - xmin
+        dy = ymax - ymin
         for i in range(2):
             self.go(dx)
             self.left(90)
