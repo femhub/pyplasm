@@ -7983,13 +7983,16 @@ COULEUR = COLOR
 # Original PLaSM color command:
 
 
-def PLASM_COLOR(Cpl):
+def PLASM_COLOR(Cpl0):
+    
     def formatColor(Cpl):
         assert isinstance(Cpl, Color4f)
         return "%s %s %s %s" % (Cpl.r, Cpl.g, Cpl.b, Cpl.a)
 
     # convert list to Color
-    if isinstance(Cpl, list) and len(Cpl) in (3, 4):
+    if isinstance(Cpl0, list) and len(Cpl0) in (3, 4):
+        # Create copy so that original argument is not changed:
+        Cpl = Cpl0[:]
         # Normalizing RGB between 0 and 1 if necessary:
         if Cpl[0] > 1 or Cpl[1] > 1 or Cpl[2] > 1:
             Cpl[0] = Cpl[0] / 255.
