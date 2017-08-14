@@ -9803,9 +9803,9 @@ class NCLabTurtle():
         # Nothing found:
         return None
 
-    # Do laser() but then also draw the beam. Return the distance if any.
-    def laserbeam(self, col=ORANGE, w=1):
-        d = self.laser()
+    # Do lidar() but then also draw the beam. Return the distance if any.
+    def lidarbeam(self, col=ORANGE, w=1):
+        d = self.lidar()
         if d != None:
             self.width(w)
             col0 = self.linecolor[:] 
@@ -9820,18 +9820,19 @@ class NCLabTurtle():
     # Perform intersection of the laser beam with all walls, one by one. The valid ones
     # put into a list. Select closest point to the Turtle, and return the distance. Or return
     # None if there is no intersection
-    def laser(self):
+    def lidar(self, color=ANY):
         found = False
         ax = self.posx
         ay = self.posy
         mindist = 100000.0
         for l in self.walls:
-            p = self.intersect(l.startx, l.starty, l.endx, l.endy)
-            if p != None:    # Point valid, calculate distance
-                d = distance(ax, ay, p[0], p[1])
-                if d < mindist:
-                    mindist = d
-                    found = True
+            if col == ANY or [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+                p = self.intersect(l.startx, l.starty, l.endx, l.endy)
+                if p != None:    # Point valid, calculate distance
+                    d = distance(ax, ay, p[0], p[1])
+                    if d < mindist:
+                        mindist = d
+                        found = True
         if found:
             return mindist
         else:
