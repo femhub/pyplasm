@@ -9799,7 +9799,7 @@ class NCLabTurtle():
                     if distance(ax, ay, px, py) <= 0.5*l.linewidth:
                         return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
         # Nothing found:
-        return False
+        return None
 
     # Do laser() but then also draw the beam. Return the distance if any.
     def laserbeam(self, col=ORANGE, w=0.5):
