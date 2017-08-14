@@ -9804,13 +9804,15 @@ class NCLabTurtle():
         return None
 
     # Do laser() but then also draw the beam. Return the distance if any.
-    def laserbeam(self, col=ORANGE, w=0.5):
+    def laserbeam(self, col=ORANGE, w=1):
         d = self.laser()
         if d != None:
             self.width(w)
+            col0 = self.linecolor[:] 
             self.color(col)  
             self.go(d)
             self.back(d)
+            self.color(col0)
             return d
         else:
             return None
