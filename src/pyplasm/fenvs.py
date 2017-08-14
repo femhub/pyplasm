@@ -9820,7 +9820,7 @@ class NCLabTurtle():
     # Perform intersection of the laser beam with all walls, one by one. The valid ones
     # put into a list. Select closest point to the Turtle, and return the distance. Or return
     # None if there is no intersection
-    def lidar(self, color=ANY):
+    def lidar(self, col=ANY):
         found = False
         ax = self.posx
         ay = self.posy
