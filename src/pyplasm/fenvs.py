@@ -9776,7 +9776,8 @@ class NCLabTurtle():
             ex = l.endx
             ey = l.endy
             if distance(ax, ay, sx, sy) < 0.5*l.linewidth or distance(ax, ay, ex, ey) < 0.5*l.linewidth:
-                return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
+                #return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
+                return l.linecolor[:]
         # Is it inside of a line?
         for l in self.walls:
             sx = l.startx
@@ -9797,7 +9798,8 @@ class NCLabTurtle():
                     py = sy + z*uy
                     # Is the Turtle less than 0.5*linewidth from it?
                     if distance(ax, ay, px, py) <= 0.5*l.linewidth:
-                        return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
+                        #return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
+                        return l.linecolor[:]
         # Nothing found:
         return None
 
