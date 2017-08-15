@@ -9738,7 +9738,8 @@ class NCLabTurtle():
             if distance(ax, ay, sx, sy) < 0.5*l.linewidth or distance(ax, ay, ex, ey) < 0.5*l.linewidth:
                 if col == ANY:
                     return True
-                if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+                #if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+                if l.linecolor == col:
                     return True
         # Is it inside of a line?
         for l in self.walls:
@@ -9762,7 +9763,8 @@ class NCLabTurtle():
                     if distance(ax, ay, px, py) <= 0.5*l.linewidth:
                         if col == ANY:
                             return True
-                        if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+                        #if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+                        if l.linecolor == col:
                             return True
         # Nothing found:
         return False
@@ -9829,7 +9831,8 @@ class NCLabTurtle():
         ay = self.posy
         mindist = 100000.0
         for l in self.walls:
-            if col == ANY or [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+            #if col == ANY or [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+            if col == ANY or l.linecolor == col:
                 p = self.intersect(l.startx, l.starty, l.endx, l.endy)
                 if p != None:    # Point valid, calculate distance
                     d = distance(ax, ay, p[0], p[1])
