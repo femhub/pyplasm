@@ -9937,9 +9937,15 @@ class NCLabTurtle():
 
     # Draw (xmin, xmax) x (ymin, ymax) rectangle:
     def rectangle(self, xmin, xmax, ymin, ymax, col = ANY):
+        # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
             self.linecolor = col
+        savex = self.posx
+        savey = self.posy
+        saveangle = self.turtleangle
+        savedraw = self.draw
+        # Draw:
         self.pu()
         self.goto(xmin, ymin)
         self.angle(0)
@@ -9951,26 +9957,48 @@ class NCLabTurtle():
             self.left(90)
             self.go(dy)
             self.left(90)
+        # Restore color, position, angle, penup:
         if col != ANY:
             self.linecolor = savecol
+        self.pu()
+        self.goto(savex, savey)
+        self.angle(saveangle)
+        self.draw = savedraw
             
     # Draw a line from (ax, ay) to (bx, by):
     def line(self, ax, ay, bx, by, col = ANY):
+        # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
             self.linecolor = col
+        savex = self.posx
+        savey = self.posy
+        saveangle = self.turtleangle
+        savedraw = self.draw
+        # Draw:
         self.pu()
         self.goto(ax, ay)
         self.pd()
         self.goto(bx, by)
+        # Restore color, position, angle, penup:
         if col != ANY:
             self.linecolor = savecol
+        self.pu()
+        self.goto(savex, savey)
+        self.angle(saveangle)
+        self.draw = savedraw        
 
     # Draw a polyline, here L is a list of points:
     def polyline(self, L, col = ANY):
+        # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
             self.linecolor = col
+        savex = self.posx
+        savey = self.posy
+        saveangle = self.turtleangle
+        savedraw = self.draw
+        # Draw:
         self.pu()
         p = L[0]
         self.goto(p[0], p[1])
@@ -9978,14 +10006,25 @@ class NCLabTurtle():
         del L[0]
         for p in L:
             self.goto(p[0], p[1])
+        # Restore color, position, angle, penup:
         if col != ANY:
             self.linecolor = savecol
+        self.pu()
+        self.goto(savex, savey)
+        self.angle(saveangle)
+        self.draw = savedraw      
 
     # Draw a series of dots, here L is a list of points:
     def polydots(self, L, col = ANY):
+        # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
             self.linecolor = col
+        savex = self.posx
+        savey = self.posy
+        saveangle = self.turtleangle
+        savedraw = self.draw
+        # Draw:
         p = L[0]
         self.pu()
         self.goto(p[0], p[1])
@@ -9999,8 +10038,13 @@ class NCLabTurtle():
             self.pd()
             self.angle(0)
             self.go(0.1)
+       # Restore color, position, angle, penup:
         if col != ANY:
             self.linecolor = savecol
+        self.pu()
+        self.goto(savex, savey)
+        self.angle(saveangle)
+        self.draw = savedraw    
 
     @staticmethod
     def get_user_instances():
