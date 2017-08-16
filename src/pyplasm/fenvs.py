@@ -10302,12 +10302,6 @@ class NCLabTurtle():
     # Spanish:
     def esconder(self):
         self.hide()
-
-    def line(self, x1, y1, x2, y2):
-        self.penup()
-        self.goto(x1, y1)
-        self.pendown()
-        self.goto(x2, y2)
         
     # Spanish:
     def linea(self, x1, y1, x2, y2):
