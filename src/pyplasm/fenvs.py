@@ -9936,7 +9936,10 @@ class NCLabTurtle():
             NCLAB_TURTLE_WALLS.append(line)
 
     # Draw (xmin, xmax) x (ymin, ymax) rectangle:
-    def rectangle(self, xmin, xmax, ymin, ymax):
+    def rectangle(self, xmin, xmax, ymin, ymax, col = ANY):
+        if col != ANY:
+            savecol = self.linecolor
+            self.linecolor = col
         self.pu()
         self.goto(xmin, ymin)
         self.angle(0)
@@ -9948,16 +9951,26 @@ class NCLabTurtle():
             self.left(90)
             self.go(dy)
             self.left(90)
+        if col != ANY:
+            self.linecolor = savecol
             
     # Draw a line from (ax, ay) to (bx, by):
-    def line(self, ax, ay, bx, by):
+    def line(self, ax, ay, bx, by, col = ANY):
+        if col != ANY:
+            savecol = self.linecolor
+            self.linecolor = col
         self.pu()
         self.goto(ax, ay)
         self.pd()
         self.goto(bx, by)
+        if col != ANY:
+            self.linecolor = savecol
 
     # Draw a polyline, here L is a list of points:
-    def polyline(self, L):
+    def polyline(self, L, col = ANY):
+        if col != ANY:
+            savecol = self.linecolor
+            self.linecolor = col
         self.pu()
         p = L[0]
         self.goto(p[0], p[1])
@@ -9965,9 +9978,14 @@ class NCLabTurtle():
         del L[0]
         for p in L:
             self.goto(p[0], p[1])
+        if col != ANY:
+            self.linecolor = savecol
 
     # Draw a series of dots, here L is a list of points:
-    def polydots(self, L):
+    def polydots(self, L, col = ANY):
+        if col != ANY:
+            savecol = self.linecolor
+            self.linecolor = col
         p = L[0]
         self.pu()
         self.goto(p[0], p[1])
@@ -9981,6 +9999,8 @@ class NCLabTurtle():
             self.pd()
             self.angle(0)
             self.go(0.1)
+        if col != ANY:
+            self.linecolor = savecol
 
     @staticmethod
     def get_user_instances():
