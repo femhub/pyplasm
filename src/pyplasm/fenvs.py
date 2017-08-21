@@ -7,6 +7,7 @@ import copy
 
 # This is needed to access NCLab's object "nclabinst":
 from nclab.tools.lab import Lab
+from .utils import flatten
 
 nclabinst = Lab.instance()
 
@@ -1066,7 +1067,6 @@ def VIEWBASE(objects):
             raise ExceptionWT("The arguments must be objects!")
         geoms.append(x.geom)
     nclabinst.visualize(nclabinst.converter(geoms))
-
 
 # English:
 
@@ -3813,19 +3813,6 @@ if self_test:
         Boxf(Vecf(1, 0, 0), Vecf(1, 1, 1))))
 
 
-# ===================================================
-# FLATTEN
-# ===================================================
-
-# takes lists (possibly including other lists) and returns one plain list
-def flatten(*args):
-    output = []
-    for arg in args:
-        if hasattr(arg, '__iter__'):
-            output.extend(flatten(*arg))
-        else:
-            output.append(arg)
-    return output
 
 
 FLATTEN = flatten
@@ -9671,7 +9658,7 @@ class NCLabTurtleLine:
 
 # Needed for random walks:
 from random import random, randint
-        
+
 # Class Turtle:
 class NCLabTurtle():
     _instances = []
