@@ -10537,6 +10537,8 @@ class NCLabTurtle():
         # The arc:
         n = (angle / 180) * 18
         n = round(n)
+        if n == 0:
+            n = 1
         # Calculate center of arc:
         from numpy import cos, sin, pi
         vx = cos(self.turtleangle*pi/180)
