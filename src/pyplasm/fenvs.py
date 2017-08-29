@@ -276,8 +276,8 @@ if self_test:
 
 def COMP(Funs):
     def compose(f, g):
-        def h(x): return f(g(x))
-
+        def h(x):
+            return f(g(x))
         return h
 
     return reduce(compose, Funs)
