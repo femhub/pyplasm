@@ -11567,7 +11567,7 @@ def letterK():
 # L:
 def letterL():
   l1 = BOX(0, 30, 0, 150)
-  l2 = BOX(0, 100, 0, 30)
+  l2 = BOX(0, 80, 0, 30)
   le = UNION(l1, l2)
   SCALE(le, 0.1, 0.1)
   return le
@@ -11709,3 +11709,38 @@ def letterZ():
   le = UNION(x1, x2, x3)
   SCALE(le, 0.1, 0.1)
   return le
+
+# Main function:
+def LETTER(c):
+  if not isinstance(c, str):
+    raise ExceptionWT("In LETTER(c): c must be a character (text string of length 1).")
+  if len(c) != 1:
+    raise ExceptionWT("In LETTER(c): c must be a character (text string of length 1).")
+  c = c.upper()
+  if c == 'A': return letterA()
+  if c == 'B': return letterB()
+  if c == 'C': return letterC()
+  if c == 'D': return letterD()
+  if c == 'E': return letterE()
+  if c == 'F': return letterF()
+  if c == 'G': return letterG()
+  if c == 'H': return letterH()
+  if c == 'I': return letterI()
+  if c == 'J': return letterJ()
+  if c == 'K': return letterK()
+  if c == 'L': return letterL()
+  if c == 'M': return letterM()
+  if c == 'N': return letterN()
+  if c == 'O': return letterO()
+  if c == 'P': return letterP()
+  if c == 'Q': return letterQ()
+  if c == 'R': return letterR()
+  if c == 'S': return letterS()
+  if c == 'T': return letterT()
+  if c == 'U': return letterU()
+  if c == 'V': return letterV()
+  if c == 'W': return letterW()
+  if c == 'X': return letterX()
+  if c == 'Y': return letterY()
+  if c == 'Z': return letterZ()
+  raise ExceptionWT("Unknown character '" + c + "' detected in LETTER()!\nPlease use English alphabet letters only.")
