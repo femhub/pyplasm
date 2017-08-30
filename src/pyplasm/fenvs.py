@@ -11540,6 +11540,7 @@ def letterH():
   l2 = BOX(70, 100, 0, 150)
   l3 = BOX(0, 100, 60, 90)
   le = UNION(l1, l2, l3)
+  SCALE(le, 0.1, 0.1)
   return le
 # I:
 def letterI():
@@ -11744,3 +11745,5 @@ def LETTER(c):
   if c == 'Y': return letterY()
   if c == 'Z': return letterZ()
   raise ExceptionWT("Unknown character '" + c + "' detected in LETTER()!\nPlease use English alphabet letters only.")
+
+LETRA = LETTER
