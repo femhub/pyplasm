@@ -54,7 +54,7 @@ class StepAccumulator:
     def reset_history():
         StepAccumulator.geom_base.clear()
         StepAccumulator.pending_actions.clear()
-        StepAccumulator.model_triples.clear()
+        del StepAccumulator.model_triples[:]
 
     @staticmethod
     def forward_one_step(step_id):
