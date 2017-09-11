@@ -1,5 +1,7 @@
 from .utils import flatten
-
+from .fenvs import NCLabTurtleImage, NCLabTurtleTrace, NCLabTurtle, \
+                   NCLabTurtleTrace3D, NCLabTurtleImage3D, NCLabTurtle3D, \
+                   NCLAB_TURTLE_IMAGE_H, PRISM
 
 class StepAccumulator:
     pending_actions = dict()
@@ -24,6 +26,7 @@ class StepAccumulator:
         def safe_add(base):
             if hasattr(base, 'geom'):
                 StepAccumulator.add_object(base.geom)
+
         if isinstance(obj, list):
             f = flatten(obj)
             for o in f:
@@ -41,10 +44,21 @@ class StepAccumulator:
         to remove previous turtle position or hide intermediate states of
         some operation ex. union or subtraction.
         """
-        if id(ob) in StepAccumulator.pending_actions:
-            del StepAccumulator.pending_actions[id(ob)]
+        if not isinstance(ob, list):
+            lob = [ob]
         else:
-            StepAccumulator.pending_actions[id(ob)] = {'action': 'remove', 'geom': ob}
+            lob = ob
+
+        for el in lob:
+            if hasattr(el, 'geom'):
+                geom = el.geom
+            else:
+                geom = el
+
+            if id(geom) in StepAccumulator.pending_actions:
+                del StepAccumulator.pending_actions[id(geom)]
+            else:
+                StepAccumulator.pending_actions[id(geom)] = {'action': 'remove', 'geom': geom}
 
     @staticmethod
     def modeling_history():
@@ -78,7 +92,7 @@ class StepAccumulator:
         return StepAccumulator.geom_base
 
     @staticmethod
-    def generate_trace(turtle, trace_gen, img_gen):
+    def generate_trace(turtle, trace_gen, img_gen, turtle_thickness=None):
         """
         Generate trace that was accumulated by turtle since
         previous call of this function. It also creates a turtle
@@ -92,14 +106,25 @@ class StepAccumulator:
 
             orig_lines = turtle.lines
             turtle.lines = new_path_segments
-            trace = trace_gen(turtle)
+            if isinstance(turtle, NCLabTurtle):
+                trace = NCLabTurtleTrace(turtle)
+            elif isinstance(turtle, NCLabTurtle3D):
+                trace = NCLabTurtleTrace3D(turtle)
+
             StepAccumulator.add_shapes(trace)
             turtle.lines = orig_lines
 
             turtle.nclab_path_length = len(turtle.lines)-1
 
         StepAccumulator.remove_turtle_image(turtle)
-        turtle.nclab_step_image = img_gen(turtle)
+        if isinstance(turtle, NCLabTurtle):
+            image = NCLabTurtleImage(turtle)
+            if turtle_thickness:
+                turtle.nclab_step_image = PRISM(image, turtle_thickness)
+            else:
+                turtle.nclab_step_image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
+        elif isinstance(turtle, NCLabTurtle3D):
+            turtle.nclab_step_image = NCLabTurtleImage3D(turtle)
         StepAccumulator.add_shapes(turtle.nclab_step_image)
 
     @staticmethod
