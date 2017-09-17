@@ -9331,15 +9331,15 @@ def NCLabTurtleWedge(l1, l2):
     
 # Return trace as list of PLaSM objects. Assumes that
 # every line segment has a height:
-def NCLabTurtleTrace(turtle, layer=0, dots=True):
+def NCLabTurtleTrace(lines, layer=0, dots=True):
     out = []
-    n = len(turtle.lines)
+    n = len(lines)
     # List of lines is empty - just return:
     if n == 0:
         return out
     # Now we know that there is at least one line segment:
     for i in range(n):
-        l = turtle.lines[i]
+        l = lines[i]
         # Add rectangle corresponding to the line:
         rect = NCLabTurtleRectangle(l, layer)
         if abs(l.lineheight) < 0.000001:
@@ -9356,10 +9356,10 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
             if i == 0:
                 addcircle = True
             else:
-                lprev = turtle.lines[i-1]
+                lprev = lines[i-1]
                 addcircle = (lprev.continued == False)
                 # also check if angle difference is greater than 45 degrees:
-                lcurr = turtle.lines[i]
+                lcurr = lines[i]
                 if abs(lprev.angle - lcurr.angle) >= 45:
                     addcircle = True
             if addcircle:
@@ -9372,7 +9372,7 @@ def NCLabTurtleTrace(turtle, layer=0, dots=True):
                 else:
                     out.append(PRISM(cir, l.lineheight))
             else:  # we will be adding a wedge to the beginning of current line
-                lprev = turtle.lines[i-1]
+                lprev = lines[i-1]
                 if abs(lprev.angle - l.angle) > 0.001:
                     wedge = NCLabTurtleWedge(lprev, l)
                     COLOR(wedge, lprev.linecolor)
@@ -9488,16 +9488,17 @@ def NCLabTurtleCleanTrace(turtle):
 # Extrusion heights for the turtle trace, the red (sol) 
 # (correct solution) trace and the turtle itself:
 NCLAB_TURTLE_TRACE_H = 0.0005
+NCLAB_TURTLE_WALL_H = 0.0002
 NCLAB_TURTLE_ERR_H = 0.0006
 NCLAB_TURTLE_RED_H = 0.0007
 NCLAB_TURTLE_SOL_H = NCLAB_TURTLE_RED_H
 NCLAB_TURTLE_IMAGE_H = 0.0009
 NCLAB_TURTLE_EPS = 0.0001
 
-def NCLabTurtleShow(turtle, layer=0, dots=True):
+def NCLabTurtleShowTrace(turtle, layer=0, dots=True):
     image = NCLabTurtleImage(turtle)
     canvas = NCLabTurtleCanvas(turtle)
-    trace = NCLabTurtleTrace(turtle, layer, dots)
+    trace = NCLabTurtleTrace(turtle.lines, layer, dots)
     # Make the image and canvas 3D:
     image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
     canvas = PRISM(canvas, NCLAB_TURTLE_TRACE_H)
@@ -9508,6 +9509,23 @@ def NCLabTurtleShow(turtle, layer=0, dots=True):
             SHOW(canvas, trace)
     else:
         SHOW(canvas, trace)
+
+def NCLabTurtleShowWalls(turtle, layer=0, dots=True):
+    image = NCLabTurtleImage(turtle)
+    canvas = NCLabTurtleCanvas(turtle)
+    for w in turtle.walls:
+        w.lineheight = NCLAB_TURTLE_WALL_H
+    walls = NCLabTurtleTrace(turtle.walls, layer, dots)
+    # Make the image and canvas 3D:
+    image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
+    canvas = PRISM(canvas, NCLAB_TURTLE_WALL_H)
+    if turtle.isvisible:
+        if not turtle.heightused:
+            SHOW(image, canvas, walls)
+        else:
+            SHOW(canvas, walls)
+    else:
+        SHOW(canvas, walls)
 
 # Return xmin, xmax, ymin, ymax:
 def NCLabTurtleExtremes(lines):
@@ -9681,10 +9699,11 @@ class NCLabTurtle():
         self.lineheight = 0
         self.canvassize = 100
         self.lines = []
+        self.walls = []
 
         # Try to import walls from NCLAB_TURTLE_WALLS:
         self.importwalls()            # lines, made by another Turtle, to serve as obstacles
-        self.wallminx = 0                # Extremes for the walls
+        self.wallminx = 0             # Extremes for the walls
         self.wallmaxx = 0
         self.wallminy = 0
         self.wallmaxy = 0
@@ -10354,19 +10373,19 @@ class NCLabTurtle():
             l.lineheight = height
         layer = 0
         dots = True
-        self.geom = NCLabTurtleTrace(self, layer, dots)
+        self.geom = NCLabTurtleTrace(self.lines, layer, dots)
 
     def export(self):
         is3D = self.isrosol or self.isrosurf or self.isroshell or self.isspiral or self.isextruded 
         if (not is3D) and (not self.heightused):    # Trace is 2D:
             for l in self.lines:
                 l.lineheight = NCLAB_TURTLE_TRACE_H
-            return NCLabTurtleTrace(self)
+            return NCLabTurtleTrace(self.lines)
         else:                               # Trace is 3D:
             if self.heightused:
                 layer = 0
                 dots = True
-                self.geom = NCLabTurtleTrace(self, layer, dots)
+                self.geom = NCLabTurtleTrace(self.lines, layer, dots)
             return self.geom
 
     # Revolves complete trace including width
@@ -10385,7 +10404,7 @@ class NCLabTurtle():
         self.isroshell = True
         layer = 0
         dots = True
-        base = NCLabTurtleTrace(self, layer, dots)
+        base = NCLabTurtleTrace(self.lines, layer, dots)
         self.geom = REVOLVE(base, angle, div)
 
     # Another name for revolve()
@@ -10417,7 +10436,7 @@ class NCLabTurtle():
         self.isroshell = False
         layer = 0
         dots = True
-        base = NCLabTurtleTrace(self, layer, dots)
+        base = NCLabTurtleTrace(self.lines, layer, dots)
         self.geom = SPIRAL(base, angle, elevation, div)
 
     # Rotational solid
@@ -10584,8 +10603,15 @@ class NCLabTurtle():
         if self.geom != None:
             SHOW(self.geom)
         else:
-            NCLabTurtleShow(self, layer, dots)
+            NCLabTurtleShowTrace(self, layer, dots)
+        self._plot_turtle_trace()
 
+    def showwalls(self, layer=0, dots=True):
+        # If geom is not None, show geometry, else show walls:
+        if self.geom != None:
+            SHOW(self.geom)
+        else:
+            NCLabTurtleShowWalls(self, layer, dots)
         self._plot_turtle_trace()
 
     # Spanish:
@@ -11240,7 +11266,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
     ##### PREPARE TESTING DATA #####
   
     # Students trace without the circles:
-    trace = NCLabTurtleTrace(turtle, 0, False)
+    trace = NCLabTurtleTrace(turtle.lines, 0, False)
 
     # EMPTYSET?
     if EMPTYSET(trace):
@@ -11249,8 +11275,8 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
 
     # Subset and superset:
     eps = NCLAB_TURTLE_EPS
-    subset = NCLabTurtleTrace(tsol, -eps, False)
-    superset = NCLabTurtleTrace(tsol, eps, False)
+    subset = NCLabTurtleTrace(tsol.lines, -eps, False)
+    superset = NCLabTurtleTrace(tsol.lines, eps, False)
   
     ##### GEOMETRY TEST #####
 
@@ -11272,7 +11298,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
             if turtle.heightused:  # There are different heights:
                 layer = 0.01
                 dots = True
-                err = NCLabTurtleTrace(turtle, layer, dots)            
+                err = NCLabTurtleTrace(turtle.lines, layer, dots)            
             else:  # Genuinely 2D
                 turtle.extrude(errheight)
                 err = turtle.geometry()
@@ -11287,7 +11313,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
             if turtle.heightused:   # There are different heights:
                 layer = 0.02
                 dots = True
-                sol = NCLabTurtleTrace(tsol, layer, dots)            
+                sol = NCLabTurtleTrace(tsol.lines, layer, dots)            
             else:    # Genuinely 2D
                 tsol.extrude(solheight)
                 sol = tsol.geometry()
