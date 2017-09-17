@@ -9510,23 +9510,6 @@ def NCLabTurtleShowTrace(turtle, layer=0, dots=True):
     else:
         SHOW(canvas, trace)
 
-def NCLabTurtleShowWalls(turtle, layer=0, dots=True):
-    image = NCLabTurtleImage(turtle)
-    canvas = NCLabTurtleCanvas(turtle)
-    for w in turtle.walls:
-        w.lineheight = NCLAB_TURTLE_WALL_H
-    walls = NCLabTurtleTrace(turtle.walls, layer, dots)
-    # Make the image and canvas 3D:
-    image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
-    canvas = PRISM(canvas, NCLAB_TURTLE_WALL_H)
-    if turtle.isvisible:
-        if not turtle.heightused:
-            SHOW(image, canvas, walls)
-        else:
-            SHOW(canvas, walls)
-    else:
-        SHOW(canvas, walls)
-
 # Return xmin, xmax, ymin, ymax:
 def NCLabTurtleExtremes(lines):
     n = len(lines)
@@ -10610,7 +10593,7 @@ class NCLabTurtle():
     def showwalls(self, layer=0, dots=True):
         # If geom is not None, show geometry, else show lines with height NCLAB_TURTLE_WALL_H:
         if self.geom != None:
-            SHOW(self.geom)
+            raise ExceptionWT("Internal: self.geom should not be defined in showwalls().")
         else:
             n = len(self.lines)
             for i in range(n):
