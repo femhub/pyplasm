@@ -107,7 +107,7 @@ class StepAccumulator:
             orig_lines = turtle.lines
             turtle.lines = new_path_segments
             if isinstance(turtle, NCLabTurtle):
-                trace = NCLabTurtleTrace(turtle)
+                trace = NCLabTurtleTrace(turtle.lines)
             elif isinstance(turtle, NCLabTurtle3D):
                 trace = NCLabTurtleTrace3D(turtle)
 
