@@ -9343,7 +9343,8 @@ def NCLabTurtleTrace(lines, layer=0, dots=True):
         # Add rectangle corresponding to the line:
         rect = NCLabTurtleRectangle(l, layer)
         if abs(l.lineheight) < 0.000001:
-            out.append(MOVE(rect, 0, 0, NCLAB_TURTLE_TRACE_H))
+            out.append(rect)
+            #out.append(MOVE(rect, 0, 0, NCLAB_TURTLE_TRACE_H))
         else:
             out.append(PRISM(rect, l.lineheight))
         # If dots == True (we will be adding circles
