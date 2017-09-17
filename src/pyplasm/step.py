@@ -1,7 +1,7 @@
 from .utils import flatten
 from .fenvs import NCLabTurtleImage, NCLabTurtleTrace, NCLabTurtle, \
                    NCLabTurtleTrace3D, NCLabTurtleImage3D, NCLabTurtle3D, \
-                   NCLAB_TURTLE_IMAGE_H, PRISM
+                   NCLAB_TURTLE_IMAGE_H, NCLAB_TURTLE_TRACE_H, PRISM
 
 class StepAccumulator:
     pending_actions = dict()
@@ -109,7 +109,7 @@ class StepAccumulator:
             if isinstance(turtle, NCLabTurtle):
                 layer = 0
                 dots = True
-                elev = 0
+                elev = NCLAB_TURTLE_TRACE_H
                 trace = NCLabTurtleTrace(turtle.lines, layer, dots, elev)
             elif isinstance(turtle, NCLabTurtle3D):
                 trace = NCLabTurtleTrace3D(turtle)
