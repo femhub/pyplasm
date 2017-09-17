@@ -10608,12 +10608,13 @@ class NCLabTurtle():
 
     # To be used with the Turtle which produces the walls:
     def showwalls(self, layer=0, dots=True):
-        # If geom is not None, show geometry, else show walls:
+        # If geom is not None, show geometry, else show lines with height NCLAB_TURTLE_WALL_H:
         if self.geom != None:
             SHOW(self.geom)
         else:
-            for w in self.lines:
-                w.lineheight = NCLAB_TURTLE_WALL_H
+            n = len(self.lines)
+            for i in range(n):
+                self.lines[i].lineheight = NCLAB_TURTLE_WALL_H
             NCLabTurtleShowTrace(self, layer, dots)
         self._plot_turtle_trace()
 
