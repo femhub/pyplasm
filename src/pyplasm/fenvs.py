@@ -9329,9 +9329,9 @@ def NCLabTurtleWedge(l1, l2):
         return TRIANGLE(POINT(p1x, p1y), POINT(p2x, p2y), POINT(p3x, p3y))        
 
     
-# Return trace as list of PLaSM objects. Assumes that
-# every line segment has a height:
-def NCLabTurtleTrace(lines, layer=0, dots=True):
+# Return trace as list of PLaSM objects. Line segments with height 0 will become
+# rectangles in the XY plane, line segments with nonzero height will become 3D prisms. 
+def NCLabTurtleTrace(lines, layer=0, dots=True, elev=0):
     out = []
     n = len(lines)
     # List of lines is empty - just return:
@@ -9343,8 +9343,10 @@ def NCLabTurtleTrace(lines, layer=0, dots=True):
         # Add rectangle corresponding to the line:
         rect = NCLabTurtleRectangle(l, layer)
         if abs(l.lineheight) < 0.000001:
-            out.append(rect)
-            #out.append(MOVE(rect, 0, 0, NCLAB_TURTLE_TRACE_H))
+            if elev < 0.000001: out.append(rect)
+            else:
+                rect2 = MOVE(rect, elev, Z)  # strictly for visualization purposes
+                out.append(rect2)            # such trace will not work for grading
         else:
             out.append(PRISM(rect, l.lineheight))
         # If dots == True (we will be adding circles
@@ -9496,10 +9498,10 @@ NCLAB_TURTLE_SOL_H = NCLAB_TURTLE_RED_H
 NCLAB_TURTLE_IMAGE_H = 0.0009
 NCLAB_TURTLE_EPS = 0.0001
 
-def NCLabTurtleShowTrace(turtle, layer=0, dots=True):
+def NCLabTurtleShowTrace(turtle, layer=0, dots=True, elev=0):
     image = NCLabTurtleImage(turtle)
     canvas = NCLabTurtleCanvas(turtle)
-    trace = NCLabTurtleTrace(turtle.lines, layer, dots)
+    trace = NCLabTurtleTrace(turtle.lines, layer, dots, elev)
     # Make the image and canvas 3D:
     image = PRISM(image, NCLAB_TURTLE_IMAGE_H)
     canvas = PRISM(canvas, NCLAB_TURTLE_TRACE_H)
@@ -10357,19 +10359,24 @@ class NCLabTurtle():
             l.lineheight = height
         layer = 0
         dots = True
-        self.geom = NCLabTurtleTrace(self.lines, layer, dots)
+        elev = 0
+        self.geom = NCLabTurtleTrace(self.lines, layer, dots, elev)
 
     def export(self):
         is3D = self.isrosol or self.isrosurf or self.isroshell or self.isspiral or self.isextruded 
         if (not is3D) and (not self.heightused):    # Trace is 2D:
             for l in self.lines:
                 l.lineheight = NCLAB_TURTLE_TRACE_H
-            return NCLabTurtleTrace(self.lines)
+            layer = 0
+            dots = True
+            elev = 0
+            return NCLabTurtleTrace(self.lines, layer, dots, elev)
         else:                               # Trace is 3D:
             if self.heightused:
                 layer = 0
                 dots = True
-                self.geom = NCLabTurtleTrace(self.lines, layer, dots)
+                elev = 0
+                self.geom = NCLabTurtleTrace(self.lines, layer, dots, elev)
             return self.geom
 
     # Revolves complete trace including width
@@ -10388,7 +10395,8 @@ class NCLabTurtle():
         self.isroshell = True
         layer = 0
         dots = True
-        base = NCLabTurtleTrace(self.lines, layer, dots)
+        elev = 0
+        base = NCLabTurtleTrace(self.lines, layer, dots, elev)
         self.geom = REVOLVE(base, angle, div)
 
     # Another name for revolve()
@@ -10420,7 +10428,8 @@ class NCLabTurtle():
         self.isroshell = False
         layer = 0
         dots = True
-        base = NCLabTurtleTrace(self.lines, layer, dots)
+        elev = 0
+        base = NCLabTurtleTrace(self.lines, layer, dots, elev)
         self.geom = SPIRAL(base, angle, elevation, div)
 
     # Rotational solid
@@ -10587,7 +10596,7 @@ class NCLabTurtle():
         if self.geom != None:
             SHOW(self.geom)
         else:
-            NCLabTurtleShowTrace(self, layer, dots)
+            NCLabTurtleShowTrace(self, layer, dots, NCLAB_TURTLE_TRACE_H)
         self._plot_turtle_trace()
 
     # To be used with the Turtle which produces the walls:
@@ -10596,10 +10605,7 @@ class NCLabTurtle():
         if self.geom != None:
             raise ExceptionWT("Internal: self.geom should not be defined in showwalls().")
         else:
-            n = len(self.lines)
-            for i in range(n):
-                self.lines[i].lineheight = NCLAB_TURTLE_WALL_H
-            NCLabTurtleShowTrace(self, layer, dots)
+            NCLabTurtleShowTrace(self, layer, dots, NCLAB_TURTLE_WALL_H)
         self._plot_turtle_trace()
 
     # Spanish:
