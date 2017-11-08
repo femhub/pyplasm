@@ -21,7 +21,7 @@ class StepAccumulator:
 
         Added objects are in "pending" state which means you
         have to call .forward_one_step function with step id (number)
-        to assign all pending objects to particular step identifier.
+        to assign all pending objects to specific step identifier.
         """
         def safe_add(base):
             if hasattr(base, 'geom'):
@@ -38,13 +38,13 @@ class StepAccumulator:
     @staticmethod
     def remove_object(ob):
         """
-        Remove object from set of existing steps. This does not mean
+        Remove object from the set of existing steps. This does not mean
         that object will not be included in the result. This means that
         object is scheduled to be removed in the next step. This can be used
         to remove previous turtle position or hide intermediate states of
         some operation ex. union or subtraction.
         """
-        if not isinstance(ob, list):
+        if not isinstance(ob, list) or not isinstance(ob, tuple):
             lob = [ob]
         else:
             lob = ob
