@@ -9715,6 +9715,7 @@ class NCLabTurtle():
         self.revolvecalled = False
         self.extrudecalled = False
         self.showcalled = False
+        self.programended = False
 
     # Detects whether the Turtle stands on a wall of the given color
     # (for line-following purposes). Returns either True or False:
@@ -9832,7 +9833,7 @@ class NCLabTurtle():
                         mindist = d
                         found = True
         if found:
-            return mindist
+            return round(mindist, 4)
         else:
             return None
     
@@ -10517,6 +10518,7 @@ class NCLabTurtle():
         self.revolvecalled = False
         self.extrudecalled = False
         self.showcalled = False
+        self.programended = False
 
     def arc(self, angle, radius, direction='r'):
         if angle < 0.001:
@@ -10592,6 +10594,7 @@ class NCLabTurtle():
         if self.showcalled == True:
             raise ExceptionWT("Command show() can be only called once!")
         self.showcalled = True
+        self.programended = True
         # If geom is not None, show geometry, else show trace:
         if self.geom != None:
             SHOW(self.geom)
@@ -10835,6 +10838,7 @@ class NCLabTurtle3D:
         self.geom = None
         # These commands can be called only once:
         self.showcalled = False
+        self.programended = False
 
     def color(self, col, col2=None):
         if not isinstance(col, list):
