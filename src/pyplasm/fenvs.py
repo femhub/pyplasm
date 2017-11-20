@@ -10307,22 +10307,22 @@ class NCLabTurtle():
         self.home()
 
     def getx(self):
-        return self.posx
+        return round(self.posx, 6)
 
     def gety(self):
-        return self.posy
+        return round(self.posy, 6)
 
     def getangle(self):
-        return self.turtleangle
+        return round(self.turtleangle, 6)
 
     def getcolor(self):
         return self.linecolor
 
     def getwidth(self):
-        return self.linewidth
+        return round(self.linewidth, 6)
 
     def getheight(self):
-        return self.lineheight
+        return round(self.lineheight, 6)
 
     def visible(self):
         self.isvisible = True
