@@ -44,10 +44,11 @@ class StepAccumulator:
         to remove previous turtle position or hide intermediate states of
         some operation ex. union or subtraction.
         """
-        if not isinstance(ob, list) or not isinstance(ob, tuple):
+        if not isinstance(ob, list) and not isinstance(ob, tuple):
             lob = [ob]
         else:
             lob = ob
+        lob = flatten(lob)
 
         for el in lob:
             if hasattr(el, 'geom'):
