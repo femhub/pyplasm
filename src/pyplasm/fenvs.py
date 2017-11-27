@@ -6575,9 +6575,11 @@ def PRISM(basis, h, n=1):
     gridlist = [h0 for i in range(n)]
     # Check that the basis is two-dimensional:
     if not isinstance(basis, list):
+        if not isinstance(basis, BASEOBJ):
+            raise ExceptionWT("The base object in PRISM(base, height) must be a 2D object in the XY plane!")
         if basis.dim != 2:
             raise ExceptionWT(
-                "The base object in PRISM(base, height) must be 2-dimensional!")
+                "The base object in PRISM(base, height) must be a 2D object in the XY plane!")
         color = basis.getcolor()
         obj = PRODUCT(basis, GRID(*gridlist))  # PRODUCT returns a class instance!
         obj.setcolor(color)
@@ -6586,9 +6588,11 @@ def PRISM(basis, h, n=1):
     else:
         basis = flatten(basis)
         for obj in basis:
+            if not isinstance(obj, BASEOBJ):
+                raise ExceptionWT("The base object in PRISM(base, height) must be a 2D object in the XY plane!")
             if obj.dim != 2:
                 raise ExceptionWT(
-                    "The base object in PRISM(base, height) must be 2-dimensional!")
+                    "The base object in PRISM(base, height) must be a 2D object in the XY plane!")
         obj = []
         for oo in basis:
             color = oo.getcolor()
