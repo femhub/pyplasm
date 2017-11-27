@@ -9,12 +9,24 @@ class StepAccumulator:
     geom_base = set()
 
     @staticmethod
-    def add_object(ob):
+    def add_object(ob, action='add'):
         """Add internal PLaSM object to the current step"""
-        StepAccumulator.pending_actions[id(ob)] = {'action': 'add', 'geom': ob}
+        StepAccumulator.pending_actions[id(ob)] = {'action': action, 'geom': ob}
+
 
     @staticmethod
-    def add_shapes(obj):
+    def remove_unused_objects(objects):
+        """
+        Generate 'remove' action for every object that is not listed
+        in argument. Used to implement SHOW command functionality in step mode.
+        """
+        if isinstance(objects, (list, tuple)):
+            fgeoms = [o.geom for o in flatten(objects)]
+            to_remove = StepAccumulator.geom_base.difference(fgeoms)
+            StepAccumulator.remove_object(to_remove)
+
+    @staticmethod
+    def add_shapes(obj, copy=False):
         """
         Add objects to state of the current step. Argument can
         either be a single BASEOBJ or list of BASEOBJs.
@@ -25,9 +37,12 @@ class StepAccumulator:
         """
         def safe_add(base):
             if hasattr(base, 'geom'):
-                StepAccumulator.add_object(base.geom)
+                if copy:
+                    StepAccumulator.add_object(base.geom, action='copy')
+                else:
+                    StepAccumulator.add_object(base.geom)
 
-        if isinstance(obj, list):
+        if isinstance(obj, (list, tuple)):
             f = flatten(obj)
             for o in f:
                 safe_add(o)
@@ -44,7 +59,7 @@ class StepAccumulator:
         to remove previous turtle position or hide intermediate states of
         some operation ex. union or subtraction.
         """
-        if not isinstance(ob, list) and not isinstance(ob, tuple):
+        if not isinstance(ob, (list, tuple)):
             lob = [ob]
         else:
             lob = ob
@@ -56,10 +71,19 @@ class StepAccumulator:
             else:
                 geom = el
 
+            # If an object has already been added
+            # in the current step (line), remove it from the list
+            # of actions to store. Previously added object was probably
+            # internal and intermediate stage and we won't waste
+            # space and network bandwidth to send it to user because
+            # he would not see it anyway.
+            #
+            # However, we need to store the 'remove' action regardless
+            # of wheter it represents temporary object or something else
+            # because we cannot tell the difference between those two situations.
             if id(geom) in StepAccumulator.pending_actions:
                 del StepAccumulator.pending_actions[id(geom)]
-            else:
-                StepAccumulator.pending_actions[id(geom)] = {'action': 'remove', 'geom': geom}
+            StepAccumulator.pending_actions[id(geom)] = {'action': 'remove', 'geom': geom}
 
     @staticmethod
     def modeling_history():
@@ -76,10 +100,17 @@ class StepAccumulator:
         """
         Add all pending shapes to database of unique shapes
         and create a history of the current steps by creating list
-        of tripels (stepId, action, geometryId). This will allow to
+        of tripels (stepId, action, geometryId). This will allow us to
         reproduce all user actions in UI.
+
+        Every object which was an object of 'remove' action should have
+        also corresponding 'add' action in model history. If there is no 'add' action for a
+        specific 'remove', the object was only an intermediate stage
+        and we should not store any action involving it.
         """
         for geom_id, action in StepAccumulator.pending_actions.items():
+            if action['action'] == 'remove' and action['geom'] not in StepAccumulator.geom_base:
+                continue
             StepAccumulator.model_triples.append((step_id, action['action'], geom_id))
             StepAccumulator.geom_base.add(action['geom'])
         StepAccumulator.pending_actions.clear()
