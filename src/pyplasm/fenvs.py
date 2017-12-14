@@ -9705,7 +9705,6 @@ class NCLabTurtle():
         self.heightused = False       # If any line height is set
                                       # to nonzero, this will be True
         self.isvisible = True
-        self.isextruded = False
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
@@ -9934,6 +9933,8 @@ class NCLabTurtle():
 
     # Draw (xmin, xmax) x (ymin, ymax) rectangle:
     def rectangle(self, xmin, xmax, ymin, ymax, col = ANY):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
@@ -9964,6 +9965,8 @@ class NCLabTurtle():
             
     # Draw a line from (ax, ay) to (bx, by):
     def line(self, ax, ay, bx, by, col = ANY):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
@@ -9987,6 +9990,8 @@ class NCLabTurtle():
 
     # Draw a polyline, here L is a list of points:
     def polyline(self, L, col = ANY):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
@@ -10052,6 +10057,8 @@ class NCLabTurtle():
         return NCLabTurtle._instances
 
     def angle(self, a):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.turtleangle = a
 
     # Spanish:
@@ -10059,6 +10066,8 @@ class NCLabTurtle():
         self.angle(a)
 
     def color(self, col):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         if not isinstance(col, list) and not isinstance(col, tuple):
             raise ExceptionWT("Attempt to set invalid color. Must be a list or a tuple.")
         if len(col) != 3:
@@ -10069,6 +10078,8 @@ class NCLabTurtle():
         self.linecolor = col[:]
 
     def width(self, w):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         if w < 0.1:
             raise ExceptionWT("Line width must be between 0.1 and 10.0.")
         if w > 10.0:
@@ -10080,6 +10091,8 @@ class NCLabTurtle():
         self.width(w)
 
     def height(self, h):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         if h <= 0:
             raise ExceptionWT("In height(h), h must be greater than zero!")
         self.lineheight = h
@@ -10090,9 +10103,13 @@ class NCLabTurtle():
         self.height(w)
 
     def penup(self):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.draw = False
 
     def pu(self):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.draw = False
 
     # Spanish:
@@ -10102,9 +10119,13 @@ class NCLabTurtle():
         self.penup()
 
     def pendown(self):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.draw = True
 
     def pd(self):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.draw = True
 
     # Spanish:
@@ -10130,6 +10151,8 @@ class NCLabTurtle():
     # position of the new line, and if the width / height / color match, we
     # will change its 'continued' flag to True:
     def go(self, dist):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         # If Tina has not moved, just return:
         if dist < 0.000001:
             return
@@ -10192,6 +10215,8 @@ class NCLabTurtle():
         self.left(da)
 
     def right(self, da):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.turtleangle -= da
 
     # Spanish:
@@ -10202,6 +10227,8 @@ class NCLabTurtle():
         self.right(da)
 
     def back(self, dist):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         if dist <= 0:
             raise ExceptionWT("The distance d in back(d) must be positive!")
         draw = self.draw
@@ -10223,6 +10250,8 @@ class NCLabTurtle():
         self.back(dist)
 
     def goto(self, newx, newy):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         dx = newx - self.posx
         dy = newy - self.posy
         # If Tina has not moved, just return:
@@ -10252,27 +10281,43 @@ class NCLabTurtle():
 
     #####  Random versions of some functions  #####
     def rango(self, x):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.go(random() * x)
 
     def ranleft(self, x):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.left(random() * x)
     
     def ranright(self, x):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.right(random() * x)
 
     def ranturn(self, x):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.left(random() * 2 * x - x)
 
     def ranwidth(self, x):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.linewidth(random() * x)
 
     def ranheight(self, x):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.lineheight(random() * x)
 
     def ranback(self, x):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.back(random() * x)
 
     def ranwalk(self, n, s, a):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         cycles = n // s
         rest = n % s 
         for i in range(cycles):
@@ -10301,6 +10346,8 @@ class NCLabTurtle():
         self.goto(self.posx, newy)
 
     def home(self):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.penup()
         self.goto(0, 0)
         self.angle(0)
@@ -10351,11 +10398,12 @@ class NCLabTurtle():
     # If called, the extrude command will override individual
     # heights of line segments.
     def extrude(self, height = 1):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't call it again!")
         self.extrudecalled = True
         if height <= 0.000001:
             raise ExceptionWT("Height 'h' in extrude(h) must be positive!")
         self.lineheight = height
-        self.isextruded = True
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
@@ -10368,7 +10416,7 @@ class NCLabTurtle():
         self.geom = NCLabTurtleTrace(self.lines, layer, dots, elev)
 
     def export(self):
-        is3D = self.isrosol or self.isrosurf or self.isroshell or self.isspiral or self.isextruded 
+        is3D = self.isrosol or self.isrosurf or self.isroshell or self.isspiral or self.extrudecalled
         if (not is3D) and (not self.heightused):    # Trace is 2D:
             for l in self.lines:
                 l.lineheight = NCLAB_TURTLE_TRACE_H
@@ -10393,7 +10441,6 @@ class NCLabTurtle():
         self.revolvecalled = True
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in revolve(a) must be positive!")
-        self.isextruded = False
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
@@ -10406,7 +10453,7 @@ class NCLabTurtle():
 
     # Another name for revolve()
     def roshell(self, angle=360, div=32):
-        if self.isextruded:
+        if self.extrudecalled:
             raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
             raise ExceptionWT("Once you use the height() command, roshell() cannot be used!")
@@ -10426,7 +10473,6 @@ class NCLabTurtle():
         self.spiralcalled = True
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in spiral(a, elevation) must be positive!")
-        self.isextruded = False
         self.isspiral = True
         self.isrosol = False
         self.isrosurf = False
@@ -10439,7 +10485,7 @@ class NCLabTurtle():
 
     # Rotational solid
     def rosol(self, angle=360, div=32):     
-        if self.isextruded:
+        if self.extrudecalled:
             raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
             raise ExceptionWT("Once you use the height() command, rosol() cannot be used!")
@@ -10448,7 +10494,6 @@ class NCLabTurtle():
         self.rosolcalled = True
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in rosol(a) must be positive!")
-        self.isextruded = False
         self.isspiral = False
         self.isrosol = True
         self.isrosurf = False
@@ -10469,7 +10514,7 @@ class NCLabTurtle():
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
-        if self.isextruded:
+        if self.extrudecalled:
             raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
             raise ExceptionWT("Once you use the height() command, rosurf() cannot be used!")
@@ -10478,7 +10523,6 @@ class NCLabTurtle():
         self.rosurfcalled = True
         if angle <= 0.000001:
             raise ExceptionWT("Angle 'a' in rosurf(a) must be positive!")
-        self.isextruded = False
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = True
@@ -10508,7 +10552,6 @@ class NCLabTurtle():
         self.lineheight = 0
         self.canvassize = 100
         self.isvisible = True
-        self.isextruded = False
         self.isspiral = False
         self.isrosol = False
         self.isrosurf = False
@@ -10525,6 +10568,8 @@ class NCLabTurtle():
         self.programended = False
 
     def arc(self, angle, radius, direction='r'):
+        if self.extrudecalled:
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         if angle < 0.001:
             raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
         if radius < 0.001:
@@ -11261,7 +11306,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
     ##### EXTRUSION TEST #####
 
     if extrusionflag:
-        if not turtle.isextruded or turtle.lineheight != extrusionheight:
+        if not turtle.extrudecalled or turtle.lineheight != extrusionheight:
             lab.grade(False, "Please use extrusion height " + str(extrusionheight) + "!")
             return False
     
@@ -11293,7 +11338,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
     if not succ1 or not succ2:
         # Show wrong solution in 'errcol' color:
         err = None
-        if extrusionflag and turtle.isextruded:
+        if extrusionflag and turtle.extrudecalled:
             turtle.extrude(extrusionheight + 0.01)
             err = turtle.geometry()
         else:
@@ -11308,7 +11353,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
         SHOW(err)
         # Show correct solution in 'solcol' color:
         sol = None
-        if extrusionflag and turtle.isextruded:
+        if extrusionflag and turtle.extrudecalled:
             tsol.extrude(extrusionheight + 0.02)
             sol = tsol.geometry()    
         else:
