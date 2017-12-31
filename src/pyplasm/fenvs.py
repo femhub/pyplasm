@@ -9720,12 +9720,12 @@ class NCLabTurtle():
         self.showcalled = False
         self.programended = False
 
-    # Detects whether the Turtle stands on a wall of the given color
+    # Detects whether the Turtle stands on a wall or on its own trace of the given color
     # (for line-following purposes). Returns either True or False:
     def oncolor(self, col = ANY):
         ax = self.posx
         ay = self.posy
-        # Is it one of the line end points?
+        # Is it one of the wall end points?
         for l in self.walls:
             sx = l.startx
             sy = l.starty
@@ -9737,8 +9737,47 @@ class NCLabTurtle():
                 #if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
                 if l.linecolor == col:
                     return True
-        # Is it inside of a line?
+        # Is it one of the line end points?
+        # WARNING - when she has the pen down, her own trace will always be detected!
+        # This makes sense only when she is not drawing and just walking.
+        for l in self.lines:
+            sx = l.startx
+            sy = l.starty
+            ex = l.endx
+            ey = l.endy
+            if distance(ax, ay, sx, sy) < 0.5*l.linewidth or distance(ax, ay, ex, ey) < 0.5*l.linewidth:
+                if col == ANY:
+                    return True
+                #if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+                if l.linecolor == col:
+                    return True
+        # Is it inside of a wall?
         for l in self.walls:
+            sx = l.startx
+            sy = l.starty
+            ex = l.endx
+            ey = l.endy
+            ux = ex - sx
+            uy = ey - sy
+            # Length of the line (squared):
+            ulen2 = ux**2 + uy**2
+            if ulen2 > 0.00000001:
+                # Calculate parameter:
+                z = (ax*ux + ay*uy - sx*ux - sy*uy) / ulen2
+                # Is z between 0 and 1?
+                if 0 <= z and z <= 1:
+                    # This is the projection to the line:
+                    px = sx + z*ux
+                    py = sy + z*uy
+                    # Is the Turtle less than 0.5*linewidth from it?
+                    if distance(ax, ay, px, py) <= 0.5*l.linewidth:
+                        if col == ANY:
+                            return True
+                        #if [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+                        if l.linecolor == col:
+                            return True
+        # Is it inside of a line?
+        for l in self.lines:
             sx = l.startx
             sy = l.starty
             ex = l.endx
@@ -9765,12 +9804,12 @@ class NCLabTurtle():
         # Nothing found:
         return False
 
-    # Detects whether the Turtle stands on a wall.
+    # Detects whether the Turtle stands on a wall or its own trace.
     # Returns the color of the wall or False.
     def colorprobe(self):
         ax = self.posx
         ay = self.posy
-        # Is it one of the line end points?
+        # Is it one of the wall end points?
         for l in self.walls:
             sx = l.startx
             sy = l.starty
@@ -9779,8 +9818,39 @@ class NCLabTurtle():
             if distance(ax, ay, sx, sy) < 0.5*l.linewidth or distance(ax, ay, ex, ey) < 0.5*l.linewidth:
                 #return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
                 return l.linecolor[:]
-        # Is it inside of a line?
+        # Is it one of the line end points?
+        for l in self.lines:
+            sx = l.startx
+            sy = l.starty
+            ex = l.endx
+            ey = l.endy
+            if distance(ax, ay, sx, sy) < 0.5*l.linewidth or distance(ax, ay, ex, ey) < 0.5*l.linewidth:
+                #return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
+                return l.linecolor[:]
+        # Is it inside of a wall?
         for l in self.walls:
+            sx = l.startx
+            sy = l.starty
+            ex = l.endx
+            ey = l.endy
+            ux = ex - sx
+            uy = ey - sy
+            # Length of the line (squared):
+            ulen2 = ux**2 + uy**2
+            if ulen2 > 0.00000001:
+                # Calculate parameter:
+                z = (ax*ux + ay*uy - sx*ux - sy*uy) / ulen2
+                # Is z between 0 and 1?
+                if 0 <= z and z <= 1:
+                    # This is the projection to the line:
+                    px = sx + z*ux
+                    py = sy + z*uy
+                    # Is the Turtle less than 0.5*linewidth from it?
+                    if distance(ax, ay, px, py) <= 0.5*l.linewidth:
+                        #return [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)]
+                        return l.linecolor[:]
+        # Is it inside of a line?
+        for l in self.lines:
             sx = l.startx
             sy = l.starty
             ex = l.endx
@@ -9818,15 +9888,26 @@ class NCLabTurtle():
         else:
             return None
         
-    # Perform intersection of the laser beam with all walls, one by one. The valid ones
-    # put into a list. Select closest point to the Turtle, and return the distance. Or return
-    # None if there is no intersection
+    # Perform intersection of the laser beam with all walls, one by one, and all line segments
+    # drawn by the Turtle. The valid ones are put into a list. Select closest point to the Turtle,
+    # and return the distance. Or return None if there is no intersection
     def lidar(self, col=ANY):
         found = False
         ax = self.posx
         ay = self.posy
         mindist = 100000.0
+        # Check all walls:
         for l in self.walls:
+            #if col == ANY or [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
+            if col == ANY or l.linecolor == col:
+                p = self.intersect(l.startx, l.starty, l.endx, l.endy)
+                if p != None:    # Point valid, calculate distance
+                    d = distance(ax, ay, p[0], p[1])
+                    if d < mindist:
+                        mindist = d
+                        found = True
+        # Check all lines:
+        for l in self.lines:
             #if col == ANY or [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
             if col == ANY or l.linecolor == col:
                 p = self.intersect(l.startx, l.starty, l.endx, l.endy)
@@ -9898,11 +9979,21 @@ class NCLabTurtle():
         result = intersection(L1, L2)
         return result
     
-    # Go through all vertices in the walls, and calculate the maximum
+    # Go through all vertices in the walls and lines, and calculate the maximum
     # distance from the Turtle. This is the maxlaserradius.
     def maxlaserradius(self):
         radius = 0
+        # Check all walls:
         for l in self.walls:
+            r = distance(l.startx, l.starty, self.posx, self.posy)
+            if r > radius:
+                radius = r
+            if l.continued == False:
+                r = distance(l.endx, l.endy, self.posx, self.posy)
+                if r > radius:
+                    radius = r
+        # Check all lines:
+        for l in self.lines:
             r = distance(l.startx, l.starty, self.posx, self.posy)
             if r > radius:
                 radius = r
