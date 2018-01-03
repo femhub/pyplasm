@@ -7,6 +7,7 @@ class StepAccumulator:
     pending_actions = dict()
     model_triples = []
     geom_base = set()
+    accumulated_trace = []
 
     @staticmethod
     def add_object(ob, action='add'):
@@ -124,6 +125,10 @@ class StepAccumulator:
         return StepAccumulator.geom_base
 
     @staticmethod
+    def remove_trace(turtle, trace_gen):
+        StepAccumulator.remove_object(StepAccumulator.accumulated_trace)
+
+    @staticmethod
     def generate_trace(turtle, trace_gen, img_gen, turtle_thickness=None):
         """
         Generate trace that was accumulated by turtle since
@@ -147,6 +152,7 @@ class StepAccumulator:
                 trace = NCLabTurtleTrace3D(turtle)
 
             StepAccumulator.add_shapes(trace)
+            StepAccumulator.accumulated_trace.extend(trace)
             turtle.lines = orig_lines
 
             turtle.nclab_path_length = len(turtle.lines)-1
