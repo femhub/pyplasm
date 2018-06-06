@@ -22,8 +22,8 @@ endif
 
 # --- LINUX ---
 ifeq ($(PLATFORM_NAME),PLATFORM_Linux)
-    PYTHON_INCLUDE_DIRECTORY=/usr/include/python3.2
-    PYTHON_SITE_PACKAGES=/usr/lib/python3.2/dist-packages
+    PYTHON_INCLUDE=$$(pkg-config --cflags python3)
+    PYTHON_SITE_PACKAGES=$$(python3 -c "import site; print(site.getsitepackages()[0])")
 endif
 
 # ---- DARWIN ----

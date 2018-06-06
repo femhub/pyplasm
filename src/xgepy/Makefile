@@ -2,7 +2,7 @@
 include ../../Makefile.inc
 
 # cpp configuration
-CXXFLAGS+=-I../ -I../xge -I$(PYTHON_INCLUDE_DIRECTORY)
+CXXFLAGS+=-I../ -I../xge $(PYTHON_INCLUDE)
 
 # all source code in this directory
 SRC_CPP=$(shell ls *.cpp)
@@ -13,7 +13,7 @@ all: libxgepy.so
 	@echo "all done"
 
 libxgepy.so: $(OBJS) 
-	g++ $(LDFLAGS) -fPIC -shared -lpython3.2mu -o $@ ${OBJS} ${LIBS} -L../xge -lxge -lpthread -lGL -lGLU -lXinerama -lasound -lfreetype -lrt -lX11 -lfreeimage
+	g++ $(LDFLAGS) -fPIC -shared -o $@ ${OBJS} ${LIBS} -L../xge -lxge -lpthread -lGL -lGLU -lXinerama -lasound -lfreetype -lrt -lX11 -lfreeimage
 endif
 
 
