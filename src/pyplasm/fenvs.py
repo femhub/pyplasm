@@ -9874,6 +9874,7 @@ class NCLabTurtle():
 
     # Do lidar() but then also draw the beam. Return the distance if any.
     def lidarbeam(self, col=ORANGE, w=1):
+        print("Method lidarbeam() is obsolete. Please use lidar(wallcolor=ANY, raycolor=None, raywidth=1) instead.")
         d = self.lidar()
         if d != None:
             self.width(w)
@@ -9889,7 +9890,31 @@ class NCLabTurtle():
     # Perform intersection of the laser beam with all walls, one by one, and all line segments
     # drawn by the Turtle. The valid ones are put into a list. Select closest point to the Turtle,
     # and return the distance. Or return None if there is no intersection
-    def lidar(self, col=ANY):
+    def lidar(self, wallcolor=ANY, raycolor=None, raywidth=1):
+        # Sanity checks:
+        if wallcolor != ANY:
+            if not isinstance(wallcolor, list):
+                raise ExceptionWT("In lidar(): Invalid wall color.")
+            if len(wallcolor) != 3:
+                raise ExceptionWT("In lidar(): Invalid wall color.")
+            if (not isinstance(wallcolor[0], int)) or (not isinstance(wallcolor[1], int)) or (not isinstance(wallcolor[2], int)):
+                raise ExceptionWT("In lidar(): Invalid wall color.")
+            if wallcolor[0] < 0 or wallcolor[1] < 0 or wallcolor[2] < 0:
+                raise ExceptionWT("In lidar(): Invalid wall color.")
+        if raycolor != None:
+            if not isinstance(raycolor, list):
+                raise ExceptionWT("In lidar(): Invalid ray color.")
+            if len(raycolor) != 3:
+                raise ExceptionWT("In lidar(): Invalid ray color.")
+            if (not isinstance(raycolor[0], int)) or (not isinstance(raycolor[1], int)) or (not isinstance(raycolor[2], int)):
+                raise ExceptionWT("In lidar(): Invalid ray color.")
+            if raycolor[0] < 0 or raycolor[1] < 0 or raycolor[2] < 0:
+                raise ExceptionWT("In lidar(): Invalid ray color.")
+        if not isinstance(raywidth, int) and not isinstance(raywidth, float):
+            raise ExceptionWT("In lidar(): Invalid ray width.")
+        if raywidth <= 0:
+            raise ExceptionWT("In lidar(): Invalid ray width.")
+            
         found = False
         ax = self.posx
         ay = self.posy
@@ -9897,7 +9922,7 @@ class NCLabTurtle():
         # Check all walls:
         for l in self.walls:
             #if col == ANY or [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
-            if col == ANY or l.linecolor == col:
+            if wallcolor == ANY or l.linecolor == wallcolor:
                 p = self.intersect(l.startx, l.starty, l.endx, l.endy)
                 if p != None:    # Point valid, calculate distance
                     d = distance(ax, ay, p[0], p[1])
@@ -9907,7 +9932,7 @@ class NCLabTurtle():
         # Check all lines:
         for l in self.lines:
             #if col == ANY or [round(l.linecolor[0]*255), round(l.linecolor[1]*255), round(l.linecolor[2]*255)] == col:
-            if col == ANY or l.linecolor == col:
+            if wallcolor == ANY or l.linecolor == wallcolor:
                 p = self.intersect(l.startx, l.starty, l.endx, l.endy)
                 if p != None:    # Point valid, calculate distance
                     d = distance(ax, ay, p[0], p[1])
@@ -9915,7 +9940,17 @@ class NCLabTurtle():
                         mindist = d
                         found = True
         if found:
-            return round(mindist, 4)
+            d = round(mindist, 4)
+            if raycolor != None: # Draw the ray
+                width0 = self.linewidth   # Store original line width
+                self.width(raywidth)   # Set ray width
+                col0 = self.linecolor[:]  # Store original line color
+                self.color(raycolor)  # Set ray color
+                self.go(d)
+                self.back(d)
+                self.linewidth = width0  # Restore original line width
+                self.color(col0) # Restore original color
+            return d 
         else:
             return None
     
@@ -10146,6 +10181,10 @@ class NCLabTurtle():
         return NCLabTurtle._instances
 
     def angle(self, a):
+        # Sanity checks:
+        if not isinstance(a, int) and not isinstance(a, float):
+            raise ExceptionWT("In angle(): Invalid angle.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.turtleangle = a
@@ -10155,6 +10194,16 @@ class NCLabTurtle():
         self.angle(a)
 
     def color(self, col):
+        # Sanity checks:
+        if not isinstance(col, list):
+            raise ExceptionWT("In color(): Invalid color.")
+        if len(col) != 3:
+            raise ExceptionWT("In color(): Invalid color.")
+        if (not isinstance(col[0], int)) or (not isinstance(col[1], int)) or (not isinstance(col[2], int)):
+            raise ExceptionWT("In color(): Invalid color.")
+        if col[0] < 0 or col[1] < 0 or col[2] < 0:
+            raise ExceptionWT("In color(): Invalid color.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         if not isinstance(col, list) and not isinstance(col, tuple):
@@ -10167,6 +10216,12 @@ class NCLabTurtle():
         self.linecolor = col[:]
 
     def width(self, w):
+        # Sanity checks:
+        if not isinstance(w, int) and not isinstance(w, float):
+            raise ExceptionWT("In width(): Invalid line width.")
+        if w <= 0:
+            raise ExceptionWT("In width(): Invalid line width.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         if w < 0.1:
@@ -10180,10 +10235,14 @@ class NCLabTurtle():
         self.width(w)
 
     def height(self, h):
+        # Sanity checks:
+        if not isinstance(h, int) and not isinstance(h, float):
+            raise ExceptionWT("In height(): Invalid line height.")
+        if h <= 0:
+            raise ExceptionWT("In height(): Invalid line height.")
+        # Body of function
         if self.extrudecalled:
             raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
-        if h <= 0:
-            raise ExceptionWT("In height(h), h must be greater than zero!")
         self.lineheight = h
         self.heightused = True
 
@@ -10240,6 +10299,10 @@ class NCLabTurtle():
     # position of the new line, and if the width / height / color match, we
     # will change its 'continued' flag to True:
     def go(self, dist):
+        # Sanity checks:
+        if not isinstance(dist, int) and not isinstance(dist, float):
+            raise ExceptionWT("In go(): Invalid distance.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         # If Tina has not moved, just return:
@@ -10294,6 +10357,10 @@ class NCLabTurtle():
         self.go(dist)
 
     def left(self, da):
+        # Sanity checks:
+        if not isinstance(da, int) and not isinstance(da, float):
+            raise ExceptionWT("In left(): Invalid angle.")
+        # Body of function:
         self.turtleangle += da
 
     # Spanish:
@@ -10304,6 +10371,10 @@ class NCLabTurtle():
         self.left(da)
 
     def right(self, da):
+        # Sanity checks:
+        if not isinstance(da, int) and not isinstance(da, float):
+            raise ExceptionWT("In right(): Invalid angle.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         self.turtleangle -= da
@@ -10316,6 +10387,10 @@ class NCLabTurtle():
         self.right(da)
 
     def back(self, dist):
+        # Sanity checks:
+        if not isinstance(dist, int) and not isinstance(dist, float):
+            raise ExceptionWT("In back(): Invalid distance.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
         if dist <= 0:
@@ -10487,6 +10562,10 @@ class NCLabTurtle():
     # If called, the extrude command will override individual
     # heights of line segments.
     def extrude(self, height = 1):
+        # Sanity checks:
+        if not isinstance(height, int) and not isinstance(height, float):
+            raise ExceptionWT("In extrude(): Invalid extrusion height.")
+        # Body of function:
         self.extrudecalled = True
         if height <= 0.000001:
             raise ExceptionWT("Height 'h' in extrude(h) must be positive!")
@@ -10521,6 +10600,16 @@ class NCLabTurtle():
 
     # Revolves complete trace including width
     def revolve(self, angle=360, div=32):   
+        # Sanity checks:
+        if not isinstance(angle, int) and not isinstance(angle, float):
+            raise ExceptionWT("In roshell(): Invalid angle.")
+        if angle <= 0:
+            raise ExceptionWT("In roshell(): Invalid angle.")
+        if not isinstance(div, int) and not isinstance(div, float):
+            raise ExceptionWT("In roshell(): Invalid angular division.")
+        if div <= 3:
+            raise ExceptionWT("In roshell(): Invalid angular division.")
+        # Body of function:
         if self.heightused:
             raise ExceptionWT("Once you use the height() command, revolve() cannot be used!")
         if self.revolvecalled == True:
@@ -10540,6 +10629,16 @@ class NCLabTurtle():
 
     # Another name for revolve()
     def roshell(self, angle=360, div=32):
+        # Sanity checks:
+        if not isinstance(angle, int) and not isinstance(angle, float):
+            raise ExceptionWT("In roshell(): Invalid angle.")
+        if angle <= 0:
+            raise ExceptionWT("In roshell(): Invalid angle.")
+        if not isinstance(div, int) and not isinstance(div, float):
+            raise ExceptionWT("In roshell(): Invalid angular division.")
+        if div <= 3:
+            raise ExceptionWT("In roshell(): Invalid angular division.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
@@ -10553,6 +10652,20 @@ class NCLabTurtle():
 
     # Spiral
     def spiral(self, angle, elevation, div=48):
+        # Sanity checks:
+        if not isinstance(angle, int) and not isinstance(angle, float):
+            raise ExceptionWT("In spiral(): Invalid angle.")
+        if angle <= 0:
+            raise ExceptionWT("In spiral(): Invalid angle.")
+        if not isinstance(elevation, int) and not isinstance(elevation, float):
+            raise ExceptionWT("In spiral(): Invalid elevation.")
+        if elevation <= 0:
+            raise ExceptionWT("In spiral(): Invalid elevation.")
+        if not isinstance(div, int) and not isinstance(div, float):
+            raise ExceptionWT("In spiral(): Invalid angular division.")
+        if div <= 3:
+            raise ExceptionWT("In spiral(): Invalid angular division.")
+        # Body of function:
         if self.heightused:
             raise ExceptionWT("Once you use the height() command, spiral() cannot be used!")
         if self.spiralcalled == True:
@@ -10572,6 +10685,16 @@ class NCLabTurtle():
 
     # Rotational solid
     def rosol(self, angle=360, div=32):     
+        # Sanity checks:
+        if not isinstance(angle, int) and not isinstance(angle, float):
+            raise ExceptionWT("In rosol(): Invalid angle.")
+        if angle <= 0:
+            raise ExceptionWT("In rosol(): Invalid angle.")
+        if not isinstance(div, int) and not isinstance(div, float):
+            raise ExceptionWT("In rosol(): Invalid angular division.")
+        if div <= 3:
+            raise ExceptionWT("In rosol(): Invalid angular division.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
@@ -10601,6 +10724,16 @@ class NCLabTurtle():
 
     # Rotational surface
     def rosurf(self, angle=360, div=32):     
+        # Sanity checks:
+        if not isinstance(angle, int) and not isinstance(angle, float):
+            raise ExceptionWT("In rosurf(): Invalid angle.")
+        if angle <= 0:
+            raise ExceptionWT("In rosurf(): Invalid angle.")
+        if not isinstance(div, int) and not isinstance(div, float):
+            raise ExceptionWT("In rosurf(): Invalid angular division.")
+        if div <= 3:
+            raise ExceptionWT("In rosurf(): Invalid angular division.")
+        # Body of function:
         if self.extrudecalled:
             raise ExceptionWT("Once you use the extrude() command, rosol() cannot be used!")
         if self.heightused:
