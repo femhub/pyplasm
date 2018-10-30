@@ -9931,8 +9931,11 @@ class NCLabTurtle():
                 self.width(raywidth)   # Set ray width
                 col0 = self.linecolor[:]  # Store original line color
                 self.color(raycolor)  # Set ray color
+                draw0 = self.draw   # Store original draw flag
+                self.draw = True
                 self.go(d)
                 self.back(d)
+                self.draw = draw0  # Restore original draw flag
                 self.linewidth = width0  # Restore original line width
                 self.color(col0) # Restore original color
             return d 
