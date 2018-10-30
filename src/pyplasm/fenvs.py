@@ -9872,21 +9872,6 @@ class NCLabTurtle():
         # Nothing found:
         return None
 
-    # Do lidar() but then also draw the beam. Return the distance if any.
-    def lidarbeam(self, col=ORANGE, w=1):
-        print("Method lidarbeam() is obsolete. Please use lidar(wallcolor=ANY, raycolor=None, raywidth=1) instead.")
-        d = self.lidar()
-        if d != None:
-            self.width(w)
-            col0 = self.linecolor[:] 
-            self.color(col)  
-            self.go(d)
-            self.back(d)
-            self.color(col0)
-            return d
-        else:
-            return None
-        
     # Perform intersection of the laser beam with all walls, one by one, and all line segments
     # drawn by the Turtle. The valid ones are put into a list. Select closest point to the Turtle,
     # and return the distance. Or return None if there is no intersection
@@ -9894,26 +9879,26 @@ class NCLabTurtle():
         # Sanity checks:
         if wallcolor != ANY:
             if not isinstance(wallcolor, list):
-                raise ExceptionWT("In lidar(): Invalid wall color.")
+                raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Invalid wall color.")
             if len(wallcolor) != 3:
-                raise ExceptionWT("In lidar(): Invalid wall color.")
+                raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Invalid wall color.")
             if (not isinstance(wallcolor[0], int)) or (not isinstance(wallcolor[1], int)) or (not isinstance(wallcolor[2], int)):
-                raise ExceptionWT("In lidar(): Invalid wall color.")
+                raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Invalid wall color.")
             if wallcolor[0] < 0 or wallcolor[1] < 0 or wallcolor[2] < 0:
-                raise ExceptionWT("In lidar(): Invalid wall color.")
+                raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Invalid wall color.")
         if raycolor != None:
             if not isinstance(raycolor, list):
-                raise ExceptionWT("In lidar(): Invalid ray color.")
+                raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Invalid ray color.")
             if len(raycolor) != 3:
-                raise ExceptionWT("In lidar(): Invalid ray color.")
+                raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Invalid ray color.")
             if (not isinstance(raycolor[0], int)) or (not isinstance(raycolor[1], int)) or (not isinstance(raycolor[2], int)):
-                raise ExceptionWT("In lidar(): Invalid ray color.")
+                raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Invalid ray color.")
             if raycolor[0] < 0 or raycolor[1] < 0 or raycolor[2] < 0:
-                raise ExceptionWT("In lidar(): Invalid ray color.")
+                raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Invalid ray color.")
         if not isinstance(raywidth, int) and not isinstance(raywidth, float):
-            raise ExceptionWT("In lidar(): Invalid ray width.")
+            raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Ray width must be a number.")
         if raywidth <= 0:
-            raise ExceptionWT("In lidar(): Invalid ray width.")
+            raise ExceptionWT("In lidar(wallcolor=ANY, raycolor=None, raywidth=1): Ray width must be positive.")
             
         found = False
         ax = self.posx
@@ -10058,7 +10043,7 @@ class NCLabTurtle():
     # Draw (xmin, xmax) x (ymin, ymax) rectangle:
     def rectangle(self, xmin, xmax, ymin, ymax, col = ANY):
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In rectangle(xmin, xmax, ymin, ymax, col = ANY): Once extrude() is called, you can't keep drawing.")
         # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
@@ -10090,7 +10075,7 @@ class NCLabTurtle():
     # Draw a line from (ax, ay) to (bx, by):
     def line(self, ax, ay, bx, by, col = ANY):
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In line(ax, ay, bx, by, col = ANY): Once extrude() is called, you can't keep drawing.")
         # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
@@ -10115,7 +10100,7 @@ class NCLabTurtle():
     # Draw a polyline, here L is a list of points:
     def polyline(self, L, col = ANY):
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In polyline(L, col = ANY): Once extrude() is called, you can't keep drawing.")
         # Remember color, position, angle, penup:
         if col != ANY:
             savecol = self.linecolor
@@ -10183,10 +10168,10 @@ class NCLabTurtle():
     def angle(self, a):
         # Sanity checks:
         if not isinstance(a, int) and not isinstance(a, float):
-            raise ExceptionWT("In angle(): Invalid angle.")
+            raise ExceptionWT("In angle(a): Angle a must be a number.")
         # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In angle(a): Once extrude() is called, you can't keep drawing.")
         self.turtleangle = a
 
     # Spanish:
@@ -10196,38 +10181,38 @@ class NCLabTurtle():
     def color(self, col):
         # Sanity checks:
         if not isinstance(col, list):
-            raise ExceptionWT("In color(): Invalid color.")
+            raise ExceptionWT("In color(c): Invalid color c.")
         if len(col) != 3:
-            raise ExceptionWT("In color(): Invalid color.")
+            raise ExceptionWT("In color(c): Invalid color c.")
         if (not isinstance(col[0], int)) or (not isinstance(col[1], int)) or (not isinstance(col[2], int)):
-            raise ExceptionWT("In color(): Invalid color.")
+            raise ExceptionWT("In color(c): Invalid color c.")
         if col[0] < 0 or col[1] < 0 or col[2] < 0:
-            raise ExceptionWT("In color(): Invalid color.")
+            raise ExceptionWT("In color(c): Invalid color c.")
         # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In color(c): Once extrude() is called, you can't keep drawing.")
         if not isinstance(col, list) and not isinstance(col, tuple):
-            raise ExceptionWT("Attempt to set invalid color. Must be a list or a tuple.")
+            raise ExceptionWT("In color(c): Attempt to set invalid color. Must be a list or a tuple.")
         if len(col) != 3:
-            raise ExceptionWT("Attempt to set invalid color. Have you used three integers between 0 and 255?")
+            raise ExceptionWT("In color(c): Attempt to set invalid color. Have you used three integers between 0 and 255?")
         for i in range(3):
             if col[i] < 0 or col[i] > 255:
-                raise ExceptionWT("Attempt to set invalid color. Have you used three integers between 0 and 255?")
+                raise ExceptionWT("In color(c): Attempt to set invalid color. Have you used three integers between 0 and 255?")
         self.linecolor = col[:]
 
     def width(self, w):
         # Sanity checks:
         if not isinstance(w, int) and not isinstance(w, float):
-            raise ExceptionWT("In width(): Invalid line width.")
+            raise ExceptionWT("In width(w): Line width w must be a number.")
         if w <= 0:
-            raise ExceptionWT("In width(): Invalid line width.")
+            raise ExceptionWT("In width(w): Line width w must be positive.")
         # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In width(w): Once extrude() is called, you can't keep drawing.")
         if w < 0.1:
-            raise ExceptionWT("Line width must be between 0.1 and 10.0.")
+            raise ExceptionWT("In width(w): Line width must be between 0.1 and 10.0.")
         if w > 10.0:
-            raise ExceptionWT("Line width must be between 0.1 and 10.0.")
+            raise ExceptionWT("In width(w): Line width must be between 0.1 and 10.0.")
         self.linewidth = w
 
     # Spanish:
@@ -10237,12 +10222,12 @@ class NCLabTurtle():
     def height(self, h):
         # Sanity checks:
         if not isinstance(h, int) and not isinstance(h, float):
-            raise ExceptionWT("In height(): Invalid line height.")
+            raise ExceptionWT("In height(h): Line height must be a number.")
         if h <= 0:
-            raise ExceptionWT("In height(): Invalid line height.")
+            raise ExceptionWT("In height(h): Line height h must be positive.")
         # Body of function
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In height(h): Once extrude() is called, you can't keep drawing.")
         self.lineheight = h
         self.heightused = True
 
@@ -10252,12 +10237,12 @@ class NCLabTurtle():
 
     def penup(self):
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In penup(): Once extrude() is called, you can't keep drawing.")
         self.draw = False
 
     def pu(self):
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In pu(): Once extrude() is called, you can't keep drawing.")
         self.draw = False
 
     # Spanish:
@@ -10268,12 +10253,12 @@ class NCLabTurtle():
 
     def pendown(self):
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In pendown(): Once extrude() is called, you can't keep drawing.")
         self.draw = True
 
     def pd(self):
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In pd(): Once extrude() is called, you can't keep drawing.")
         self.draw = True
 
     # Spanish:
@@ -10301,13 +10286,14 @@ class NCLabTurtle():
     def go(self, dist):
         # Sanity checks:
         if not isinstance(dist, int) and not isinstance(dist, float):
-            raise ExceptionWT("In go(): Invalid distance.")
+            raise ExceptionWT("In go(d): Distance d must be a number.")
+        if abs(dist) < 0.00000001:  # if turtle has not moved, just return
+            return
+        if dist < 0:
+            raise ExceptionWT("In go(d): Distance d must be positive.")
         # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
-        # If Tina has not moved, just return:
-        if dist < 0.000001:
-            return
+            raise ExceptionWT("In go(d): Once extrude() is called, you can't keep drawing.")
         if self.draw:
             self.tracelength += dist
         newx = self.posx + dist * cos(self.turtleangle * pi / 180)
@@ -10359,8 +10345,10 @@ class NCLabTurtle():
     def left(self, da):
         # Sanity checks:
         if not isinstance(da, int) and not isinstance(da, float):
-            raise ExceptionWT("In left(): Invalid angle.")
+            raise ExceptionWT("In left(a): Angle a must be a number.")
         # Body of function:
+        if self.extrudecalled:
+            raise ExceptionWT("In left(a): Once extrude() is called, you can't keep drawing.")
         self.turtleangle += da
 
     # Spanish:
@@ -10373,10 +10361,10 @@ class NCLabTurtle():
     def right(self, da):
         # Sanity checks:
         if not isinstance(da, int) and not isinstance(da, float):
-            raise ExceptionWT("In right(): Invalid angle.")
+            raise ExceptionWT("In right(a): Angle a must be a number.")
         # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In right(a): Once extrude() is called, you can't keep drawing.")
         self.turtleangle -= da
 
     # Spanish:
@@ -10389,19 +10377,20 @@ class NCLabTurtle():
     def back(self, dist):
         # Sanity checks:
         if not isinstance(dist, int) and not isinstance(dist, float):
-            raise ExceptionWT("In back(): Invalid distance.")
+            raise ExceptionWT("In back(d): Distance d must be a number.")
+        if abs(dist) < 0.00000001:  # if turtle has not moved, just return
+            return
+        if dist < 0:
+            raise ExceptionWT("In back(d): Distance d must be positive.")
         # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
-        if dist <= 0:
-            raise ExceptionWT("The distance d in back(d) must be positive!")
-        draw = self.draw
+            raise ExceptionWT("In back(d): Once extrude() is called, you can't keep drawing.")
+        draw0 = self.draw    # remember the flag
+        self.draw = False
         self.left(180)
-        self.penup()  # do not draw while backing
         self.go(dist)
         self.right(180)
-        if draw == True:
-            self.pendown()
+        self.draw = draw0     # restore the original flag
 
     # Spanish:
     def regresar(self, dist):
@@ -10414,8 +10403,14 @@ class NCLabTurtle():
         self.back(dist)
 
     def goto(self, newx, newy):
+        # Sanity checks:
+        if not isinstance(newx, int) and not isinstance(newx, float):
+            raise ExceptionWT("In goto(x, y): x must be a number.")
+        if not isinstance(newy, int) and not isinstance(newy, float):
+            raise ExceptionWT("In goto(x, y): y must be a number.")
+        # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In goto(x, y): Once extrude() is called, you can't keep drawing.")
         dx = newx - self.posx
         dy = newy - self.posy
         # If Tina has not moved, just return:
@@ -10445,43 +10440,84 @@ class NCLabTurtle():
 
     #####  Random versions of some functions  #####
     def rango(self, x):
+        # Sanity checks:
+        if not isinstance(x, int) and not isinstance(x, float):
+            raise ExceptionWT("In rango(d): Distance d must be a number.")
+        if abs(dist) < 0.00000001:  # if turtle has not moved, just return
+            return
+        if dist < 0:
+            raise ExceptionWT("In rango(d): Distance d must be positive.")
+        # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In rango(d): Once extrude() is called, you can't keep drawing.")
         self.go(random() * x)
 
     def ranleft(self, x):
+        # Sanity checks:
+        if not isinstance(x, int) and not isinstance(x, float):
+            raise ExceptionWT("In ranleft(a): Angle a must be a number.")
+        # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In ranleft(a): Once extrude() is called, you can't keep drawing.")
         self.left(random() * x)
     
     def ranright(self, x):
+        # Sanity checks:
+        if not isinstance(da, int) and not isinstance(da, float):
+            raise ExceptionWT("In ranright(a): Angle a must be a number.")
+        # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In ranright(a): Once extrude() is called, you can't keep drawing.")
         self.right(random() * x)
 
     def ranturn(self, x):
+        # Sanity checks:
+        if not isinstance(x, int) and not isinstance(x, float):
+            raise ExceptionWT("In ranturn(a): Angle a must be a number.")
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In ranturn(a): Once extrude() is called, you can't keep drawing.")
         self.left(random() * 2 * x - x)
 
     def ranwidth(self, x):
+        # Sanity checks:
+        if not isinstance(x, int) and not isinstance(x, float):
+            raise ExceptionWT("In ranwidth(w): Line width w must be a number.")
+        if x <= 0:
+            raise ExceptionWT("In ranwidth(w): Line width w must be positive.")
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In ranwidth(w): Once extrude() is called, you can't keep drawing.")
         self.linewidth(random() * x)
 
     def ranheight(self, x):
+        # Sanity checks:
+        if not isinstance(x, int) and not isinstance(x, float):
+            raise ExceptionWT("In ranheight(h): Line height h must be a number.")
+        if x <= 0:
+            raise ExceptionWT("In ranheight(h): Line height h must be positive.")
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In ranheight(h): Once extrude() is called, you can't keep drawing.")
         self.lineheight(random() * x)
 
     def ranback(self, x):
+        # Sanity checks:
+        if not isinstance(x, int) and not isinstance(x, float):
+            raise ExceptionWT("In ranback(d): Distance d must be a number.")
+        if x < 0.0000001:
+            raise ExceptionWT("In ranback(d): Distance d must be positive.")
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In ranback(d): Once extrude() is called, you can't keep drawing.")
         self.back(random() * x)
 
     def ranwalk(self, n, s, a):
+        # Sanity checks:
+        if not isinstance(n, int) and not isinstance(n, float):
+            raise ExceptionWT("In ranwalk(n, s, a): Number of steps n must be a number.")
+        if not isinstance(s, int) and not isinstance(s, float):
+            raise ExceptionWT("In ranwalk(n, s, a): Number of steps s must be a number.")
+        if not isinstance(a, int) and not isinstance(a, float):
+            raise ExceptionWT("In ranwalk(n, s, a): Angle a must be a number.")
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
+            raise ExceptionWT("In ranwalk(n, s, a): Once extrude() is called, you can't keep drawing.")
         cycles = n // s
         rest = n % s 
         for i in range(cycles):
@@ -10511,11 +10547,12 @@ class NCLabTurtle():
 
     def home(self):
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
-        self.penup()
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing.")
+        draw0 = self.draw     # remember this flag
+        self.draw = False
         self.goto(0, 0)
         self.angle(0)
-        self.pendown()
+        self.draw = draw0     # restore the original flag 
 
     # Spanish:
     def casa(self):
@@ -10564,11 +10601,11 @@ class NCLabTurtle():
     def extrude(self, height = 1):
         # Sanity checks:
         if not isinstance(height, int) and not isinstance(height, float):
-            raise ExceptionWT("In extrude(): Invalid extrusion height.")
+            raise ExceptionWT("In extrude(h): Extrusion height h must be a number.")
+        if height <= 0.000001:
+            raise ExceptionWT("In extrude(h): Extrusion height h must be positive.")
         # Body of function:
         self.extrudecalled = True
-        if height <= 0.000001:
-            raise ExceptionWT("Height 'h' in extrude(h) must be positive!")
         self.lineheight = height
         self.isspiral = False
         self.isrosol = False
@@ -10788,12 +10825,16 @@ class NCLabTurtle():
         self.programended = False
 
     def arc(self, angle, radius, direction='r'):
+        # Sanity checks:
+        if angle < 0.00001:
+            raise ExceptionWT("In arc(a, r, direction='r'): Angle a must be positive.")
+        if radius < 0.00001:
+            raise ExceptionWT("In arc(a, r, direction='r'): Radius r must be positive.")
+        if direction != 'r' and direction != 'l':
+            raise ExceptionWT("In arc(a, r, direction='r'): Direction must be either 'r' or 'l'.")
+        # Body of function:
         if self.extrudecalled:
-            raise ExceptionWT("Once extrude() is called, you can't keep drawing!")
-        if angle < 0.001:
-            raise ExceptionWT("Angle 'a' in arc(a, r) must be positive!")
-        if radius < 0.001:
-            raise ExceptionWT("Radius 'r' in arc(a, r) must be positive!")
+            raise ExceptionWT("Once extrude() is called, you can't keep drawing.")
         # CONTINUATION IS NOW SOLVED ON THE LEVEL OF THE GOTO() COMMAND
         #Is it a continuation (posx, posy = last point, same width/height/color) ?
         #if len(self.lines) != 0:
@@ -11128,18 +11169,31 @@ class NCLabTurtle3D:
                     raise ExceptionWT("Attempt to set invalid optional 2nd color. Have you used three integers between 0 and 255?")
         self.linecolor2 = col2
 
-    def width(self, width):
-        if width < 0.1:
-            raise ExceptionWT("Line width must be between 0.1 and 10.0.")
-        if width > 10.0:
-            raise ExceptionWT("Line width must be between 0.1 and 10.0.")
-        self.linewidth = width
+    def width(self, w):
+        # Sanity checks:
+        if not isinstance(w, int) and not isinstance(w, float):
+            raise ExceptionWT("In width(w): Line width w must be a number.")
+        if w <= 0:
+            raise ExceptionWT("In width(w): Line width w must be positive.")
+        # Body of function:
+        if w < 0.1:
+            raise ExceptionWT("In width(w): Line width w must be between 0.1 and 10.0.")
+        if w > 10.0:
+            raise ExceptionWT("In width(w): Line width w must be between 0.1 and 10.0.")
+        self.linewidth = w
  
-    def angles(self, left, up, roll):
+    def angles(self, l, u, r):
+        # Sanity checks:
+        if not isinstance(l, int) and not isinstance(l, float):
+            raise ExceptionWT("In angles(l, u, r): Angle l (left) must be a number.")
+        if not isinstance(u, int) and not isinstance(u, float):
+            raise ExceptionWT("In angles(l, u, r): Angle u (up) must be a number.")
+        if not isinstance(r, int) and not isinstance(r, float):
+            raise ExceptionWT("In angles(l, u, r): Angle r (roll) must be a number.")
         self.resetangles()
-        self.left(left)
-        self.up(up)
-        self.roll(roll, 'l')
+        self.left(l)
+        self.up(u)
+        self.roll(r, 'l')
 
     def getangles(self):
         a1 = 0
@@ -11220,8 +11274,14 @@ class NCLabTurtle3D:
         self.up(-da)
 
     def go(self, dist):
-        if dist <= 0:
-            raise ExceptionWT("The distance d in go(d) must be positive!")
+       # Sanity checks:
+        if not isinstance(dist, int) and not isinstance(dist, float):
+            raise ExceptionWT("In go(d): Distance d must be a number.")
+        if abs(dist) < 0.00000001:  # if turtle has not moved, just return
+            return
+        if dist < 0:
+            raise ExceptionWT("In go(d): Distance d must be positive.")
+        # Body of function:
         if self.draw == True:
             newline = NCLabTurtleLine3D(self.posx, self.posy, self.posz, dist, 
                                         self.u1, self.u2, self.u3,
@@ -11251,6 +11311,10 @@ class NCLabTurtle3D:
         self.go(dist)
 
     def left(self, da1):
+        # Sanity checks:
+        if not isinstance(da1, int) and not isinstance(da1, float):
+            raise ExceptionWT("In left(a): Angle a must be a number.")
+        # Body of function:
         # Create new vector X by rotating (1, 0, 0) by da1 degrees about the Z axis:
         x1 = cos(da1 * pi / 180)
         x2 = sin(da1 * pi / 180)
@@ -11287,6 +11351,10 @@ class NCLabTurtle3D:
         self.left(da1)
 
     def right(self, da1):
+        # Sanity checks:
+        if not isinstance(da1, int) and not isinstance(da1, float):
+            raise ExceptionWT("In right(a): Angle a must be a number.")
+        # Body of function:
         self.left(-da1)
 
     def rt(self, da1):
