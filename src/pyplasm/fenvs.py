@@ -10076,11 +10076,11 @@ class NCLabTurtle():
         self.draw = savedraw
             
     # Draw a line from (ax, ay) to (bx, by):
-    def line(self, ax, ay, bx, by, col = ANY):
+    def line(self, ax, ay, bx, by, col = BLUE):
         if self.extrudecalled:
-            raise ExceptionWT("In line(ax, ay, bx, by, col = ANY): Once extrude() is called, you can't keep drawing.")
+            raise ExceptionWT("In line(ax, ay, bx, by, col = BLUE): Once extrude() is called, you can't keep drawing.")
         # Remember color, position, angle, penup:
-        if col != ANY:
+        if col != BLUE:
             savecol = self.linecolor
             self.linecolor = col
         savex = self.posx
@@ -10093,7 +10093,7 @@ class NCLabTurtle():
         self.pd()
         self.goto(bx, by)
         # Restore color, position, angle, penup:
-        if col != ANY:
+        if col != BLUE:
             self.linecolor = savecol
         self.pu()
         self.goto(savex, savey)
@@ -10101,11 +10101,11 @@ class NCLabTurtle():
         self.draw = savedraw        
 
     # Draw a polyline, here L is a list of points:
-    def polyline(self, L, col = ANY):
+    def polyline(self, L, col = BLUE):
         if self.extrudecalled:
-            raise ExceptionWT("In polyline(L, col = ANY): Once extrude() is called, you can't keep drawing.")
+            raise ExceptionWT("In polyline(L, col = BLUE): Once extrude() is called, you can't keep drawing.")
         # Remember color, position, angle, penup:
-        if col != ANY:
+        if col != BLUE:
             savecol = self.linecolor
             self.linecolor = col
         savex = self.posx
@@ -10121,7 +10121,7 @@ class NCLabTurtle():
         for p in L:
             self.goto(p[0], p[1])
         # Restore color, position, angle, penup:
-        if col != ANY:
+        if col != BLUE:
             self.linecolor = savecol
         self.pu()
         self.goto(savex, savey)
@@ -10129,9 +10129,9 @@ class NCLabTurtle():
         self.draw = savedraw      
 
     # Draw a series of dots, here L is a list of points:
-    def polydots(self, L, col = ANY):
+    def polydots(self, L, col = BLUE):
         # Remember color, position, angle, penup:
-        if col != ANY:
+        if col != BLUE:
             savecol = self.linecolor
             self.linecolor = col
         savex = self.posx
@@ -10153,7 +10153,7 @@ class NCLabTurtle():
             self.angle(0)
             self.go(0.1)
        # Restore color, position, angle, penup:
-        if col != ANY:
+        if col != BLUE:
             self.linecolor = savecol
         self.pu()
         self.goto(savex, savey)
