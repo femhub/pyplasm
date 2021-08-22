@@ -12098,3 +12098,47 @@ def LETTER(c):
   raise ExceptionWT("Unknown character '" + c + "' detected in LETTER()!\nPlease use English alphabet letters only.")
 
 LETRA = LETTER
+
+
+################################################################################
+# DEV-3528 changes for "3D modeling course"
+# Generic Ludo piece:
+ludo_pts = [
+           [0.3, 0],
+           [0.3, 0.5],
+           [0.2, 0.6],
+           [0.2, 0.7],
+           [0.05, 0.79],
+           [0, 0.8],
+           [0.05, 0.81],
+           [0.18, 0.85],
+           [0.22, 0.9],
+           [0.22, 1],
+           [0.22, 1.1],
+           [0.18, 1.19],
+           [0, 1.2]]
+
+ludo_token = ROSURF(ludo_pts, 360, 24, 24)
+ROTATE(ludo_token, 90, X)
+
+# Blue Ludo piece:
+BLUE_TOKEN = COPY(ludo_token)
+COLOR(BLUE_TOKEN, BLUE)
+
+# Yellow Ludo piece:
+YELLOW_TOKEN = COPY(ludo_token)
+COLOR(YELLOW_TOKEN, YELLOW)
+
+# Green Ludo piece:
+GREEN_TOKEN = COPY(ludo_token)
+COLOR(GREEN_TOKEN, GREEN)
+
+# Red Ludo piece:
+RED_TOKEN = COPY(ludo_token)
+COLOR(RED_TOKEN, RED)
+
+# Pink Ludo piece:
+PINK_TOKEN = COPY(ludo_token)
+COLOR(PINK_TOKEN, PINK)
+
+################################################################################
