@@ -9145,6 +9145,14 @@ def TANGRAM7():
     COLOR(tangram7, ORANGE)
     return tangram7
 
+
+TANGRAM_GREEN = TANGRAM1()
+TANGRAM_YELLOW = TANGRAM2()
+TANGRAM_BLUE = TANGRAM3()
+TANGRAM_RED = TANGRAM4()
+TANGRAM_CYAN = TANGRAM5()
+TANGRAM_PINK = TANGRAM6()
+TANGRAM_ORANGE = TANGRAM7()
 ##### CASTLES #####
 
 def CASTLE1():
@@ -12122,23 +12130,23 @@ ludo_token = ROSURF(ludo_pts, 360, 24, 24)
 ROTATE(ludo_token, 90, X)
 
 # Blue Ludo piece:
-BLUE_TOKEN = COPY(ludo_token)
-COLOR(BLUE_TOKEN, BLUE)
+LUDO_BLUE = COPY(ludo_token)
+COLOR(LUDO_BLUE, BLUE)
 
 # Yellow Ludo piece:
-YELLOW_TOKEN = COPY(ludo_token)
-COLOR(YELLOW_TOKEN, YELLOW)
+LUDO_YELLOW = COPY(ludo_token)
+COLOR(LUDO_YELLOW, YELLOW)
 
 # Green Ludo piece:
-GREEN_TOKEN = COPY(ludo_token)
-COLOR(GREEN_TOKEN, GREEN)
+LUDO_GREEN = COPY(ludo_token)
+COLOR(LUDO_GREEN, GREEN)
 
 # Red Ludo piece:
-RED_TOKEN = COPY(ludo_token)
-COLOR(RED_TOKEN, RED)
+LUDO_RED = COPY(ludo_token)
+COLOR(LUDO_RED, RED)
 
 # Pink Ludo piece:
-PINK_TOKEN = COPY(ludo_token)
-COLOR(PINK_TOKEN, PINK)
+LUDO_PINK = COPY(ludo_token)
+COLOR(LUDO_PINK, PINK)
 
 ################################################################################
