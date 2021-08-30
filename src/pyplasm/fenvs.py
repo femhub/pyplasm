@@ -12150,3 +12150,116 @@ LUDO_PINK = COPY(ludo_token)
 COLOR(LUDO_PINK, PINK)
 
 ################################################################################
+# DEV-3547 TETRIS3D
+
+def block(color, layer=0):
+    a = CUBE(1 + 2 * layer)
+    MOVE(a, -layer, -layer, -layer)
+    COLOR(a, color)
+    ERASE(a, 0.5, 2, X)
+    ERASE(a, 0.5, 2, Y)
+    ERASE(a, 0.5, 2, Z)
+
+    R(a, 45, Z, [0.1, 0.1, 0.1])
+    ERASE(a, -5, -layer, Y)
+    R(a, -45, Z, [0.1, 0.1, 0.1])
+
+    R(a, 45, X, [0.1, 0.1, 0.1])
+    ERASE(a, -5, -layer, Z)
+    R(a, -45, X, [0.1, 0.1, 0.1])
+
+    R(a, -45, Y, [0.1, 0.1, 0.1])
+    ERASE(a, -5, -layer, Z)
+    R(a, 45, Y, [0.1, 0.1, 0.1])
+
+    a = [a]
+    a.append(R(COPY(a), 90, Z, [0.5, 0.5, 0.5]))
+    a.append(R(COPY(a), 180, Z, [0.5, 0.5, 0.5]))
+    a.append(R(COPY(a), 180, X, [0.5, 0.5, 0.5]))
+    a = flatten(a)
+    a = WELD(a)
+    return a
+
+
+def tetris_L(color=STEEL, layer=0):
+    b = [block(color, layer)]
+    b.append(M(block(color, layer), 1, 0, 0))
+    b.append(M(block(color, layer), 0, 1, 0))
+    b.append(M(block(color, layer), 0, 2, 0))
+    b = flatten(b)
+    return b
+
+
+def tetris_S(color=STEEL, layer=0):
+    b = [block(color, layer)]
+    b.append(M(block(color, layer), 1, 0, 0))
+    b.append(M(block(color, layer), 1, 1, 0))
+    b.append(M(block(color, layer), 2, 1, 0))
+    b = flatten(b)
+    return b
+
+
+def tetris_T(color=STEEL, layer=0):
+    b = [block(color, layer)]
+    b.append(M(block(color, layer), 1, 0, 0))
+    b.append(M(block(color, layer), 1, 1, 0))
+    b.append(M(block(color, layer), 2, 0, 0))
+    b = flatten(b)
+    return b
+
+
+def tetris_C(color=STEEL, layer=0):
+    b = [block(color, layer)]
+    b.append(M(block(color, layer), 1, 0, 0))
+    b.append(M(block(color, layer), 0, 1, 0))
+    b.append(M(block(color, layer), 1, 1, 0))
+    b = flatten(b)
+    return b
+
+
+def tetris_I(color=STEEL, layer=0):
+    b = [block(color, layer)]
+    b.append(M(block(color, layer), 1, 0, 0))
+    b.append(M(block(color, layer), 2, 0, 0))
+    b.append(M(block(color, layer), 3, 0, 0))
+    b = flatten(b)
+    return b
+
+
+def tetris_D1(color=STEEL, layer=0):
+    b = [block(color, layer)]
+    b.append(M(block(color, layer), 1, 0, 0))
+    b.append(M(block(color, layer), 0, 1, 0))
+    b.append(M(block(color, layer), 0, 0, 1))
+    b = flatten(b)
+    return b
+
+
+def tetris_D2(color=STEEL, layer=0):
+    b = [block(color, layer)]
+    b.append(M(block(color, layer), 1, 0, 0))
+    b.append(M(block(color, layer), 0, 1, 0))
+    b.append(M(block(color, layer), 1, 0, 1))
+    b = flatten(b)
+    return b
+
+
+def tetris_D3(color=STEEL, layer=0):
+    b = [block(color, layer)]
+    b.append(M(block(color, layer), 1, 0, 0))
+    b.append(M(block(color, layer), 0, 1, 0))
+    b.append(M(block(color, layer), 0, 1, 1))
+    b = flatten(b)
+    return b
+
+
+TETRIS_L =  tetris_L()
+TETRIS_S =  tetris_S()
+TETRIS_T =  tetris_T()
+TETRIS_C =  tetris_C()
+TETRIS_I =  tetris_I()
+TETRIS_D1 = tetris_D1()
+TETRIS_D2 = tetris_D2()
+TETRIS_D3 = tetris_D3()
+
+################################################################################
