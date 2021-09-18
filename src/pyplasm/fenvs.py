@@ -2771,7 +2771,7 @@ def MIRROR(obj, coord, axis):
         raise ExceptionWT("In MIRROR(obj, coord, axis), axis must be X, Y or Z!")
     if axis == 'x' or axis == 'X': axis = 1
     elif axis == 'y' or axis == 'Y': axis = 2
-    else axis == 'z' or axis == 'Z': axis = 3
+    else: axis = 3
     if not ISNUMBER(coord):
         raise ExceptionWT("In MIRROR(obj, coord, axis), coord must be a number!")
     if not isinstance(obj, list):
