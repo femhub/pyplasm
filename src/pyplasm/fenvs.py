@@ -11688,7 +11688,7 @@ def TURTLETEST(lab, turtle, tsol, solcol, solcolname, solheight, errcol, errcoln
         lab.grade(False, "The trace is not correct.")
         lab.grade(False, "The correct trace is shown in " + solcolname + ".")
         lab.grade(False, "Your solution is shown in " + errcolname + ".")
-        lab.grade(False, "It may be hidden inside of the correct solution.")
+        lab.grade(False, "It may be hidden inside the correct solution.")
         return False
   
     ##### ALL TESTS PASSED #####
@@ -11821,7 +11821,7 @@ def MAINTEST(lab, testobj, extremes, tol, digits, testfns,
                 SHOW(sol)
         # Written message:
         lab.grade(False, "Your object '" + objname + "' is shown in " + errcolname + ".")
-        lab.grade(False, "It may be hidden inside of the correct solution.")
+        lab.grade(False, "It may be hidden inside the correct solution.")
         lab.grade(False, "Correct object '" + objname + "' is shown in " + solcolname + ".")
         return False
 
