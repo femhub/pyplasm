@@ -1659,7 +1659,6 @@ def ERASE(obj, minval, maxval, axis, warn=True):
                         oo.rotate(-90, 2)
     if EMPTYSET(obj) and warn==True:
         print("WARNING: Empty object created while erasing part of an object.")
-    return COPY(obj)
 
 
 def CUT(obj, coord, axis, h=0.001):
