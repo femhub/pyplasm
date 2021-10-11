@@ -2896,7 +2896,6 @@ def ROTATERAD(obj, angle_rad, axis=3, point=[0, 0, 0]):
                     "In ROTATERAD(obj, angle, axis), obj must be a 2D or 3D object!")
             if not EMPTYSET(oo) and oo != []:
                 oo.rotaterad(angle_rad, axis, centerpoint)
-    return COPY(obj)
 
 
 RRAD = ROTATERAD
@@ -2959,7 +2958,6 @@ def ROTATE(obj, angle_deg, axis=3, point=[0, 0, 0]):
             "In ROTATE(obj, angle, axis, point), point must be a list (use square brackets)!")
     if not isinstance(obj, list):
         obj.rotate(angle_deg, axis, centerpoint)
-        return COPY(obj)
     else:
         obj = flatten(obj)
         newobj = []
@@ -2967,7 +2965,6 @@ def ROTATE(obj, angle_deg, axis=3, point=[0, 0, 0]):
             # Just a comment to test git:
             oo.rotate(angle_deg, axis, centerpoint)
             newobj.append(COPY(oo))
-        return newobj
 
 
 ROTATEDEG = ROTATE
