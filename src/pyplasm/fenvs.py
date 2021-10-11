@@ -3160,7 +3160,8 @@ def PLASM_UNION(objs_list):
     result = Plasm.boolop(BOOL_CODE_OR, objs_list, plasm_config.tolerance(
     ), plasm_config.maxnumtry(), plasm_config.useOctreePlanes())
     if color != []:
-        return COLOR(result, color)
+        COLOR(result, color)
+        return result
     else:
         return result
 
@@ -7963,7 +7964,6 @@ def COLOR(obj, col=None):
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found (color - 1).")
             x.setcolor(col)
-    return COPY(obj)
 
 
 C = COLOR
