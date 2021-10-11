@@ -3452,7 +3452,7 @@ def SUBTRACT(a, b, warn=True):
         a.subtract(b)
         if EMPTYSET(a) and warn==True:
             print("WARNING: Empty object created while subtracting objects.")
-        return COPY(a)
+        return
     # a is single object, b is a list:
     if not isinstance(a, list) and isinstance(b, list):
         flatb = flatten(b)  # flatten the list as there may be structs
@@ -3470,7 +3470,7 @@ def SUBTRACT(a, b, warn=True):
         a.subtract(flatb)
         if EMPTYSET(a) and warn==True:
             print("WARNING: Empty object created while subtracting objects.")
-        return COPY(a)
+        return
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
         if isinstance(b, tuple):
@@ -3491,7 +3491,7 @@ def SUBTRACT(a, b, warn=True):
                 newlist.append(COPY(x))
             if EMPTYSET(x) and warn==True:
                 print("WARNING: Empty object created while subtracting objects.")
-        return newlist
+        return
     # a is a list, b is a list:
     if isinstance(a, list) and isinstance(b, list):
         flata = flatten(a)  # flatten the list as there may be structs
@@ -3518,7 +3518,7 @@ def SUBTRACT(a, b, warn=True):
                 newlist.append(COPY(x))
             if EMPTYSET(x) and warn==True:
                 print("WARNING: Empty object created while subtracting objects.")
-        return newlist
+
 
 # English:
 MINUS = SUBTRACT
