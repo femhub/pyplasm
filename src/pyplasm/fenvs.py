@@ -2585,7 +2585,7 @@ def MOVE(*args):
     if not ISNUMBER(t3):
         raise ExceptionWT("In MOVE(obj, dx, dy, dz), dz must be a number!")
     if obj == []: 
-        return obj
+        return
     # Remove empty sets:
     CLEAN(obj)
     # Move it:
@@ -2595,7 +2595,6 @@ def MOVE(*args):
                 "In MOVE(obj, ...), obj must be a 2D or 3D object!")
         if not EMPTYSET(obj):
             obj.move(t1, t2, t3)
-        return COPY(obj)
     else:
         obj = flatten(obj)
         newobj = []
@@ -2606,7 +2605,6 @@ def MOVE(*args):
             if not EMPTYSET(oo) and oo != []:
                 oo.move(t1, t2, t3)
                 newobj.append(COPY(oo))
-        return newobj
 
 
 TRANSLATE = MOVE
@@ -8782,7 +8780,8 @@ def POSITIONMATCH3D(tested, ref, eps=1e-8):
 def ADJUSTPOSITION3D(tested, minx, miny):
     xmintested = tested.minx()
     ymintested = tested.miny()
-    return MOVE(tested, minx - xmintested, miny - ymintested)
+    MOVE(tested, minx - xmintested, miny - ymintested)
+    return tested
 
 
 # Move 3D object "tested" so that it has given minx, miny, minz:
@@ -8804,7 +8803,8 @@ def ALIGNOBJECTS2D(tested, ref):
     ymintested = tested.miny()
     xminref = ref.minx()
     yminref = ref.miny()
-    return MOVE(tested, xminref - xmintested, yminref - ymintested)
+    MOVE(tested, xminref - xmintested, yminref - ymintested)
+    return tested
 
 
 # Move 3D object "tested" so that its minx coincides with minx of object ref,
@@ -8819,7 +8819,8 @@ def ALIGNOBJECTS3D(tested, ref):
     xminref = ref.minx()
     yminref = ref.miny()
     zminref = ref.minz()
-    return MOVE(tested, xminref - xmintested, yminref - ymintested, zminref - zmintested)
+    MOVE(tested, xminref - xmintested, yminref - ymintested, zminref - zmintested)
+    return tested
 
 
 # Returns a rectangle which is the bounding box of a 2D object "tested":
@@ -9374,8 +9375,8 @@ def NCLabTurtleTrace(lines, layer=0, dots=True, elev=0):
         if abs(l.lineheight) < 0.000001:
             if elev < 0.000001: out.append(rect)
             else:
-                rect2 = MOVE(rect, elev, Z)  # strictly for visualization purposes
-                out.append(rect2)            # such trace will not work for grading
+                MOVE(rect, elev, Z)  # strictly for visualization purposes
+                out.append(rect)    # such trace will not work for grading
         else:
             out.append(PRISM(rect, l.lineheight))
         # If dots == True (we will be adding circles
