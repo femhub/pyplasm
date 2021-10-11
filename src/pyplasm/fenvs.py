@@ -2727,7 +2727,6 @@ def SCALE(*args):
                     "In SCALE(obj, sx, sy) or SCALE(obj, sx, sy, sz), obj must be a 2D or 3D object!")
             if not EMPTYSET(oo) and oo != []:
                 oo.scale(a, b, c)
-    return COPY(obj)
 
 
 S = SCALE
