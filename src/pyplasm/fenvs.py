@@ -1659,7 +1659,6 @@ def ERASE(obj, minval, maxval, axis, warn=True):
                         oo.rotate(-90, 2)
     if EMPTYSET(obj) and warn==True:
         print("WARNING: Empty object created while erasing part of an object.")
-    return COPY(obj)
 
 
 def CUT(obj, coord, axis, h=0.001):
@@ -2586,7 +2585,7 @@ def MOVE(*args):
     if not ISNUMBER(t3):
         raise ExceptionWT("In MOVE(obj, dx, dy, dz), dz must be a number!")
     if obj == []: 
-        return obj
+        return
     # Remove empty sets:
     CLEAN(obj)
     # Move it:
@@ -2596,7 +2595,6 @@ def MOVE(*args):
                 "In MOVE(obj, ...), obj must be a 2D or 3D object!")
         if not EMPTYSET(obj):
             obj.move(t1, t2, t3)
-        return COPY(obj)
     else:
         obj = flatten(obj)
         newobj = []
@@ -2607,7 +2605,6 @@ def MOVE(*args):
             if not EMPTYSET(oo) and oo != []:
                 oo.move(t1, t2, t3)
                 newobj.append(COPY(oo))
-        return newobj
 
 
 TRANSLATE = MOVE
@@ -2730,7 +2727,6 @@ def SCALE(*args):
                     "In SCALE(obj, sx, sy) or SCALE(obj, sx, sy, sz), obj must be a 2D or 3D object!")
             if not EMPTYSET(oo) and oo != []:
                 oo.scale(a, b, c)
-    return COPY(obj)
 
 
 S = SCALE
@@ -2899,7 +2895,6 @@ def ROTATERAD(obj, angle_rad, axis=3, point=[0, 0, 0]):
                     "In ROTATERAD(obj, angle, axis), obj must be a 2D or 3D object!")
             if not EMPTYSET(oo) and oo != []:
                 oo.rotaterad(angle_rad, axis, centerpoint)
-    return COPY(obj)
 
 
 RRAD = ROTATERAD
@@ -2962,7 +2957,6 @@ def ROTATE(obj, angle_deg, axis=3, point=[0, 0, 0]):
             "In ROTATE(obj, angle, axis, point), point must be a list (use square brackets)!")
     if not isinstance(obj, list):
         obj.rotate(angle_deg, axis, centerpoint)
-        return COPY(obj)
     else:
         obj = flatten(obj)
         newobj = []
@@ -2970,7 +2964,6 @@ def ROTATE(obj, angle_deg, axis=3, point=[0, 0, 0]):
             # Just a comment to test git:
             oo.rotate(angle_deg, axis, centerpoint)
             newobj.append(COPY(oo))
-        return newobj
 
 
 ROTATEDEG = ROTATE
@@ -3167,7 +3160,8 @@ def PLASM_UNION(objs_list):
     result = Plasm.boolop(BOOL_CODE_OR, objs_list, plasm_config.tolerance(
     ), plasm_config.maxnumtry(), plasm_config.useOctreePlanes())
     if color != []:
-        return COLOR(result, color)
+        COLOR(result, color)
+        return result
     else:
         return result
 
@@ -3452,7 +3446,7 @@ def SUBTRACT(a, b, warn=True):
         a.subtract(b)
         if EMPTYSET(a) and warn==True:
             print("WARNING: Empty object created while subtracting objects.")
-        return COPY(a)
+        return
     # a is single object, b is a list:
     if not isinstance(a, list) and isinstance(b, list):
         flatb = flatten(b)  # flatten the list as there may be structs
@@ -3470,7 +3464,7 @@ def SUBTRACT(a, b, warn=True):
         a.subtract(flatb)
         if EMPTYSET(a) and warn==True:
             print("WARNING: Empty object created while subtracting objects.")
-        return COPY(a)
+        return
     # a is a list, b is single object:
     if isinstance(a, list) and not isinstance(b, list):
         if isinstance(b, tuple):
@@ -3491,7 +3485,7 @@ def SUBTRACT(a, b, warn=True):
                 newlist.append(COPY(x))
             if EMPTYSET(x) and warn==True:
                 print("WARNING: Empty object created while subtracting objects.")
-        return newlist
+        return
     # a is a list, b is a list:
     if isinstance(a, list) and isinstance(b, list):
         flata = flatten(a)  # flatten the list as there may be structs
@@ -3518,7 +3512,7 @@ def SUBTRACT(a, b, warn=True):
                 newlist.append(COPY(x))
             if EMPTYSET(x) and warn==True:
                 print("WARNING: Empty object created while subtracting objects.")
-        return newlist
+
 
 # English:
 MINUS = SUBTRACT
@@ -7970,7 +7964,6 @@ def COLOR(obj, col=None):
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found (color - 1).")
             x.setcolor(col)
-    return COPY(obj)
 
 
 C = COLOR
@@ -8783,7 +8776,8 @@ def POSITIONMATCH3D(tested, ref, eps=1e-8):
 def ADJUSTPOSITION3D(tested, minx, miny):
     xmintested = tested.minx()
     ymintested = tested.miny()
-    return MOVE(tested, minx - xmintested, miny - ymintested)
+    MOVE(tested, minx - xmintested, miny - ymintested)
+    return tested
 
 
 # Move 3D object "tested" so that it has given minx, miny, minz:
@@ -8805,7 +8799,8 @@ def ALIGNOBJECTS2D(tested, ref):
     ymintested = tested.miny()
     xminref = ref.minx()
     yminref = ref.miny()
-    return MOVE(tested, xminref - xmintested, yminref - ymintested)
+    MOVE(tested, xminref - xmintested, yminref - ymintested)
+    return tested
 
 
 # Move 3D object "tested" so that its minx coincides with minx of object ref,
@@ -8820,7 +8815,8 @@ def ALIGNOBJECTS3D(tested, ref):
     xminref = ref.minx()
     yminref = ref.miny()
     zminref = ref.minz()
-    return MOVE(tested, xminref - xmintested, yminref - ymintested, zminref - zmintested)
+    MOVE(tested, xminref - xmintested, yminref - ymintested, zminref - zmintested)
+    return tested
 
 
 # Returns a rectangle which is the bounding box of a 2D object "tested":
@@ -9375,8 +9371,8 @@ def NCLabTurtleTrace(lines, layer=0, dots=True, elev=0):
         if abs(l.lineheight) < 0.000001:
             if elev < 0.000001: out.append(rect)
             else:
-                rect2 = MOVE(rect, elev, Z)  # strictly for visualization purposes
-                out.append(rect2)            # such trace will not work for grading
+                MOVE(rect, elev, Z)  # strictly for visualization purposes
+                out.append(rect)    # such trace will not work for grading
         else:
             out.append(PRISM(rect, l.lineheight))
         # If dots == True (we will be adding circles
