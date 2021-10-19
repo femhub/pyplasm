@@ -22,7 +22,7 @@ class StepAccumulator:
         in argument. Used to implement SHOW command functionality in step mode.
         """
         if isinstance(objects, (list, tuple)):
-            fgeoms = [o.geom for o in flatten(objects)]
+            fgeoms = [o.geom for o in flatten(objects) if hasattr(o, "geom")]
             to_remove = StepAccumulator.geom_base.difference(fgeoms)
             StepAccumulator.remove_object(to_remove)
 
