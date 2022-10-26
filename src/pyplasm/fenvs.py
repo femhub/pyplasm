@@ -1,5 +1,3 @@
-# coding=UTF-8
-
 from numpy import reshape
 
 # for copying objects
@@ -11,7 +9,7 @@ from .utils import flatten
 
 nclabinst = Lab.instance()
 
-import collections
+from collections.abc import Callable
 from functools import reduce
 
 # Import exceptions without traceback:
@@ -501,7 +499,7 @@ if self_test:
 def NUMBER_FROM_ZERO_TO_ONE_P(x): return ISNUM(x) and x >= 0 and x <= 1
 
 
-def ISFUN(x): return isinstance(x, collections.Callable)
+def ISFUN(x): return isinstance(x, Callable)
 
 
 if self_test:
@@ -1136,7 +1134,7 @@ class BASEOBJ:
         if name[0:2] == '__' and name[-2:]:
             raise AttributeError
         raise ExceptionWT(
-            'Did you want to write "," (comma) instead of "." (period) before "%s" or did you misspell "%s"?' % (
+            'Did you want to write "," (comma) instead of "." (period) before "{}" or did you misspell "{}"?'.format(
                 name, name))
 
     def __coerce__(self, other):
@@ -4456,7 +4454,7 @@ if self_test:
 
 def ORTHOPROJECT(E):
     def ORTHOPROJECT0(V):
-        return VECTDIFF([V, DIRPROJECT((E))(V)])
+        return VECTDIFF([V, DIRPROJECT(E)(V)])
 
     return ORTHOPROJECT0
 
@@ -4529,7 +4527,7 @@ ISSQRMAT = COMP([AND, CONS([ISMAT, COMP([EQ, CONS([LEN, COMP([LEN, S1])])])])])
 
 
 def ISMATOF(ISTYPE): return COMP([COMP([AND, AR]), CONS(
-    [COMP([AA(ISTYPE), CAT]), COMP([ISMAT, (COMP([AA, AA]))((K(1)))])])])
+    [COMP([AA(ISTYPE), CAT]), COMP([ISMAT, (COMP([AA, AA]))(K(1))])])])
 
 
 # ===================================================
@@ -4929,7 +4927,7 @@ def PLASM_SHELL(r1, r2):
         fx = lambda p: p[2] * math.cos(p[0]) * math.sin(p[1])
         fy = lambda p: p[2] * math.cos(p[0]) * math.cos(p[1])
         fz = lambda p: p[2] * math.sin(p[0])
-        ret = PLASM_MAP(([fx, fy, fz]))(domain)
+        ret = PLASM_MAP([fx, fy, fz])(domain)
         return ret
 
     return PLASM_SHELL0
@@ -5046,7 +5044,7 @@ def PLASM_TORUS(radius):
         fx = lambda p: (c + a * math.cos(p[1])) * math.cos(p[0])
         fy = lambda p: (c + a * math.cos(p[1])) * math.sin(p[0])
         fz = lambda p: a * math.sin(p[1])
-        return PLASM_MAP(([fx, fy, fz]))(domain)
+        return PLASM_MAP([fx, fy, fz])(domain)
 
     return PLASM_TORUS0
 
@@ -5091,7 +5089,7 @@ def PLASM_SOLIDTORUS(radius):
         fx = lambda p: (c + p[2] * a * math.cos(p[1])) * math.cos(p[0])
         fy = lambda p: (c + p[2] * a * math.cos(p[1])) * math.sin(p[0])
         fz = lambda p: p[2] * a * math.sin(p[1])
-        return PLASM_MAP(([fx, fy, fz]))(domain)
+        return PLASM_MAP([fx, fy, fz])(domain)
 
     return PLASM_TORUS0
 
@@ -5158,7 +5156,7 @@ def PLASM_SOLIDELBOW(radiusandangle):
         fx = lambda p: (c + p[2] * a * math.cos(p[1])) * math.cos(p[0])
         fy = lambda p: (c + p[2] * a * math.cos(p[1])) * math.sin(p[0])
         fz = lambda p: p[2] * a * math.sin(p[1])
-        return PLASM_MAP(([fx, fy, fz]))(domain)
+        return PLASM_MAP([fx, fy, fz])(domain)
 
     return PLASM_ELBOW0
 
@@ -5215,7 +5213,7 @@ def PLASM_REVOLVE(basisandangleandelevanddiv):
     fx = lambda p: math.cos(p[2]) * p[0]
     fy = lambda p: p[1] + p[2] * elevation / 2.0 / PI
     fz = lambda p: math.sin(p[2]) * p[0]
-    return PLASM_MAP(([fx, fy, fz]))(geom)
+    return PLASM_MAP([fx, fy, fz])(geom)
 
 
 def revolve(*args):
@@ -5839,7 +5837,7 @@ def PLASM_BEZIER(U):
         def map_fn(point):
             t = U(point)
             controldata = [fun(point) if isinstance(
-                fun, collections.Callable) else fun for fun in controldata_fn]
+                fun, Callable) else fun for fun in controldata_fn]
             ret = [0.0 for i in range(len(controldata[0]))]
             for I in range(N + 1):
                 weight = CHOOSE(
@@ -5955,13 +5953,13 @@ def PLASM_COONSPATCH(args):
         u, v = point
 
         su0 = su0_fn(point) if isinstance(
-            su0_fn, collections.Callable) else su0_fn
+            su0_fn, Callable) else su0_fn
         su1 = su1_fn(point) if isinstance(
-            su1_fn, collections.Callable) else su1_fn
+            su1_fn, Callable) else su1_fn
         s0v = s0v_fn(point) if isinstance(
-            s0v_fn, collections.Callable) else s0v_fn
+            s0v_fn, Callable) else s0v_fn
         s1v = s1v_fn(point) if isinstance(
-            s1v_fn, collections.Callable) else s1v_fn
+            s1v_fn, Callable) else s1v_fn
 
         ret = [0.0 for i in range(len(su0))]
         for K in range(len(ret)):
@@ -6155,7 +6153,7 @@ def PLASM_ROTSOLID(profileangleminr):
         fy = lambda p: minr * \
                        math.sin(p[1]) + ((profile(p))[0] - minr) * p[2] * math.sin(p[1])
         fz = lambda p: (profile(p))[2]
-        return PLASM_MAP(([fx, fy, fz]))(domain)
+        return PLASM_MAP([fx, fy, fz])(domain)
 
     return PLASM_ROTSOLID0
 
@@ -6217,7 +6215,7 @@ def PLASM_ROTSHELL(profileanglethickness):
         fy = lambda p: (profile(p))[
                            0] * math.sin(p[1]) + thickness * p[2] * math.sin(p[1])
         fz = lambda p: (profile(p))[2]
-        return PLASM_MAP(([fx, fy, fz]))(domain)
+        return PLASM_MAP([fx, fy, fz])(domain)
 
     return PLASM_ROTSHELL0
 
@@ -6337,8 +6335,8 @@ def PLASM_CUBICHERMITE(U):
             u = U(point)
             u2 = u * u
             u3 = u2 * u
-            p1, p2, s1, s2 = [f(point) if isinstance(
-                f, collections.Callable) else f for f in [p1_fn, p2_fn, s1_fn, s2_fn]]
+            p1, p2, s1, s2 = (f(point) if isinstance(
+                f, Callable) else f for f in [p1_fn, p2_fn, s1_fn, s2_fn])
             ret = [0.0 for i in range(len(p1))]
             for i in range(len(ret)):
                 ret[i] += (2 * u3 - 3 * u2 + 1) * p1[i] + (-2 * u3 + 3 * u2) * \
@@ -6673,7 +6671,7 @@ if self_test:
 def ROTN(args):
     alpha, N = args
     N = UNITVECT(N)
-    QX = UNITVECT((VECTPROD([[0, 0, 1], N])))
+    QX = UNITVECT(VECTPROD([[0, 0, 1], N]))
 
     QZ = UNITVECT(N)
     QY = VECTPROD([QZ, QX])
@@ -6743,8 +6741,8 @@ def CUBICUBSPLINE(domain):
             u = S1(point)
             u2 = u * u
             u3 = u2 * u
-            q1, q2, q3, q4 = [f(point) if isinstance(
-                f, collections.Callable) else f for f in [q1_fn, q2_fn, q3_fn, q4_fn]]
+            q1, q2, q3, q4 = (f(point) if isinstance(
+                f, Callable) else f for f in [q1_fn, q2_fn, q3_fn, q4_fn])
             ret = [0 for x in range(len(q1))]
             for i in range(len(ret)):
                 ret[i] = (1.0 / 6.0) * ((-u3 + 3 * u2 - 3 * u + 1) * q1[i] + (3 * u3 - 6 *
@@ -6769,8 +6767,8 @@ def CUBICCARDINAL(domain, h=1):
             u = S1(point)
             u2 = u * u
             u3 = u2 * u
-            q1, q2, q3, q4 = [f(point) if isinstance(
-                f, collections.Callable) else f for f in [q1_fn, q2_fn, q3_fn, q4_fn]]
+            q1, q2, q3, q4 = (f(point) if isinstance(
+                f, Callable) else f for f in [q1_fn, q2_fn, q3_fn, q4_fn])
 
             ret = [0.0 for i in range(len(q1))]
             for i in range(len(ret)):
@@ -6856,7 +6854,7 @@ def TENSORPRODSURFACE(args):
             V = [f([v]) for f in vbasis]
 
             controlpoints = [f(point) if isinstance(
-                f, collections.Callable) else f for f in controlpoints_fn]
+                f, Callable) else f for f in controlpoints_fn]
 
             # each returned vector will be this side (the tensor product is
             # SOLID)
@@ -7008,7 +7006,7 @@ def TENSORPRODSOLID(args):
 
             # if are functions call them
             controlpoints = [f(point) if isinstance(
-                f, collections.Callable) else f for f in controlpoints_fn]
+                f, Callable) else f for f in controlpoints_fn]
 
             # each returned vector will be this side (the tensor product is
             # SOLID)
@@ -7129,7 +7127,7 @@ def FRACTALSIMPLEX(D):
 
         expand = COMP(
             [COMP([AA(COMPONENT), DISTR]), CONS([COMP([INTSTO, LEN]), ID])])
-        splitting = (COMP([COMP, DIESIS(N)]))((COMP([CAT, AA(expand)])))
+        splitting = (COMP([COMP, DIESIS(N)]))(COMP([CAT, AA(expand)]))
 
         return (COMP([COMP([COMP([COMP([mkpols, splitting]), CONS([S1])])])]))(UKPOL(PLASM_SIMPLEX(D)))
 
@@ -7160,12 +7158,12 @@ def VECT2DTOANGLE(v):
 
 def CART(l):
     CART2 = COMP([COMP([CAT, AA(DISTL)]), DISTR])
-    F1 = AA((AA(CONS([ID]))))
+    F1 = AA(AA(CONS([ID])))
     return TREE(COMP([AA(CAT), CART2]))(F1(l))
 
 
 def POWERSET(l):
-    return COMP([COMP([AA(CAT), CART]), AA((CONS([CONS([ID]), K([])])))])(l)
+    return COMP([COMP([AA(CAT), CART]), AA(CONS([CONS([ID]), K([])]))])(l)
 
 
 if self_test:
@@ -7216,7 +7214,7 @@ def NU_GRID(data):
 # ===================================================
 
 def CURVE2PLASM_MAPVECT(CURVE):
-    D = len((CURVE([0])))
+    D = len(CURVE([0]))
     return [COMP([SEL(i), CURVE]) for i in FROMTO([1, D])]
 
 
@@ -7416,9 +7414,9 @@ def LEX(args):
         def SHEARTENSOR(A):
             def SHEARTENSOR0(POL):
                 dim = PLASM_DIM(POL)
-                newrow = K((AR([CAT([[0, 1], DIESIS((dim - 2))(0)]), A])))
+                newrow = K(AR([CAT([[0, 1], DIESIS(dim - 2)(0)]), A]))
                 update = (COMP([CONS, CAT]))(
-                    [[S1, newrow], AA(SEL)((FROMTO([3, dim + 1])))])
+                    [[S1, newrow], AA(SEL)(FROMTO([3, dim + 1]))])
                 matrix = update(IDNT(dim + 1))
                 return (MAT(matrix))(POL)
 
@@ -7539,7 +7537,7 @@ def OFFSET(v):
                 mat[i + 1][len(shear) + 1] = shear[i]
 
             # apply shearing
-            ret = MAT(mat)((Plasm.power(ret, PLASM_QUOTE([1]))))
+            ret = MAT(mat)(Plasm.power(ret, PLASM_QUOTE([1])))
 
         return PROJECT(len(v))(ret)
 
@@ -7609,7 +7607,7 @@ def PLANE(args):
 
     normal = UNITVECT(VECTPROD([v1, v2]))
     axis = VECTPROD([[0, 0, 1], normal])
-    angle = math.acos((INNERPROD([[0, 0, 1], normal])))
+    angle = math.acos(INNERPROD([[0, 0, 1], normal]))
 
     geometry = PLASM_T([1, 2, 3])(p0)(ROTN([angle, axis])(
         PLASM_T([1, 2])([-1 * side1, -1 * side2])(CUBOID([2 * side1, 2 * side2]))))
@@ -7628,7 +7626,7 @@ def RATIONALPLASM_BEZIER(controlpoints_fn):
 
         # if control points are functions
         controlpoints = [f(point) if isinstance(
-            f, collections.Callable) else f for f in controlpoints_fn]
+            f, Callable) else f for f in controlpoints_fn]
 
         target_dim = len(controlpoints[0])
 
@@ -7705,7 +7703,7 @@ def DERPLASM_BEZIER(controlpoints_fn):
 
         # if control points are functions
         controlpoints = [f(point) if isinstance(
-            f, collections.Callable) else f for f in controlpoints_fn]
+            f, Callable) else f for f in controlpoints_fn]
 
         target_dim = len(controlpoints[0])
 
@@ -7799,7 +7797,7 @@ def BSPLINE(degree):
 
                 # if control points are functions
                 points = [
-                    f(point) if isinstance(f, collections.Callable) else f for f in points_fn]
+                    f(point) if isinstance(f, Callable) else f for f in points_fn]
 
                 target_dim = len(points[0])
                 ret = [0 for i in range(target_dim)]
@@ -7989,7 +7987,7 @@ def PLASM_COLOR(Cpl0):
     
     def formatColor(Cpl):
         assert isinstance(Cpl, Color4f)
-        return "%s %s %s %s" % (Cpl.r, Cpl.g, Cpl.b, Cpl.a)
+        return "{} {} {} {}".format(Cpl.r, Cpl.g, Cpl.b, Cpl.a)
 
     # convert list to Color
     if isinstance(Cpl0, list) and len(Cpl0) in (3, 4):
@@ -8270,7 +8268,7 @@ def PLASM_GETCOLOR(obj):
 
 if self_test:
     (Plasm.getProperty(PLASM_COLOR(RED)(Plasm.cube(3)), "RGBcolor")
-     == ("%s %s %s %s" % (1.0, 0.0, 0.0, 1.0)))
+     == ("{} {} {} {}".format(1.0, 0.0, 0.0, 1.0)))
 
 
 # =========================================================================
@@ -8281,7 +8279,7 @@ if self_test:
 def PLASM_MATERIAL(M):
     def PLASM_MATERIAL0(pol):
 
-        svalue = "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s" % (M[0], M[1], M[2], M[
+        svalue = "{} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(M[0], M[1], M[2], M[
             3], M[4], M[5], M[6], M[7], M[8], M[9], M[10], M[11], M[12], M[13], M[14], M[15], M[16])
         return Plasm.addProperty(pol, "VRMLmaterial", svalue)
 
