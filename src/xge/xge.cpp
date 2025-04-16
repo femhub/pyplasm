@@ -11,15 +11,15 @@ class XgeApplication : public juce::JUCEApplication
 public:
 
   //constructor
-  XgeApplication()                                 
+  XgeApplication()
   {}
 
   //destrutor
-  virtual ~XgeApplication()                                 
+  virtual ~XgeApplication()
   {}
 
   //getApplicationName
-  virtual const juce::String getApplicationName() override                          
+  virtual const juce::String getApplicationName() override
   {return "PyPlasm";}
 
   //getApplicationVersion
@@ -31,7 +31,7 @@ public:
   {return true;}
 
   //anotherInstanceStarted
-  virtual void anotherInstanceStarted(const juce::String&) override 
+  virtual void anotherInstanceStarted(const juce::String&) override
   {}
 
   //initialise
@@ -59,23 +59,24 @@ static juce::ScopedPointer< juce::JUCEApplicationBase > app;
 //////////////////////////////////////////////////////////////////
 void XgeModule::init()
 {
-  if (app) return;
-  juce::JUCEApplicationBase::createInstance = (juce::JUCEApplicationBase::CreateInstanceFunction)-1;//to avoid a juce assert
-
-  #if PYPLASM_APPLE
-  juce::initialiseNSApplication();
-  new juce::ScopedAutoReleasePool();
-  #endif
-  juce::initialiseJuce_GUI();
-  app=new XgeApplication();
-  app->initialiseApp();
+    return;
+//  if (app) return;
+//  juce::JUCEApplicationBase::createInstance = (juce::JUCEApplicationBase::CreateInstanceFunction)-1;//to avoid a juce assert
+//
+//  #if PYPLASM_APPLE
+//  juce::initialiseNSApplication();
+//  new juce::ScopedAutoReleasePool();
+//  #endif
+//  juce::initialiseJuce_GUI();
+//  app=new XgeApplication();
+//  app->initialiseApp();
 }
 
 //////////////////////////////////////////////////////////////////
 void XgeModule::shutdown()
 {
-  if (!app) return;
-  app->shutdownApp();
-  juce::shutdownJuce_GUI();
+    return;
+//  if (!app) return;
+//  app->shutdownApp();
+//  juce::shutdownJuce_GUI();
 }
-

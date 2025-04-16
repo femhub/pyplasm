@@ -3,7 +3,7 @@
 #include <xge/mempool.h>
 
 
-extern "C" unsigned long xge_total_memory=0;
+unsigned long xge_total_memory=0;
 
 
 /////////////////////////////////////////// 
@@ -26,5 +26,3 @@ MemPool::~MemPool()
 
 	//xge_allocated_memory-=sizeof(SinglePool)*MEMPOOL_TABLE_SIZE;
 }
-
-

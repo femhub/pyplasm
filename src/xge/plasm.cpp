@@ -7,7 +7,7 @@
 
 
 
-extern "C" unsigned long xge_total_hpc=0;
+unsigned long xge_total_hpc=0;
 
 
 Plasm::Statistic Plasm::stats[2048];

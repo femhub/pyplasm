@@ -18,10 +18,14 @@ bool Log::redirect(uint64 handle)
 	#endif
 }
 
- 
+
 ////////////////////////////////////////////////////////////////////
 void Log::printf(const char * format, ...)
 {
+    // Disable all logging
+    return;
+
+    /*
 	int ret;
 	va_list args;
 	va_start(args,format);
@@ -29,15 +33,15 @@ void Log::printf(const char * format, ...)
 	#if PYPLASM_WINDOWS
 	if (!__redirect)
 	{
-		ret = vfprintf(stdout, format, args);	
+		ret = vfprintf(stdout, format, args);
 		fflush(stdout);
 	}
 	else
 	{
 		//need to write to a Windows File (is a PIPE!)
-		OVERLAPPED o; 
-		memset(&o, 0, sizeof(o)); 
-		o.Offset =  0xffffffff; 
+		OVERLAPPED o;
+		memset(&o, 0, sizeof(o));
+		o.Offset =  0xffffffff;
 		o.OffsetHigh = -1;
 		int length = _vscprintf(format, args);
 		char* tmp = (char*)malloc(length+1);
@@ -49,12 +53,11 @@ void Log::printf(const char * format, ...)
 	}
 	#else
 	{
-		ret = vfprintf(stdout, format, args);	
+		ret = vfprintf(stdout, format, args);
 		fflush(stdout);
 	}
 	#endif
 
 	va_end(args);
+	*/
 }
-
-

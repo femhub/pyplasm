@@ -1,0 +1,35 @@
+name: test-pyplasm
+on: [push]
+
+jobs:
+  test-pyplasm-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Build and test PyPlasm
+      run: |
+        # Install dependencies
+        sudo apt-get update
+        sudo apt-get install -y cmake unzip libasound2-dev libfreeimage-dev libfreetype6-dev libglew-dev libxcursor-dev libxinerama-dev bison byacc libgmp-dev libmpfr-dev zlib1g-dev openssl ca-certificates postgresql-client-common swig
+        
+        # Build PyPlasm
+        mkdir -p build
+        cd build
+        cmake ..
+        make -j
+        
+        # Copy to site-packages (replacing pip install)
+        mkdir -p $(python -c "import site; print(site.getsitepackages()[0])")/pyplasm
+        cp -rv Release/pyplasm/* $(python -c "import site; print(site.getsitepackages()[0])")/pyplasm/
+        
+        # Test import
+        python -c "import pyplasm; print('PyPlasm successfully imported')"
+
+

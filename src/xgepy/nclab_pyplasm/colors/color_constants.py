@@ -1,0 +1,450 @@
+"""
+COLOR constants
+"""
+
+__all__ = [
+    # Basic colors
+    "STEEL",
+    "ANY",
+    "GRAY",
+    "GREY",
+    "SAND",
+    "LIGHTGREEN",
+    "GREEN",
+    "DARKGREEN",
+    "BLACK",
+    "LIGHTBLUE",
+    "BLUE",
+    "DARKBLUE",
+    "LIGHTBROWN",
+    "BROWN",
+    "DARKBROWN",
+    "LIME",
+    "MAROON",
+    "OLIVE",
+    "TEAL",
+    "NAVY",
+    "NAVYBLUE",
+    "SKYBLUE",
+    "CRIMSON",
+    "CORAL",
+    "SALMON",
+    "KHAKI",
+    "TURQUOISE",
+    "ORCHID",
+    "BEIGE",
+    "WHEAT",
+    "LIGHTCYAN",
+    "CYAN",
+    "DARKCYAN",
+    "PINK",
+    "LIGHTMAGENTA",
+    "MAGENTA",
+    "DARKMAGENTA",
+    "ORANGE",
+    "DARKORANGE",
+    "PURPLE",
+    "INDIGO",
+    "VIOLET",
+    "WHITE",
+    "LIGHTRED",
+    "RED",
+    "DARKRED",
+    "YELLOW",
+    "DARKYELLOW",
+    # Food colors
+    "STRAWBERRY",
+    "RASPBERRY",
+    "BLUEBERRY",
+    "PEACH",
+    "BANANA",
+    "MINT",
+    "VANILLA",
+    "LEMON",
+    "CHOCOLATE",
+    "CANDY",
+    "MANGO",
+    "PAPAYA",
+    "BLACKBERRY",
+    "HONEY",
+    "KETCHUP",
+    "MUSTARD",
+    # Metal colors
+    "BRASS",
+    "COPPER",
+    "BRONZE",
+    "SILVER",
+    "GOLD",
+    "WOOD",
+    # Czech colors
+    "SEDA",
+    "SEDIVA",
+    "ZELENA",
+    "CERNA",
+    "MODRA",
+    "HNEDA",
+    "ORANZOVA",
+    "RUZOVA",
+    "FIALOVA",
+    "BILA",
+    "CERVENA",
+    "RUDA",
+    "ZLUTA",
+    "OCEL",
+    "OCELOVA",
+    "MOSAZ",
+    "MOSAZNA",
+    "MED",
+    "MEDENA",
+    "BRONZ",
+    "BRONZOVA",
+    "STRIBRO",
+    "STRIBRNA",
+    "ZLATO",
+    "ZLATA",
+    # Polish colors
+    "SZARY",
+    "SIWY",
+    "ZIELONY",
+    "CZARNY",
+    "NIEBIESKI",
+    "BRAZOWY",
+    "POMARANCZOVY",
+    "ROZOWY",
+    "PURPUROWY",
+    "BIALY",
+    "CZERWONY",
+    "ZOLTY",
+    "STAL",
+    "STALOWY",
+    "MOSIADZ",
+    "MIEDZ",
+    "BRAZ",
+    "SREBRO",
+    "SREBRNY",
+    "ZLOTO",
+    "ZLOTY",
+    # German colors
+    "GRAU",
+    "GRUEN",
+    "GRUN",
+    "SCHWARZ",
+    "BLAU",
+    "BRAUN",
+    "ROSA",
+    "LILA",
+    "WEISS",
+    "ROT",
+    "GELB",
+    "STAHL",
+    "MESSING",
+    "KUPFER",
+    "SILBER",
+    # Spanish colors
+    "GRIS",
+    "VERDE",
+    "NEGRO",
+    "NEGRA",
+    "AZUL",
+    "MARRON",
+    "CIAN",
+    "ROSO",
+    "ROSA",
+    "MAGENTA",
+    "NARANJA",
+    "PURPURO",
+    "PURPURA",
+    "BLANCO",
+    "BLANCA",
+    "ROJO",
+    "ROJA",
+    "AMARILLO",
+    "AMARILLA",
+    "ACERO",
+    "LATON",
+    "COBRE",
+    "BRONCE",
+    "PLATA",
+    "ORO",
+    # Italian colors
+    "GRIGIO",
+    "VERDE",
+    "NERO",
+    "NERA",
+    "AZZURRO",
+    "AZZURRA",
+    "MARRONE",
+    "ROSOLARE",
+    "CIANO",
+    "DENTELLARE",
+    "ROSA",
+    "MAGENTA",
+    "ARANCIONE",
+    "ARANCIO",
+    "ARANCIA",
+    "VIOLA",
+    "PORPORA",
+    "BIANCO",
+    "BIANCA",
+    "ROSSO",
+    "ROSSA",
+    "GIALLO",
+    "GIALLA",
+    "ACCIAIO",
+    "OTTONE",
+    "RAME",
+    "BRONZO",
+    "ARGENTO",
+    # French colors
+    "GRIS",
+    "VERT",
+    "NOIR",
+    "BLEU",
+    "BRUN",
+    "ROSE",
+    "POURPRE",
+    "BLANC",
+    "ROUGE",
+    "JAUNE",
+    "ACIER",
+    "LAITON",
+    "CUIVRE",
+    "ARGENT",
+    "OR",
+]
+
+# Default color of objects:
+STEEL = [200, 200, 200]
+ANY = [0, 0, 0]  # Special value (black)
+
+GRAY = [128, 128, 128]
+GREY = GRAY
+
+SAND = [194, 178, 128]
+
+LIGHTGREEN = [0, 255, 0]
+GREEN = [0, 180, 0]
+DARKGREEN = [0, 100, 0]
+
+BLACK = [0, 0, 0]
+
+LIGHTBLUE = [0, 0, 255]
+BLUE = [0, 0, 180]
+DARKBLUE = [0, 0, 100]
+
+LIGHTBROWN = [204, 102, 0]
+BROWN = [153, 76, 0]
+DARKBROWN = [102, 51, 0]
+
+LIME = [0, 255, 0]
+MAROON = [128, 0, 0]
+OLIVE = [128, 128, 0]
+TEAL = [0, 128, 128]
+NAVY = [0, 0, 128]
+NAVYBLUE = NAVY
+SKYBLUE = [136, 204, 255]
+CRIMSON = [220, 20, 60]
+CORAL = [255, 127, 80]
+SALMON = [250, 128, 114]
+KHAKI = [240, 230, 140]
+TURQUOISE = [64, 224, 208]
+ORCHID = [218, 112, 214]
+BEIGE = [245, 245, 220]
+WHEAT = [245, 222, 179]
+
+LIGHTCYAN = [0, 255, 255]
+CYAN = [0, 180, 180]
+DARKCYAN = [0, 100, 100]
+
+PINK = [255, 0, 255]
+
+LIGHTMAGENTA = [255, 0, 255]
+MAGENTA = [180, 0, 180]
+DARKMAGENTA = [100, 0, 100]
+
+ORANGE = [255, 153, 0]
+DARKORANGE = [180, 107, 0]
+
+PURPLE = [128, 0, 128]
+
+INDIGO = [75, 0, 130]
+
+VIOLET = [238, 130, 238]
+
+WHITE = [255, 255, 255]
+
+LIGHTRED = [255, 0, 0]
+RED = [180, 0, 0]
+DARKRED = [100, 0, 0]
+
+YELLOW = [255, 255, 0]
+DARKYELLOW = [180, 180, 0]
+
+# Food colors
+STRAWBERRY = [252, 90, 141]
+RASPBERRY = [227, 11, 92]
+BLUEBERRY = [117, 73, 177]
+PEACH = [255, 218, 185]
+BANANA = [252, 236, 174]
+MINT = [160, 255, 170]
+VANILLA = [243, 229, 171]
+LEMON = [255, 250, 205]
+CHOCOLATE = [94, 39, 40]
+CANDY = [237, 139, 209]
+MANGO = [255, 130, 67]
+PAPAYA = [255, 239, 213]
+BLACKBERRY = [77, 0, 54]
+HONEY = [207, 135, 51]
+KETCHUP = [147, 16, 9]
+MUSTARD = [245, 208, 76]
+
+# Metal colors
+BRASS = [181, 166, 66]
+COPPER = [184, 115, 51]
+BRONZE = [140, 120, 83]
+SILVER = [230, 232, 250]
+GOLD = [226, 178, 39]
+WOOD = [195, 148, 89]
+
+
+# Keep all the multilingual aliases as they are, since they reference the base colors
+# Czech:
+SEDA = GRAY
+SEDIVA = GRAY
+ZELENA = GREEN
+CERNA = BLACK
+MODRA = BLUE
+HNEDA = BROWN
+ORANZOVA = ORANGE
+RUZOVA = PINK
+FIALOVA = PURPLE
+BILA = WHITE
+CERVENA = RED
+RUDA = RED
+ZLUTA = YELLOW
+OCEL = STEEL
+OCELOVA = STEEL
+MOSAZ = BRASS
+MOSAZNA = BRASS
+MED = COPPER
+MEDENA = COPPER
+BRONZ = BRONZE
+BRONZOVA = BRONZE
+STRIBRO = SILVER
+STRIBRNA = SILVER
+ZLATO = GOLD
+ZLATA = GOLD
+
+# Polish:
+SZARY = GRAY
+SIWY = GRAY
+ZIELONY = GREEN
+CZARNY = BLACK
+NIEBIESKI = BLUE
+BRAZOWY = BROWN
+POMARANCZOVY = ORANGE
+ROZOWY = PINK
+PURPUROWY = PURPLE
+BIALY = WHITE
+CZERWONY = RED
+ZOLTY = YELLOW
+STAL = STEEL
+STALOWY = STEEL
+MOSIADZ = BRASS
+MIEDZ = COPPER
+BRAZ = BRONZE
+SREBRO = SILVER
+SREBRNY = SILVER
+ZLOTO = GOLD
+ZLOTY = GOLD
+
+# German:
+GRAU = GREY
+GRUEN = GREEN
+GRUN = GREEN
+SCHWARZ = BLACK
+BLAU = BLUE
+BRAUN = BROWN
+ROSA = PINK
+LILA = PURPLE
+WEISS = WHITE
+ROT = RED
+GELB = YELLOW
+STAHL = STEEL
+MESSING = BRASS
+KUPFER = COPPER
+SILBER = SILVER
+
+# Spanish:
+GRIS = GREY
+VERDE = GREEN
+NEGRO = BLACK
+NEGRA = BLACK
+AZUL = BLUE
+MARRON = BROWN
+CIAN = CYAN
+ROSO = PINK
+ROSA = PINK
+MAGENTA = MAGENTA
+NARANJA = ORANGE
+PURPURO = PURPLE
+PURPURA = PURPLE
+BLANCO = WHITE
+BLANCA = WHITE
+ROJO = RED
+ROJA = RED
+AMARILLO = YELLOW
+AMARILLA = YELLOW
+ACERO = STEEL
+LATON = BRASS
+COBRE = COPPER
+BRONCE = BRONZE
+PLATA = SILVER
+ORO = GOLD
+
+# Italian:
+GRIGIO = GREY
+VERDE = GREEN
+NERO = BLACK
+NERA = BLACK
+AZZURRO = BLUE
+AZZURRA = BLUE
+MARRONE = BROWN
+ROSOLARE = BROWN
+CIANO = CYAN
+DENTELLARE = PINK
+ROSA = PINK
+MAGENTA = MAGENTA
+ARANCIONE = ORANGE
+ARANCIO = ORANGE
+ARANCIA = ORANGE
+VIOLA = PURPLE
+PORPORA = PURPLE
+BIANCO = WHITE
+BIANCA = WHITE
+ROSSO = RED
+ROSSA = RED
+GIALLO = YELLOW
+GIALLA = YELLOW
+ACCIAIO = STEEL
+OTTONE = BRASS
+RAME = COPPER
+BRONZO = BRONZE
+ARGENTO = SILVER
+
+# French:
+GRIS = GREY
+VERT = GREEN
+NOIR = BLACK
+BLEU = BLUE
+BRUN = BROWN
+ROSE = PINK
+POURPRE = PURPLE
+BLANC = WHITE
+ROUGE = RED
+JAUNE = YELLOW
+ACIER = STEEL
+LAITON = BRASS
+CUIVRE = COPPER
+ARGENT = SILVER
+OR = GOLD

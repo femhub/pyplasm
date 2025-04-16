@@ -1,25 +1,25 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
-# swig related 
+# swig related
 if (POLICY CMP0086)
-  cmake_policy(SET CMP0086 OLD) 
+  cmake_policy(SET CMP0086 OLD)
 endif()
 
 # swig related
 if (POLICY CMP0078)
-  cmake_policy(SET CMP0078 OLD)  
+  cmake_policy(SET CMP0078 OLD)
 endif()
 
 # cmake generator expression in install
 if (POLICY CMP0087)
-  cmake_policy(SET CMP0087 NEW)  
+  cmake_policy(SET CMP0087 NEW)
 endif()
 
 # use cmake folders
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)  
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # disable incremental linking for windows
-SET(MSVC_INCREMENTAL_DEFAULT OFF) 
+SET(MSVC_INCREMENTAL_DEFAULT OFF)
 
 # independent code position
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)

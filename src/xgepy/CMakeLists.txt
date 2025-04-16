@@ -1,5 +1,5 @@
 find_package(SWIG 3.0 REQUIRED)
-include(${SWIG_USE_FILE})	
+include(${SWIG_USE_FILE})
 
 
 set(SwigFile ${CMAKE_CURRENT_SOURCE_DIR}/xge.i)
@@ -7,7 +7,7 @@ set(SwigFile ${CMAKE_CURRENT_SOURCE_DIR}/xge.i)
 set_property(SOURCE ${SwigFile} APPEND PROPERTY SWIG_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}")
 
 # this is for generated C++ and header files
-set(SWIG_OUTFILE_DIR ${CMAKE_BINARY_DIR}/${IntConfigName}) 
+set(SWIG_OUTFILE_DIR ${CMAKE_BINARY_DIR}/${IntConfigName})
 
 set(CMAKE_SWIG_OUTDIR ${SWIG_OUTFILE_DIR}/pyplasm) # this is for *.py generated files
 set (UseSWIG_TARGET_NAME_PREFERENCE STANDARD)
@@ -30,23 +30,22 @@ if (WIN32)
 	target_include_directories(xgepy PUBLIC ${Python_INCLUDE_DIRS})
 	target_link_libraries(xgepy      PUBLIC ${Python_LIBRARY_RELEASE})
 else()
-	target_link_libraries(xgepy PUBLIC Python::Module) # Python library for Python extending
+	target_link_libraries(xgepy PUBLIC Python::Python) # Python library for Python extending
 endif()
 
 if (MSVC)
-	target_compile_definitions(xgepy PRIVATE /W0) 
+	target_compile_definitions(xgepy PRIVATE /W0)
 	target_compile_options(xgepy     PRIVATE /bigobj)
 else()
 	set_target_properties(xgepy PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS} -w")
 endif()
 
 # swig generated *.py file and *.so must be in the same pyplasm/ root directoryc otherwise it won't work
-set_target_properties(xgepy PROPERTIES 
+set_target_properties(xgepy PROPERTIES
 	LIBRARY_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/${ConfigName}/pyplasm
 	RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/${ConfigName}/pyplasm
-	ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/${ConfigName}/swig) 
+	ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/${ConfigName}/swig)
 
 install(FILES ${PyFiles}         DESTINATION ${CMAKE_BINARY_DIR}/${ConfigName}/pyplasm/)
 install(DIRECTORY ../../examples DESTINATION ${CMAKE_BINARY_DIR}/${ConfigName}/pyplasm/)
-
- 
+install(DIRECTORY nclab_pyplasm  DESTINATION ${CMAKE_BINARY_DIR}/${ConfigName}/pyplasm/)
