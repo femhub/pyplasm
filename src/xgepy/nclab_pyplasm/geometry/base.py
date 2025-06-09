@@ -34,6 +34,8 @@ class BASEOBJ:
         self.color = STEEL
         self.geom = basegeom
         self.dim = PLASM_DIM(basegeom)
+        self.opacity = 1.0
+        self.shininess = 0.3
         self.material = [1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 100]
 
     def __getattr__(self, name):
