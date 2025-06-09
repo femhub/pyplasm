@@ -48,9 +48,9 @@ def COLOR(obj, color=None, opacity=None, shininess=None):
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("The first argument of COLOR must be an object!")
         if opacity is not None:
-            object.opacity = opacity
+            obj.opacity = opacity
         if shininess is not None:
-            object.shininess = shininess
+            obj.shininess = shininess
         obj.setcolor(color)
     else:
         obj = flatten(obj)
@@ -60,9 +60,9 @@ def COLOR(obj, color=None, opacity=None, shininess=None):
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found (color - 1).")
             if opacity is not None:
-                object.opacity = opacity
+                x.opacity = opacity
             if shininess is not None:
-                object.shininess = shininess
+                x.shininess = shininess
             x.setcolor(color)
 
 
