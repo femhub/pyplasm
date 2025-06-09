@@ -41,17 +41,17 @@ def COLOR(obj, color=None, opacity=None, shininess=None):
             "You are already providing an opacity value in the color list. Please remove the 'opacity' parameter."
         )
 
+    if isinstance(color, list) and len(color) == 4 and opacity is None:
+        opacity = color[3]
+        color = color[:3]
+
     if shininess is not None and (shininess < 0.0 or shininess > 1.0):
         raise ExceptionWT("Shininess value must be between 0.0 and 1.0.")
 
     if not isinstance(obj, list):
         if not isinstance(obj, BASEOBJ):
             raise ExceptionWT("The first argument of COLOR must be an object!")
-        if opacity is not None:
-            obj.opacity = opacity
-        if shininess is not None:
-            obj.shininess = shininess
-        obj.setcolor(color)
+        obj.setcolor(color, opacity, shininess)
     else:
         obj = flatten(obj)
         for x in obj:
@@ -59,11 +59,7 @@ def COLOR(obj, color=None, opacity=None, shininess=None):
                 raise ExceptionWT("Use the UNION command to create unions of objects.")
             if not isinstance(x, BASEOBJ):
                 raise ExceptionWT("Invalid object found (color - 1).")
-            if opacity is not None:
-                x.opacity = opacity
-            if shininess is not None:
-                x.shininess = shininess
-            x.setcolor(color)
+            x.setcolor(color, opacity, shininess)
 
 
 C = COLOR  # Short form
