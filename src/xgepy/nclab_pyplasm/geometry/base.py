@@ -101,13 +101,20 @@ class BASEOBJ:
                     "Opacity value in color definition must be between 0 and 1!"
                 )
 
-    def setcolor(self, color=STEEL):
+    def setcolor(self, color=STEEL, opacity=None, shininess=None):
+        if opacity is not None:
+            self.opacity = opacity
+        if shininess is not None:
+            self.shininess = shininess
+
         if isinstance(color, str) and color.startswith("#"):
             if not self._is_valid_hex(color):
                 raise ExceptionWT(
                     f"Invalid hex color format: {color}. Color must be a hex string (e.g. '#FF0000')."
                 )
-            self.color = color
+            hex_color = color.lstrip("#")
+            rgb_color = [int(hex_color[i : i + 2], 16) for i in (0, 2, 4)]
+            self.color = rgb_color
             self.geom = PLASM_HEX(color)(self.geom)
             return
 
