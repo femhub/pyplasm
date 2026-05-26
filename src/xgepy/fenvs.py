@@ -5214,7 +5214,7 @@ def larExtrude(model, pattern):
     for cell in FV:
         tube = [v + k * offset for k in range(m + 1) for v in cell]
         cellTube = [tube[k : k + d + 1] for k in range(rangelimit)]
-        outcells += [reshape(cellTube, newshape=(m, d, d + 1)).tolist()]
+        outcells += [reshape(cellTube, (m, d, d + 1)).tolist()]
 
     outcells = AA(CAT)(TRANS(outcells))
     cellGroups = [group for k, group in enumerate(outcells) if pattern[k] > 0]
